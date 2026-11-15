@@ -339,9 +339,9 @@ def main(argv: list[str] | None = None) -> int:
         # A quiet probe: GameFiles asks every installed game tool in turn.
         return _identify_verb(args)
     try:
-        import heat3d_update
+        from . import update
 
-        heat3d_update.startup("heat3d_ext_battlefield")
+        update.startup("heat3d_ext_battlefield")
     except Exception:  # an update check never stops an export
         pass
     return _run(_levels if args.verb == "levels" else _level, args)

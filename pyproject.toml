@@ -24,4 +24,4 @@ test = ["pytest>=8.0"]
 heat3d-battlefield-maps = "heat3d_ext_battlefield.cli:main"
 
 [tool.setuptools]
-packages = ["heat3d_ext_battlefield", "heat3d_update"]
+packages = ["heat3d_ext_battlefield"]
