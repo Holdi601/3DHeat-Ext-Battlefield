@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(本体とアップデート)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "予算",
+ "Level table": "レベルの表",
+ "Options": "オプション",
+ "bundles, meshes,": "バンドル、メッシュ、",
+ "coarser levels of detail": "より粗い詳細度",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 のレベルを1つの .glb に",
+ "levels": "levels",
+ "lists every level": "すべてのレベルを一覧",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "地形、配置",
+ "until --detail-budget fits": "--detail-budget に収まるまで"
+}

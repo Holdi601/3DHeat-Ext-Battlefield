@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(joc base i actualitzacions)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Pressupost",
+ "Level table": "Taula del nivell",
+ "Options": "Opcions",
+ "bundles, meshes,": "paquets, malles,",
+ "coarser levels of detail": "nivells de detall més grollers",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: un nivell de Battlefield 6 en un sol .glb",
+ "levels": "levels",
+ "lists every level": "llista cada nivell",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "terreny, col·locació",
+ "until --detail-budget fits": "fins que encaixi --detail-budget"
+}

@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(ana oyun ve güncellemeler)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Bütçe",
+ "Level table": "Bölüm tablosu",
+ "Options": "Seçenek",
+ "bundles, meshes,": "paketler, ağlar,",
+ "coarser levels of detail": "daha kaba ayrıntı düzeyleri",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: bir Battlefield 6 seviyesini tek .glb'ye",
+ "levels": "levels",
+ "lists every level": "her seviyeyi listeler",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "arazi, yerleşim",
+ "until --detail-budget fits": "--detail-budget sığana kadar"
+}

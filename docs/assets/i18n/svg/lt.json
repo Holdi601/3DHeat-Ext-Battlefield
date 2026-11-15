@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(žaidimas ir atnaujinimai)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Biudžetas",
+ "Level table": "Lygio lentelė",
+ "Options": "Parinktys",
+ "bundles, meshes,": "paketai, tinklai,",
+ "coarser levels of detail": "šiurkštesni detalumo lygiai",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 lygis į vieną .glb",
+ "levels": "levels",
+ "lists every level": "išvardija kiekvieną lygį",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "reljefas, išdėstymas",
+ "until --detail-budget fits": "kol --detail-budget telpa"
+}

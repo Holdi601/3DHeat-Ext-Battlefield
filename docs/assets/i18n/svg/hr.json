@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(osnovna igra i nadogradnje)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Proračun",
+ "Level table": "Tablica razina",
+ "Options": "Opcije",
+ "bundles, meshes,": "snopovi, mreže,",
+ "coarser levels of detail": "grublji razine detalja",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: razina Battlefielda 6 u jedan .glb",
+ "levels": "levels",
+ "lists every level": "popisuje svaku razinu",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "teren, postavljanje",
+ "until --detail-budget fits": "dok se ne uklopi --detail-budget"
+}

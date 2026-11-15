@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(alap játék és frissítések)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Keret",
+ "Level table": "Pálya-táblázat",
+ "Options": "Kapcsolók",
+ "bundles, meshes,": "csomagok, hálók,",
+ "coarser levels of detail": "durvább részletességi szintek",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: egy Battlefield 6 pálya egy .glb-be",
+ "levels": "pályák",
+ "lists every level": "minden pályát listáz",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "terep, elhelyezés",
+ "until --detail-budget fits": "amíg a --detail-budget ráfér"
+}

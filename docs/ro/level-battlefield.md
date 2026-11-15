@@ -1,6 +1,6 @@
 ---
 title: "Niveluri Battlefield 6: `levels` și `level`"
-nav_order: 1
+nav_order: 2
 lang: "ro"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -20,8 +20,8 @@ Exportă un nivel Frostbite întreg al jocului instalat: câmpul de înălțimi 
 1. **Listați nivelurile** pe care le livrează jocul:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Fiecare rând este un tabel de nivel (`levels/<level>/<level>.toc`) cu dimensiunea lui și de unde vine: `Data` pentru jocul de bază, `Update/<pack>` pentru o actualizare.
@@ -29,20 +29,20 @@ Exportă un nivel Frostbite întreg al jocului instalat: câmpul de înălțimi 
 2. **Exportați unul**, după numele lui, după o parte unică a acestuia sau după calea `.toc`. Începeți fără culori, ca să vedeți forma și dimensiunea:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Adăugați culoare** după ce arată bine:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Adăugați suprafețele pe care se poate merge**, sau micșorați fișierul:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Deschideți `level.glb`** în panoul Background / level al vizualizatorului 3DHeat ([încărcarea unui nivel](https://holdi601.github.io/3DHeat/levels.html)).
@@ -63,7 +63,7 @@ Exportă un nivel Frostbite întreg al jocului instalat: câmpul de înălțimi 
 | `--by-mesh` | oprit | o piesă pentru fiecare mesh sursă și material, ca să găsiți ce este o piesă |
 | `--clamped-uvs` | oprit | pentru randerele care nu pot repeta o textură |
 
-Tabelul complet, cu dimensiunile de așteptat (un nivel întreg are sute de MB), se află la [Comenzi](commands.md#levels-and-level-frostbite). Cum sunt citite tabelele, pachetele, mesh-urile și terenul se află la [Frostbite](reader-frostbite.md).
+Tabelul complet, cu dimensiunile de așteptat (un nivel întreg are sute de MB), se află la [Comenzi](../cli-reference.md). Cum sunt citite tabelele, pachetele, mesh-urile și terenul se află la [Frostbite](reader-frostbite.md).
 
 ## Exemplu de ieșire {#example-output}
 
@@ -86,6 +86,6 @@ Navigation mesh: <tiles read>.
 
 ## Piesele {#the-parts}
 
-`ground:terrain` (câmpul de înălțimi), `ground:terrain backdrop` și `ground:terrain blend`, `structure:<kind>` pentru fiecare tip de mesh (pentru fiecare hartă de culoare cu `--textures`, cu ` (destructible)` pentru ce poate fi distrus într-un meci), și `nav:walkable` cu `--navmesh`. Vezi [Formatul de ieșire](output-format.md).
+`ground:terrain` (câmpul de înălțimi), `ground:terrain backdrop` și `ground:terrain blend`, `structure:<kind>` pentru fiecare tip de mesh (pentru fiecare hartă de culoare cu `--textures`, cu ` (destructible)` pentru ce poate fi distrus într-un meci), și `nav:walkable` cu `--navmesh`. Vezi [Formatul de ieșire](https://holdi601.github.io/3DHeat-GameFiles/ro/output-format.html).
 
-Fișierul conține conținutul jocului: este pentru calculatorul pe care a fost făcut, nu pentru a fi dat mai departe ([Reguli și licențe](rules-and-licences.md)).
+Fișierul conține conținutul jocului: este pentru calculatorul pe care a fost făcut, nu pentru a fi dat mai departe ([Reguli și licențe](../terms.md)).

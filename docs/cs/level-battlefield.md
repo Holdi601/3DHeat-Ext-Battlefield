@@ -1,6 +1,6 @@
 ---
 title: Úrovně Battlefield 6
-nav_order: 1
+nav_order: 2
 lang: "cs"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -25,8 +25,8 @@ zapečené do země a choditelné povrchy vojáků.
 1. **Vypište úrovně**, které hra obsahuje:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Každý řádek je tabulka úrovně (`levels/<level>/<level>.toc`) s velikostí a
@@ -36,20 +36,20 @@ zapečené do země a choditelné povrchy vojáků.
    `.toc`. Začněte bez textur, abyste uviděli tvar a velikost:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Přidejte barvu**, až to bude vypadat správně:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Přidejte choditelné povrchy**, nebo zmenšete soubor:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Otevřete `level.glb`** v panelu Pozadí / úroveň prohlížeče 3DHeat ([načtení úrovně](https://holdi601.github.io/3DHeat/levels.html)).
@@ -71,7 +71,7 @@ zapečené do země a choditelné povrchy vojáků.
 | `--clamped-uvs` | vypnuto | pro renderery, které neumějí textury opakovat |
 
 Úplná tabulka s velikostmi, které čekat (celá úroveň má stovky MB), je na
-[Příkazy](commands.md#levels-and-level-frostbite). Jak se čtou tabulky, bundly,
+[Příkazy](../cli-reference.md). Jak se čtou tabulky, bundly,
 sítě a terén, je na [Frostbite](reader-frostbite.md).
 
 ## Příklad výstupu {#example-output}
@@ -99,7 +99,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (výškové pole), `ground:terrain backdrop` a
 `ground:terrain blend`, `structure:<kind>` pro každý druh sítě (pro každou barevnou
 mapu s `--textures`, s ` (destructible)` u toho, co může zápas zničit), a
-`nav:walkable` s `--navmesh`. Viz [Formát výstupu](output-format.md).
+`nav:walkable` s `--navmesh`. Viz [Formát výstupu](https://holdi601.github.io/3DHeat-GameFiles/cs/output-format.html).
 
 Soubor obsahuje obsah hry: je určen pro počítač, na kterém vznikl, a ne pro
-předávání dál ([Pravidla a licence](rules-and-licences.md)).
+předávání dál ([Pravidla a licence](../terms.md)).

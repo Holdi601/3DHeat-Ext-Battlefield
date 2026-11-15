@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(peli ja päivitykset)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Budjetti",
+ "Level table": "Tasotaulukko",
+ "Options": "Asetukset",
+ "bundles, meshes,": "paketit, meshit,",
+ "coarser levels of detail": "karkeammat tarkkuustasot",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 -taso yhteen .glb-tiedostoon",
+ "levels": "tasot",
+ "lists every level": "listaa jokaisen tason",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "maasto, sijoittelu",
+ "until --detail-budget fits": "kunnes --detail-budget mahtuu"
+}

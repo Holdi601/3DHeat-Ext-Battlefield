@@ -20,19 +20,19 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from heat3d_gamefiles.frostbite import (
+from heat3d_ext_battlefield.frostbite import (
     UnsupportedFrostbite,
     chunk_locations,
     read_header,
     read_sections,
 )
-from heat3d_gamefiles.frostbitebundle import (
+from heat3d_ext_battlefield.frostbitebundle import (
     MANIFEST_MAGIC,
     read_manifest,
     toc_bundles,
 )
-from heat3d_gamefiles.frostbiteebx import read_partition
-from heat3d_gamefiles.frostbitelevel import (
+from heat3d_ext_battlefield.frostbiteebx import read_partition
+from heat3d_ext_battlefield.frostbitelevel import (
     MEMBER,
     MEMBER_MESH,
     MEMBER_SIZE,
@@ -43,8 +43,8 @@ from heat3d_gamefiles.frostbitelevel import (
     ebx_prefix,
     place,
 )
-from heat3d_gamefiles.frostbitematerial import MaterialLinks
-from heat3d_gamefiles.frostbitemesh import decode_lod, read_meshset
+from heat3d_ext_battlefield.frostbitematerial import MaterialLinks
+from heat3d_ext_battlefield.frostbitemesh import decode_lod, read_meshset
 
 from . import frostbite_fixtures as fx
 from .installed import installed
@@ -84,7 +84,7 @@ class TestManifest:
             [b"K" * 16],
         )
         entries = [fx.location(1, 1, 10 * i, 4) for i in range(3)]
-        from heat3d_gamefiles.frostbite import location_at
+        from heat3d_ext_battlefield.frostbite import location_at
 
         spots = [location_at(e, 0) for e in entries]
 
@@ -210,7 +210,7 @@ needs_level = pytest.mark.skipif(LEVEL is None, reason="no Frostbite level on th
 
 @pytest.fixture(scope="module")
 def catalogue():
-    from heat3d_gamefiles.frostbitebundle import LevelCatalogue
+    from heat3d_ext_battlefield.frostbitebundle import LevelCatalogue
 
     return LevelCatalogue(LEVEL)
 
@@ -229,7 +229,7 @@ def test_shipped_meshes_decode_inside_their_own_bounds(catalogue):
     Half floats round, so a vertex may sit a hair outside the declared box;
     a misread layout scatters them everywhere.
     """
-    from heat3d_gamefiles.frostbitemesh import MESHSET
+    from heat3d_ext_battlefield.frostbitemesh import MESHSET
 
     meshes = [e for e in catalogue.res.values() if e.res_type == MESHSET]
     checked = 0
@@ -278,7 +278,7 @@ class TestTerrain:
     SAMPLES = 17  # 8 cells a side, a border of four, and the closing sample
 
     def build(self):
-        from heat3d_gamefiles.frostbiteterrain import read_tree
+        from heat3d_ext_battlefield.frostbiteterrain import read_tree
 
         n = self.SAMPLES
         root = np.full((n, n), 1000, dtype="<u2")
@@ -297,7 +297,7 @@ class TestTerrain:
         assert set(tree.height_nodes()) == {(0, 0, 0), (1, 0, 0)}
 
     def test_the_finest_node_supplies_each_quadrant(self):
-        from heat3d_gamefiles.frostbiteterrain import build_ground, sample_heights
+        from heat3d_ext_battlefield.frostbiteterrain import build_ground, sample_heights
 
         tree, read = self.build()
         ground = build_ground(tree, read, spacing=1.0)
@@ -313,7 +313,7 @@ class TestTerrain:
         assert (np.cross(t[:, 1] - t[:, 0], t[:, 2] - t[:, 0])[:, 1] > 0).all()
 
     def test_a_tree_that_does_not_end_where_the_res_ends_is_refused(self):
-        from heat3d_gamefiles.frostbiteterrain import read_tree
+        from heat3d_ext_battlefield.frostbiteterrain import read_tree
 
         res = fx.terrain_tree(17, 1.0, 16.0, (b"R" * 16, 1, []))
         with pytest.raises(UnsupportedFrostbite, match="quadtree"):
@@ -322,7 +322,7 @@ class TestTerrain:
 
 class TestMaterials:
     def links(self):
-        from heat3d_gamefiles.frostbitematerial import MaterialLinks, TextureInfo
+        from heat3d_ext_battlefield.frostbitematerial import MaterialLinks, TextureInfo
 
         def info(name, fmt):
             return TextureInfo(name, 0, fmt, 64, 64, 1, b"", (4096,))
@@ -346,7 +346,7 @@ class TestMaterials:
         assert links.colour_map("x/ind_hut_01_mesh", "M_Trim", b"K" * 8) == "t_ind_hut_01_trim_cs"
 
     def test_a_decal_sheet_loses_to_the_surface_s_own_map(self):
-        from heat3d_gamefiles.frostbitematerial import MaterialLinks, TextureInfo
+        from heat3d_ext_battlefield.frostbitematerial import MaterialLinks, TextureInfo
 
         names = ["t_de_com_sign_01_ca", "t_com_sign_01_cs"]
         links = MaterialLinks()
@@ -358,7 +358,7 @@ class TestMaterials:
         assert links.colour_map("x/com_sign_01_mesh", "M_Sign", b"S" * 8) == "t_com_sign_01_cs"
 
     def test_distance_fields_and_palettes_are_never_the_colour(self):
-        from heat3d_gamefiles.frostbitematerial import MaterialLinks, TextureInfo
+        from heat3d_ext_battlefield.frostbitematerial import MaterialLinks, TextureInfo
 
         names = ["t_bd_vegetationtown_atlas_a_sdf", "bd_seu_buildingstown_palette", "t_com_oak_01_leaves_cu"]
         links = MaterialLinks()
@@ -375,7 +375,7 @@ class TestMaterials:
         assert links.colour_map("x/ind_hut_01_mesh", "M_Glass", b"?" * 8) is None
 
     def test_a_texture_chunk_missing_its_largest_mips_decodes_from_what_it_has(self):
-        from heat3d_gamefiles.frostbitematerial import TextureInfo, decode_texture
+        from heat3d_ext_battlefield.frostbitematerial import TextureInfo, decode_texture
 
         red = struct.pack("<HHI", 0xF800, 0xF800, 0)  # BC1: both endpoints pure red
         sizes = (4 * 8, 8, 8, 8)  # 8x8, 4x4, 2x2, 1x1
@@ -391,7 +391,7 @@ class TestMaterials:
 
 
 def test_sections_carry_their_texture_coordinates():
-    from heat3d_gamefiles.frostbitemesh import decode_sections
+    from heat3d_ext_battlefield.frostbitemesh import decode_sections
 
     positions = TestMesh.positions
     uvs = np.array([[0, 0], [2, 0], [0, 3], [1, 1]], dtype=np.float32)
@@ -431,8 +431,8 @@ def test_vegetation_stands_on_the_decoded_terrain(catalogue):
     origins are the sharpest check of the heightfield: within half a metre
     in the median, where any misreading puts them metres off.
     """
-    from heat3d_gamefiles.frostbitelevel import CATEGORIES, find_placements
-    from heat3d_gamefiles.frostbiteterrain import STREAMING_TREE, read_tree, sample_heights
+    from heat3d_ext_battlefield.frostbitelevel import CATEGORIES, find_placements
+    from heat3d_ext_battlefield.frostbiteterrain import STREAMING_TREE, read_tree, sample_heights
 
     trees = [e for e in catalogue.res.values() if e.res_type == STREAMING_TREE]
     if not trees:
@@ -468,7 +468,7 @@ def _decal_res(guid: bytes, params: bytes = b"") -> bytes:
     head = bytearray(20 + 16 + 4)
     struct.pack_into("<I", head, 16, 1)
     struct.pack_into("<I", head, 36, 2)
-    from heat3d_gamefiles.frostbitedecals import VERTEX
+    from heat3d_ext_battlefield.frostbitedecals import VERTEX
 
     vertices = np.zeros(6, dtype=VERTEX)
     vertices["x"] = [0, 8, 0, 10, 12, 10]
@@ -483,7 +483,7 @@ def _decal_res(guid: bytes, params: bytes = b"") -> bytes:
 
 class TestDecals:
     def test_batches_vertices_and_textures_are_read(self):
-        from heat3d_gamefiles.frostbitedecals import read_decals
+        from heat3d_ext_battlefield.frostbitedecals import read_decals
 
         decals = read_decals(_decal_res(b"T" * 16), {b"T" * 16: "x/t_line_op"})
 
@@ -492,7 +492,7 @@ class TestDecals:
         assert decals.vertices["x"].tolist() == [0, 8, 0, 10, 12, 10]
 
     def test_a_record_out_of_sequence_is_refused(self):
-        from heat3d_gamefiles.frostbitedecals import read_decals
+        from heat3d_ext_battlefield.frostbitedecals import read_decals
 
         res = bytearray(_decal_res(b"T" * 16))
         struct.pack_into("<I", res, 40 + 187 + 156, 999)  # second record's byte offset
@@ -500,7 +500,7 @@ class TestDecals:
             read_decals(bytes(res), {})
 
     def test_a_decal_s_paint_is_read_from_its_material(self):
-        from heat3d_gamefiles.frostbitedecals import read_decals
+        from heat3d_ext_battlefield.frostbitedecals import read_decals
 
         # A float3 parameter as a shader block encodes one: tag, flags, the
         # name hash 607e, a count of one, three floats, an id.
@@ -511,8 +511,8 @@ class TestDecals:
         assert np.allclose(decals.batches[1].paint, (0.64, 0.56, 0.48))
 
     def test_a_runway_line_and_a_track_are_drawn(self, monkeypatch):
-        from heat3d_gamefiles import frostbitelevel
-        from heat3d_gamefiles.frostbitedecals import Batch, Decals, VERTEX
+        from heat3d_ext_battlefield import frostbitelevel
+        from heat3d_ext_battlefield.frostbitedecals import Batch, Decals, VERTEX
 
         images = {
             "x/afb_line_mult": np.full((2, 2, 3), 200, np.uint8),
@@ -536,7 +536,7 @@ class TestDecals:
         assert drawn[2] is None
 
     def test_a_decal_is_composited_by_its_alpha(self):
-        from heat3d_gamefiles.frostbitedecals import Layer, bake, read_decals
+        from heat3d_ext_battlefield.frostbitedecals import Layer, bake, read_decals
 
         decals = read_decals(_decal_res(b"T" * 16), {})
         decals.vertices["rgba"][:3, 3] = 0.5
@@ -553,8 +553,8 @@ class TestDecals:
 @needs_level
 def test_shipped_terrain_decals_are_read(catalogue):
     """Every record's vertex range follows the last; most batches name their textures."""
-    from heat3d_gamefiles.frostbitedecals import TERRAIN_DECALS, read_decals
-    from heat3d_gamefiles.frostbitematerial import link_materials
+    from heat3d_ext_battlefield.frostbitedecals import TERRAIN_DECALS, read_decals
+    from heat3d_ext_battlefield.frostbitematerial import link_materials
 
     entries = [e for e in catalogue.res.values() if e.res_type == TERRAIN_DECALS]
     if not entries:
@@ -589,7 +589,7 @@ class TestLevelLayers:
         return tmp_path
 
     def test_an_update_s_complete_table_wins_over_a_stub_in_data(self, tmp_path):
-        from heat3d_gamefiles.frostbitebundle import level_sources
+        from heat3d_ext_battlefield.frostbitebundle import level_sources
 
         root = self.install(tmp_path)
         stub = self.table(root, "Data", "lv_a", 0)
@@ -602,7 +602,7 @@ class TestLevelLayers:
         assert set(table.supplements) == {stub, extra}
 
     def test_a_level_only_in_data_comes_from_data(self, tmp_path):
-        from heat3d_gamefiles.frostbitebundle import level_sources
+        from heat3d_ext_battlefield.frostbitebundle import level_sources
 
         root = self.install(tmp_path)
         own = self.table(root, "Data", "lv_b", 1)
@@ -614,7 +614,7 @@ class TestLevelLayers:
         assert found["lv_b"].toc == own and found["lv_b"].source == "Data"
 
     def test_of_two_complete_tables_the_later_layer_wins(self, tmp_path):
-        from heat3d_gamefiles.frostbitebundle import level_sources
+        from heat3d_ext_battlefield.frostbitebundle import level_sources
 
         root = self.install(tmp_path)
         self.table(root, "Data", "lv_d", 1)
@@ -629,7 +629,7 @@ def _nav_tile(points, polygons, box=((0, 0, 0), (16, 10, 16)), detail=None) -> b
     given, is (detail vertices, [(first vertex, first triangle, vertex count,
     triangle count) per polygon], triangles of three indices).
     """
-    from heat3d_gamefiles.frostbitenav import MAGIC, POLYGON, VERTICES
+    from heat3d_ext_battlefield.frostbitenav import MAGIC, POLYGON, VERTICES
 
     extra, meshes, triangles = detail if detail else ([], [], [])
     head = bytearray(VERTICES)
@@ -660,7 +660,7 @@ class TestNavigation:
     points = [(1, 0, 1), (9, 0, 1), (9, 0, 9), (1, 0, 9), (4, 1, 4), (300, 120, -500), (0, 0, 0)]
 
     def test_surfaces_are_read_and_links_left_out(self):
-        from heat3d_gamefiles.frostbitenav import read_tile
+        from heat3d_ext_battlefield.frostbitenav import read_tile
 
         blob = _nav_tile(self.points, [((0, 1, 2, 3), 0), ((0, 4, 1), 2), ((5, 6, 2, 3), 1)])
 
@@ -673,7 +673,7 @@ class TestNavigation:
         assert polygons == [(0, 1, 2), (0, 2, 3), (0, 4, 1)]
 
     def test_a_polygon_s_detail_mesh_gives_its_surface(self):
-        from heat3d_gamefiles.frostbitenav import read_tile
+        from heat3d_ext_battlefield.frostbitenav import read_tile
 
         # A flat square whose detail mesh raises its middle by a metre: four
         # triangles round one detail vertex, index 4 (after the 4 corners).
@@ -686,13 +686,13 @@ class TestNavigation:
         assert np.allclose(vertices[4], (5, 1, 5))
 
     def test_a_surface_outside_its_tile_is_refused(self):
-        from heat3d_gamefiles.frostbitenav import read_tile
+        from heat3d_ext_battlefield.frostbitenav import read_tile
 
         with pytest.raises(UnsupportedFrostbite, match="outside"):
             read_tile(_nav_tile(self.points, [((0, 5, 2), 0)]))
 
     def test_an_index_past_the_vertices_is_refused(self):
-        from heat3d_gamefiles.frostbitenav import read_tile
+        from heat3d_ext_battlefield.frostbitenav import read_tile
 
         with pytest.raises(UnsupportedFrostbite, match="vertex"):
             read_tile(_nav_tile(self.points, [((0, 1, 9), 0)]))
@@ -707,7 +707,7 @@ class TestUntile:
         return (np.cross(t[:, 1] - t[:, 0], t[:, 2] - t[:, 0])[:, 2] / 2).sum()
 
     def test_every_piece_shows_the_same_pixels_inside_0_to_1(self):
-        from heat3d_gamefiles.frostbitelevel import untile
+        from heat3d_ext_battlefield.frostbitelevel import untile
 
         # Texture coordinates equal to x and y: however a triangle is cut, a
         # point's coordinates must stay its position less whole repeats.
@@ -728,7 +728,7 @@ class TestUntile:
         assert np.isclose(self.signed_area(out_points, out_faces), self.signed_area(points, faces), rtol=1e-5)
 
     def test_triangles_inside_keep_their_shared_vertices(self):
-        from heat3d_gamefiles.frostbitelevel import untile
+        from heat3d_ext_battlefield.frostbitelevel import untile
 
         points = np.array([[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]], dtype=np.float32)
         uv = np.array([[0, 0], [1, 0], [1, 1], [0, 1]], dtype=np.float32)
@@ -739,7 +739,7 @@ class TestUntile:
         assert out[0] is points and out[1] is faces and out[2] is uv
 
     def test_a_texture_repeating_too_often_is_left_as_it_is(self):
-        from heat3d_gamefiles.frostbitelevel import untile
+        from heat3d_ext_battlefield.frostbitelevel import untile
 
         points = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]], dtype=np.float32)
         uv = np.array([[0, 0], [40, 0], [0, 1]], dtype=np.float32)
@@ -752,8 +752,8 @@ class TestUntile:
 def test_a_level_without_backdrop_takes_its_surfaces_middle_colour(monkeypatch):
     from types import SimpleNamespace
 
-    from heat3d_gamefiles import frostbitelevel
-    from heat3d_gamefiles.frostbitematerial import SHADER_BLOCK_DEPOT, MaterialLinks
+    from heat3d_ext_battlefield import frostbitelevel
+    from heat3d_ext_battlefield.frostbitematerial import SHADER_BLOCK_DEPOT, MaterialLinks
 
     shades = {"t_sand_cv": 200, "t_gravel_cv": 150, "t_soil_cv": 100, "t_ter_defaulttexture_cv": 255, "t_sand_nhs": 0}
     links = MaterialLinks()
@@ -775,7 +775,7 @@ def test_a_level_without_backdrop_takes_its_surfaces_middle_colour(monkeypatch):
 
 
 def test_only_a_named_mask_of_alpha_cuts_a_surface_out():
-    from heat3d_gamefiles.frostbitematerial import is_cutout
+    from heat3d_ext_battlefield.frostbitematerial import is_cutout
 
     leaves = np.full((8, 8, 4), 255, np.uint8)
     leaves[:4, :, 3] = 0  # half the card is empty
@@ -827,7 +827,7 @@ def test_a_cut_out_texture_is_a_masked_two_sided_png(tmp_path):
 
 
 def _repeating_model():
-    from heat3d_gamefiles.frostbitelevel import LevelModel, Piece
+    from heat3d_ext_battlefield.frostbitelevel import LevelModel, Piece
 
     model = LevelModel()
     bark = Piece(texture="t_bark_cs")
@@ -852,7 +852,7 @@ def _repeating_model():
 def test_a_repeating_texture_keeps_its_uvs_and_repeats(tmp_path):
     import json
 
-    from heat3d_gamefiles.frostbitelevel import write_level
+    from heat3d_ext_battlefield.frostbitelevel import write_level
 
     model = _repeating_model()
     out = write_level(model, tmp_path / "t.glb")
@@ -881,7 +881,7 @@ def test_a_repeating_texture_keeps_its_uvs_and_repeats(tmp_path):
 def test_clamped_output_draws_a_texture_too_dense_to_cut_in_its_average_colour(tmp_path):
     import json
 
-    from heat3d_gamefiles.frostbitelevel import write_level
+    from heat3d_ext_battlefield.frostbitelevel import write_level
 
     model = _repeating_model()
     out = write_level(model, tmp_path / "t.glb", clamped=True)
@@ -915,7 +915,7 @@ def _bc7_solid(rgb) -> bytes:
 def test_the_colormap_pages_lie_on_their_quadrants():
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbiteterrain import COLOUR_QUADRANTS, MASK_PAGE, TerrainTree, read_colormap
+    from heat3d_ext_battlefield.frostbiteterrain import COLOUR_QUADRANTS, MASK_PAGE, TerrainTree, read_colormap
 
     colours = [(200, 40, 40), (40, 200, 40), (40, 40, 200), (200, 200, 40)]
     pages = b"".join(_bc7_solid(c) * (33 * 33) for c in colours)
@@ -937,7 +937,7 @@ def test_the_colormap_follows_the_mask_pages_the_mask_tree_counts():
     import struct
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbiteterrain import MASK_HEADER, MASKS, TerrainTree, read_colormap
+    from heat3d_ext_battlefield.frostbiteterrain import MASK_HEADER, MASKS, TerrainTree, read_colormap
 
     # One uncompressed mask page (the group of quadrant (1, 0) has one), the
     # colormap, then four pages of another raster in a flat colour.
@@ -959,7 +959,7 @@ def test_the_colormap_follows_the_mask_pages_the_mask_tree_counts():
 def test_a_chunk_of_many_colormaps_lengths_is_another_layout():
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbiteterrain import COLOUR_PAGES, TerrainTree, read_colormap
+    from heat3d_ext_battlefield.frostbiteterrain import COLOUR_PAGES, TerrainTree, read_colormap
 
     node = SimpleNamespace(depth=0, ix=0, iz=0, second=b"C" * 16)
     tree = TerrainTree(265, 1280.0, (0.0, 0.0, 512.0, 512.0), [node])
@@ -973,7 +973,7 @@ def test_mask_pages_land_on_their_quadrants(tile):
     import struct
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbiteterrain import MASK_HEADER, MASKS, TerrainTree, read_masks
+    from heat3d_ext_battlefield.frostbiteterrain import MASK_HEADER, MASKS, TerrainTree, read_masks
 
     border = (tile - 64) // 2
 
@@ -1025,8 +1025,8 @@ def test_mask_pages_whose_borders_disagree_are_refused():
     import struct
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbite import UnsupportedFrostbite
-    from heat3d_gamefiles.frostbiteterrain import MASK_HEADER, MASKS, TerrainTree, read_masks
+    from heat3d_ext_battlefield.frostbite import UnsupportedFrostbite
+    from heat3d_ext_battlefield.frostbiteterrain import MASK_HEADER, MASKS, TerrainTree, read_masks
 
     # Two pages of one layer side by side along x, a ramp across both: the
     # left page's right border holds the right page's first core columns.
@@ -1056,7 +1056,7 @@ def _float3(family: bytes, value) -> bytes:
 
 
 def test_a_block_s_tint_is_each_family_s_first_value_that_is_not_neutral():
-    from heat3d_gamefiles.frostbitematerial import block_tint
+    from heat3d_ext_battlefield.frostbitematerial import block_tint
 
     # The first of a family is neutral (0.5 where 0.5 leaves the map as it is),
     # the second blue; another family halves the brightness.
@@ -1076,7 +1076,7 @@ def test_a_block_s_tint_is_each_family_s_first_value_that_is_not_neutral():
 def test_a_grey_map_takes_its_tint_and_a_coloured_one_keeps_its_colour():
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbitelevel import _tinted
+    from heat3d_ext_battlefield.frostbitelevel import _tinted
 
     model = SimpleNamespace(images={"grey": np.full((4, 4, 3), 200, np.uint8), "red": np.zeros((4, 4, 3), np.uint8)})
     model.images["red"][..., 0] = 200
@@ -1087,16 +1087,16 @@ def test_a_grey_map_takes_its_tint_and_a_coloured_one_keeps_its_colour():
 
 
 def test_a_palette_vertex_draws_its_swatch_s_centre():
-    from heat3d_gamefiles.frostbitelevel import _palette_uvs
+    from heat3d_ext_battlefield.frostbitelevel import _palette_uvs
 
     palette = np.array([[0, 0, 0, 255], [153, 32, 0, 255], [255, 255, 219, 64]], np.float32)
     assert np.allclose(_palette_uvs(palette), [[1 / 32, 1 / 32], [9.5 / 16, 2.5 / 16], [15.5 / 16, 15.5 / 16]])
 
 
 def test_blockout_cinematic_lighting_and_channel_mask_names_are_left_out():
-    from heat3d_gamefiles.frostbitedecals import MASK_PAINT
-    from heat3d_gamefiles.frostbitelevel import BLOCKOUT, CINEMATIC, LIGHTING
-    from heat3d_gamefiles.frostbitematerial import MaterialLinks, TextureInfo
+    from heat3d_ext_battlefield.frostbitedecals import MASK_PAINT
+    from heat3d_ext_battlefield.frostbitelevel import BLOCKOUT, CINEMATIC, LIGHTING
+    from heat3d_ext_battlefield.frostbitematerial import MaterialLinks, TextureInfo
 
     assert BLOCKOUT.search("M_Whitebox") and not BLOCKOUT.search("M_WhiteBrick")
     assert CINEMATIC.search("common/hardware/vehicles/heli/art/cinematics/ob_heli_cin_mesh")
@@ -1117,7 +1117,7 @@ def test_blockout_cinematic_lighting_and_channel_mask_names_are_left_out():
 
 
 def test_a_coarse_slope_grid_is_spread_back_bilinearly():
-    from heat3d_gamefiles.frostbitelevel import _upsample
+    from heat3d_ext_battlefield.frostbitelevel import _upsample
 
     coarse = np.array([[0.0, 8.0], [16.0, 24.0]], np.float32)
     fine = _upsample(coarse, 8, 16, 16)
@@ -1127,8 +1127,8 @@ def test_a_coarse_slope_grid_is_spread_back_bilinearly():
 
 
 def test_an_object_s_overlay_is_drawn_through_its_unwrap():
-    from heat3d_gamefiles.frostbitelevel import _unwrapped
-    from heat3d_gamefiles.frostbitematerial import MaterialLinks, TextureInfo
+    from heat3d_ext_battlefield.frostbitelevel import _unwrapped
+    from heat3d_ext_battlefield.frostbitematerial import MaterialLinks, TextureInfo
 
     names = ["t_tank_02_trim_cs", "t_tank_02_overlay_cs", "t_tank_02_overlay_a"]
     links = MaterialLinks()
@@ -1141,7 +1141,7 @@ def test_an_object_s_overlay_is_drawn_through_its_unwrap():
 
 
 def test_a_variation_draws_with_the_block_its_hash_keys():
-    from heat3d_gamefiles.frostbitelevel import variant_keys, variation_hashes, with_variations
+    from heat3d_ext_battlefield.frostbitelevel import variant_keys, variation_hashes, with_variations
 
     rows = np.zeros((3, 4, 4), np.float32)
     rows[:, 0, 0] = rows[:, 1, 1] = rows[:, 2, 2] = 1.0
@@ -1160,7 +1160,7 @@ def test_a_variation_draws_with_the_block_its_hash_keys():
 
 
 def test_a_variation_reaches_a_section_through_a_twin_block():
-    from heat3d_gamefiles.frostbitelevel import variant_keys
+    from heat3d_ext_battlefield.frostbitelevel import variant_keys
 
     # Three lengths of wall whose stripes share one default block. Two have a
     # blue variant under the variation's hash; the third has none, and the
@@ -1182,7 +1182,7 @@ def test_a_variation_reaches_a_section_through_a_twin_block():
 def test_a_letter_sheet_is_laid_on_by_its_own_texture_coordinates():
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbitelevel import _lifted, _sheet_uvs
+    from heat3d_ext_battlefield.frostbitelevel import _lifted, _sheet_uvs
 
     # A wall's number: the first set tiles the plaster nearly twice across the
     # panel, the fourth lays the sheet on once (u -1 to 0, v 1 to 2, a few
@@ -1203,7 +1203,7 @@ def test_a_letter_sheet_is_laid_on_by_its_own_texture_coordinates():
 
 
 def test_a_single_channel_map_decodes_as_grey():
-    from heat3d_gamefiles.frostbitematerial import TextureInfo, decode_texture
+    from heat3d_ext_battlefield.frostbitematerial import TextureInfo, decode_texture
 
     # One BC4 block: endpoints 255 and 0, every texel the first.
     info = TextureInfo("x/t_track_op", 0, 62, 4, 4, 1, b"", (8,))
@@ -1215,7 +1215,7 @@ def test_a_mesh_with_a_destruction_asset_of_its_name_is_destructible(tmp_path):
     import json
     from types import SimpleNamespace
 
-    from heat3d_gamefiles.frostbitelevel import DESTRUCTIBLE, LevelModel, Piece, destructible, write_level
+    from heat3d_ext_battlefield.frostbitelevel import DESTRUCTIBLE, LevelModel, Piece, destructible, write_level
 
     level = SimpleNamespace(res={"env/br_wall_01.destruction": 0, "env/br_wall_01_mesh": 0}, ebx={})
     assert destructible(level, "env/br_wall_01_mesh")
@@ -1235,7 +1235,7 @@ def test_a_mesh_with_a_destruction_asset_of_its_name_is_destructible(tmp_path):
 
 
 def test_a_variation_swaps_the_texture_its_block_replaces():
-    from heat3d_gamefiles.frostbitematerial import MaterialLinks, TextureInfo
+    from heat3d_ext_battlefield.frostbitematerial import MaterialLinks, TextureInfo
 
     names = ["t_de_hall_letter_a_01_ca", "t_de_hall_number_01_ca", "t_com_plaster_cs"]
     links = MaterialLinks()

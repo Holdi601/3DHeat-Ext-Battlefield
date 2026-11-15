@@ -1,6 +1,6 @@
 ---
 title: "Frostbite: `.toc`, `.cas`, zväzky, siete a levely"
-nav_order: 5
+nav_order: 4
 lang: "sk"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -16,26 +16,26 @@ hovorí, ktoré zväzky level načíta, zväzky pomenúvajú každé aktívum a 
 ktorá sieť kde stojí.
 
 Zdroje:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tabuľky, balíky, užitočné zaťaženie),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (zväzky a ich manifesty),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (oddiely EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (výškové pole),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (textúry a materiály),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (umiestnenie a export).
-Príkazy: `identify`, `levels`, `level` (pozri [Príkazy](commands.md#levels-and-level-frostbite)).
+Príkazy: `identify`, `levels`, `level` (pozri [Príkazy](../cli-reference.md)).
 
 Hra o ničom z tohto nedokumentuje. Každé rozloženie nižšie bolo prečítané zo
 súborov a potom overené voči všetkým z nich, a každá časť hovorí, aká bola
 kontrola. Kde Frosty modding nástroje opisujú staršie verzie štruktúry, názvy polí
-nasledujú ich; žiaden kód sa z nich nepreberal (pozri [Pravidlá a licencie](rules-and-licences.md)).
+nasledujú ich; žiaden kód sa z nich nepreberal (pozri [Pravidlá a licencie](../terms.md)).
 
 ## Hlavička, ktorá vyzerá zašifrovane a nie je {#the-header-that-looks-encrypted-and-is-not}
 
@@ -139,7 +139,7 @@ Nulová komprimovaná veľkosť znamená uložené, pokiaľ sa to dekomprimuje n
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), z vlastnej DLL `oo2core` hry) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/sk/reader-oodle.html), z vlastnej DLL `oo2core` hry) |
 | iné, s rovnakými veľkosťami | skopírované tak, ako sú uložené |
 | iné | odmietnuté |
 
@@ -239,7 +239,7 @@ plný hrot. Úroveň detailu, ktorá zavedie takýto materiál, ktorý jej najje
 
 ## Terén {#terrain}
 
-Zdroj: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Zdroj: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Terén je res TerrainStreamingTree (typ `0x22FE8AC8`) a bloky, ktoré pomenúva.
 
@@ -397,7 +397,7 @@ neumiestňuje, takže ani jedna sa nedá označiť, že drží diery.
 
 ## Nálepky terénu {#terrain-decals}
 
-Zdroj: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Zdroj: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Cesty, ranvoje, betónové plochy, namaľované čiary a písmená, stopy pneumatík: res
 `TerrainDecals` (typ `0x15E1F32E`) ich drží ako plochú geometriu, ktorú hra prekladá
@@ -456,7 +456,7 @@ vo farbe samotnej zeme.
 
 ## Textúry a materiály {#textures-and-materials}
 
-Zdroj: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Zdroj: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Res Texture (typ `0x6BDE20BA`) je 180-bajtová hlavička: typ a formát pixelov na +8,
 šírka a výška na +22, počet mipov na +30, GUID bloku na +40, pätnásť veľkostí mipov
@@ -608,7 +608,7 @@ prehliadač 3DHeat obalí každú opakujúcu sa textúru v svojom atlase. Render
 namiesto toho orezáva, roztiahne rebrá na dvojnásobnú šírku, zmení betónovú podlahu
 na pruhy pozdĺž jednej osi a dá oceľovým nosníkom veže farbu okraja ich textúry; pre
 neho `--clamped-uvs` rozreže každý trojuholník pozdĺž čiar, kde sa jeho textúra
-opakuje, a presunie každý kus do 0..1 (pozri [Výstupný formát](output-format.md)).
+opakuje, a presunie každý kus do 0..1 (pozri [Výstupný formát](https://holdi601.github.io/3DHeat-GameFiles/sk/output-format.html)).
 Potom 0,03 % texturovaných trojuholníkov, cez ktoré sa textúra opakuje viac než
 16-krát, siaha von, a trojuholník, ktorý by rezanie rozdelilo na viac než 4 kusy, sa
 kreslí v priemernej farbe svojej textúry: kôra sa opakuje dole každou vetvou a
@@ -657,7 +657,7 @@ celý level nemôže byť správna všade; správne by boli masky.
 
 ## Navigačná sieť {#navigation-mesh}
 
-Zdroj: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Zdroj: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Level dodáva jeden oddiel na agenta, `<level>/dbt/<level>_navmesh_layer_<n>`: v jednom
 leveli je vrstva 0 vojak (1,8 m vysoký, krok 0,18 m, polomer 0,4 m) a dve ďalšie sú

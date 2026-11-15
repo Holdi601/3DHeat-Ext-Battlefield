@@ -1,6 +1,6 @@
 ---
 title: "Poziomy Battlefield 6: `levels` i `level`"
-nav_order: 1
+nav_order: 2
 lang: "pl"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -20,8 +20,8 @@ Eksportuje cały poziom Frostbite zainstalowanej gry: mapę wysokości terenu, k
 1. **Wypisz poziomy**, które gra zawiera:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Każda linia to tabela poziomu (`levels/<level>/<level>.toc`) z rozmiarem i miejscem pochodzenia: `Data` dla gry podstawowej, `Update/<pack>` dla aktualizacji.
@@ -29,20 +29,20 @@ Eksportuje cały poziom Frostbite zainstalowanej gry: mapę wysokości terenu, k
 2. **Wyeksportuj jeden**, po nazwie, unikalnej części nazwy albo ścieżce jego `.toc`. Zacznij bez tekstur, żeby zobaczyć kształt i rozmiar:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Dodaj kolor**, gdy wygląda dobrze:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Dodaj powierzchnie do chodzenia** albo zmniejsz plik:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Otwórz `level.glb`** w panelu Tło / poziom przeglądarki 3DHeat ([wczytywanie poziomu](https://holdi601.github.io/3DHeat/levels.html)).
@@ -63,7 +63,7 @@ Eksportuje cały poziom Frostbite zainstalowanej gry: mapę wysokości terenu, k
 | `--by-mesh` | wyłączone | jedna część na siatkę źródłową i materiał, żeby znaleźć, czym jest część |
 | `--clamped-uvs` | wyłączone | dla renderów, które nie potrafią powtarzać tekstury |
 
-Pełna tabela, z rozmiarami, których można się spodziewać (cały poziom ma setki MB), jest na stronie [Polecenia](commands.md#levels-and-level-frostbite). Jak czyta się tabele, pakiety, siatki i teren, opisano na [Frostbite](reader-frostbite.md).
+Pełna tabela, z rozmiarami, których można się spodziewać (cały poziom ma setki MB), jest na stronie [Polecenia](../cli-reference.md). Jak czyta się tabele, pakiety, siatki i teren, opisano na [Frostbite](reader-frostbite.md).
 
 ## Przykładowe wyjście {#example-output}
 
@@ -86,6 +86,6 @@ Navigation mesh: <tiles read>.
 
 ## Części {#the-parts}
 
-`ground:terrain` (mapa wysokości), `ground:terrain backdrop` i `ground:terrain blend`, `structure:<kind>` dla każdego rodzaju siatki (dla każdej mapy kolorów przy `--textures`, z dopiskiem ` (destructible)` dla rzeczy, które mogą zostać zniszczone w meczu), oraz `nav:walkable` przy `--navmesh`. Zobacz [Format wyjściowy](output-format.md).
+`ground:terrain` (mapa wysokości), `ground:terrain backdrop` i `ground:terrain blend`, `structure:<kind>` dla każdego rodzaju siatki (dla każdej mapy kolorów przy `--textures`, z dopiskiem ` (destructible)` dla rzeczy, które mogą zostać zniszczone w meczu), oraz `nav:walkable` przy `--navmesh`. Zobacz [Format wyjściowy](https://holdi601.github.io/3DHeat-GameFiles/pl/output-format.html).
 
-Plik zawiera treści gry: jest przeznaczony na maszynę, na której powstał, a nie do przekazywania dalej ([Zasady i licencje](rules-and-licences.md)).
+Plik zawiera treści gry: jest przeznaczony na maszynę, na której powstał, a nie do przekazywania dalej ([Zasady i licencje](../terms.md)).

@@ -1,7 +1,7 @@
 """
 Miniature Frostbite files, built the way the readers expect them.
 
-Every structure here is the inverse of what a reader in `heat3d_gamefiles`
+Every structure here is the inverse of what a reader in `heat3d_ext_battlefield`
 parses, kept as small as it can be while still exercising the parts that go
 wrong: a level table whose chunk identifiers and locations are in different
 orders, a bundle whose entries continue a blob named earlier, a mesh with a
@@ -14,7 +14,7 @@ import struct
 
 import numpy as np
 
-from heat3d_gamefiles.frostbite import MAGIC_SIGNED, SIGNED_HEADER
+from heat3d_ext_battlefield.frostbite import MAGIC_SIGNED, SIGNED_HEADER
 
 
 def location(package: int, cas: int, offset: int, size: int) -> bytes:

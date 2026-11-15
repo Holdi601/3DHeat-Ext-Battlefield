@@ -1,6 +1,6 @@
 ---
 title: Razine Battlefield 6
-nav_order: 1
+nav_order: 2
 lang: "hr"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -25,8 +25,8 @@ hodajuće površine vojnika.
 1. **Popišite razine** koje igra isporučuje:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Svaki redak je tablica razine (`levels/<level>/<level>.toc`) s veličinom i mjestom
@@ -36,20 +36,20 @@ hodajuće površine vojnika.
    Počnite bez teksture da vidite oblik i veličinu:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Dodajte boju** kad izgleda dobro:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Dodajte hodajuće površine**, ili smanjite datoteku:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Otvorite `level.glb`** u panelu Pozadina / razina 3DHeat preglednika
@@ -72,7 +72,7 @@ hodajuće površine vojnika.
 | `--clamped-uvs` | isključeno | za renderere koji ne mogu ponavljati teksturu |
 
 Potpuna tablica, s veličinama koje treba očekivati (cijela razina je stotine MB), nalazi
-se na [Naredbe](commands.md#levels-and-level-frostbite). Kako se čitaju tablice,
+se na [Naredbe](../cli-reference.md). Kako se čitaju tablice,
 paketi, mreže i teren, opisano je na [Frostbite](reader-frostbite.md).
 
 ## Primjer izlaza {#example-output}
@@ -100,7 +100,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (visinsko polje), `ground:terrain backdrop` i `ground:terrain blend`,
 `structure:<vrsta>` po vrsti mreže (po mapi boja uz `--textures`, uz ` (destructible)`
 za ono što se može uništiti u meču), i `nav:walkable` uz `--navmesh`. Vidi
-[Format izlaza](output-format.md).
+[Format izlaza](https://holdi601.github.io/3DHeat-GameFiles/hr/output-format.html).
 
 Datoteka sadrži sadržaj igre: namijenjena je računalu na kojem je napravljena, a ne za
-prosljeđivanje ([Pravila i licence](rules-and-licences.md)).
+prosljeđivanje ([Pravila i licence](../terms.md)).

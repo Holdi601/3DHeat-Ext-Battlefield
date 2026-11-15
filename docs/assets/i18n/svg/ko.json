@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(기본 게임과 업데이트)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "예산",
+ "Level table": "레벨 표",
+ "Options": "옵션",
+ "bundles, meshes,": "번들, 메시,",
+ "coarser levels of detail": "더 거친 디테일 단계",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 레벨을 .glb 하나로",
+ "levels": "levels",
+ "lists every level": "모든 레벨을 나열",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "지형, 배치",
+ "until --detail-budget fits": "--detail-budget에 맞을 때까지"
+}

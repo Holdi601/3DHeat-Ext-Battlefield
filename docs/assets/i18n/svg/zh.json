@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "（本体游戏及更新）",
+ "--navmesh, --skip": "--navmesh、--skip",
+ "--textures, --ground-texture,": "--textures、--ground-texture，",
+ "<level>.glb": "<level>.glb",
+ "Budget": "预算",
+ "Level table": "关卡表",
+ "Options": "选项",
+ "bundles, meshes,": "bundle、网格、",
+ "coarser levels of detail": "更粗的细节层级",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level：将一个 Battlefield 6 关卡导出为一个 .glb",
+ "levels": "关卡",
+ "lists every level": "列出每个关卡",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "地形、放置",
+ "until --detail-budget fits": "直到 --detail-budget 符合要求"
+}

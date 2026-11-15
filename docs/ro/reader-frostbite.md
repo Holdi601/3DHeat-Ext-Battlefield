@@ -1,6 +1,6 @@
 ---
 title: "Frostbite: `.toc`, `.cas`, pachete, mesh-uri și niveluri"
-nav_order: 5
+nav_order: 4
 lang: "ro"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -12,23 +12,23 @@ search_exclude: true
 **Citește un nivel Battlefield 6 până la terenul lui, mesh-urile plasate și hărțile lor de culoare, și îl scrie ca `.glb`.** Jocurile Frostbite (Battlefield, Need for Speed, Dead Space) își țin conținutul în blob-uri `.cas`, descrise de tabele de conținut `.toc`. Tabelul unui nivel spune ce pachete încarcă nivelul, pachetele numesc fiecare activ, iar activele spun ce mesh stă unde.
 
 Surse:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tabele, pachete, payload-uri),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (pachete și manifestele lor),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (partiții EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (heightfield),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (texturi și materiale),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (plasare și export).
-Comenzi: `identify`, `levels`, `level` (vedeți [Comenzi](commands.md#levels-and-level-frostbite)).
+Comenzi: `identify`, `levels`, `level` (vedeți [Comenzi](../cli-reference.md)).
 
-Nimic de aici nu este documentat de joc. Fiecare layout de mai jos a fost citit din fișiere și apoi confruntat cu toate, iar fiecare secțiune spune ce verificare s-a făcut. Acolo unde uneltele de modding Frosty descriu versiuni mai vechi ale unei structuri, numele câmpurilor urmează ale lor; nu s-a luat niciun cod de la ele (vedeți [Reguli și licențe](rules-and-licences.md)).
+Nimic de aici nu este documentat de joc. Fiecare layout de mai jos a fost citit din fișiere și apoi confruntat cu toate, iar fiecare secțiune spune ce verificare s-a făcut. Acolo unde uneltele de modding Frosty descriu versiuni mai vechi ale unei structuri, numele câmpurilor urmează ale lor; nu s-a luat niciun cod de la ele (vedeți [Reguli și licențe](../terms.md)).
 
 ## Antetul care pare criptat și nu este {#the-header-that-looks-encrypted-and-is-not}
 
@@ -97,7 +97,7 @@ O mărime comprimată zero înseamnă stocat, atâta timp cât se decomprimă la
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), din DLL-ul `oo2core` al jocului) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/ro/reader-oodle.html), din DLL-ul `oo2core` al jocului) |
 | altul, cu mărimi egale | copiat ca stocat |
 | altul | refuzat |
 
@@ -157,7 +157,7 @@ Planurile scoase din joc nu sunt urmate: activele de dezvoltare și de test (`ga
 
 ## Terenul {#terrain}
 
-Sursă: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Sursă: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Terenul este o res TerrainStreamingTree (tipul `0x22FE8AC8`) și fragmentele pe care le numește.
 
@@ -231,7 +231,7 @@ Verificat față de culoarea mediană a solului din cadrele de joc ale a trei ni
 
 ## Decalcurile terenului {#terrain-decals}
 
-Sursă: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Sursă: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Drumuri, piste, platforme de beton, marcaje și litere pictate, urme de cauciucuri: res-ul `TerrainDecals` (tipul `0x15E1F32E`) le ține ca geometrie plată pe care jocul o așază peste teren.
 
@@ -269,7 +269,7 @@ Desenate ca geometrie proprie, decalcurile ar avea nevoie de amestec alfa, pe ca
 
 ## Texturi și materiale {#textures-and-materials}
 
-Sursă: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Sursă: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 O res Texture (tipul `0x6BDE20BA`) este un antet de 180 de octeți: tipul și formatul pixelului la +8, lățimea și înălțimea la +22, numărul de mip-uri la +30, GUID-ul fragmentului la +40, cincisprezece mărimi de mip la +56. Fragmentul este lanțul de mip-uri, cel mai mare primul. Unele fragmente nu au cele mai mari mip-uri, care sunt într-un pachet de rezoluție mare; lungimea fragmentului spune de la ce mip începe. Fragmentul acelui pachet este numit la +164; se citește din [suplimentele](#which-table-is-the-level) nivelului atunci când lipsește un mip pe care îl cere fragmentul principal, iar lungimea lui plus cea a fragmentului principal dă lanțul întreg.
 
@@ -315,7 +315,7 @@ Un bloc se coace o singură dată pentru fiecare set de conținut, iar intrarea 
 
 **Hărți decupate.** Al patrulea canal al hărții de culoare înseamnă lucruri diferite după numele hărții. În `_cs`, de departe cel mai comun (893 din hărțile alese ale unui nivel), este netezimea: 1% din alfa unei hărți medii se află la 0,1 de 0 sau 1. În `_cu` (frunze, iarbă) și `_ca` (culoare și alfa) este opacitate: 90% și 87%. O hartă de culoare numită `..._cu` sau `..._ca` a cărei alfa este cel puțin 75% aproape de 0 sau 1, cel puțin 1% sub 0,5 și cel puțin 5% peste se scrie cu alfa ei, ca PNG, iar materialul ei ca `alphaMode` MASK glTF, `alphaCutoff` 0,5, cu două fețe; cărțile de frunze arată atunci frunze, nu colțurile lor negre. O hartă de frunze a unui copac nu are deloc alfa (4 din 255 cel mult): frondele lui sunt tăiate de geometrie, iar cu doar primele două condiții întreaga coroană ieșea tăiată.
 
-Coordonatele de textură sunt utilizarea de vârf `0x21`, doi semi-float-uri (format 6) sau două float-uri (format 2). Secțiunile au până la trei seturi în plus (`0x22` până la `0x24`) pentru straturile de decal și de detaliu. Coordonatele se repetă: partea nervurată a unui container merge de la -1,6 la 1,8, plăcile fundalului de teren stau în întregime în afara intervalului 0..1, iar într-un nivel 23% din triunghiurile texturate ajung în afara lui 0..1. Ele se scriu cum sunt, cu un eșantionator care se repetă; vizualizatorul 3DHeat împachetează fiecare textură repetitivă în atlasul lui. Un renderer care le fixează în loc le întinde nervurile la dublul lățimii lor, transformă o podea de beton în dungi pe o axă și dă grinzilor de oțel ale unui turn culoarea de margine a texturii lor; pentru el, `--clamped-uvs` taie fiecare triunghi de-a lungul liniilor unde textura lui se repetă și mută fiecare bucată în 0..1 (vedeți [Formatul de ieșire](output-format.md)). Apoi 0,03% din triunghiurile texturate, peste care o textură se repetă de mai mult de 16 ori, ajung în afară, iar un triunghi pe care tăierea l-ar face în mai mult de 4 bucăți se desenează în culoarea medie a texturii în loc: scoarța se repetă pe fiecare ramură, iar tăiată, copacii unui nivel au trecut de la 6,4 la 24 de milioane de triunghiuri.
+Coordonatele de textură sunt utilizarea de vârf `0x21`, doi semi-float-uri (format 6) sau două float-uri (format 2). Secțiunile au până la trei seturi în plus (`0x22` până la `0x24`) pentru straturile de decal și de detaliu. Coordonatele se repetă: partea nervurată a unui container merge de la -1,6 la 1,8, plăcile fundalului de teren stau în întregime în afara intervalului 0..1, iar într-un nivel 23% din triunghiurile texturate ajung în afara lui 0..1. Ele se scriu cum sunt, cu un eșantionator care se repetă; vizualizatorul 3DHeat împachetează fiecare textură repetitivă în atlasul lui. Un renderer care le fixează în loc le întinde nervurile la dublul lățimii lor, transformă o podea de beton în dungi pe o axă și dă grinzilor de oțel ale unui turn culoarea de margine a texturii lor; pentru el, `--clamped-uvs` taie fiecare triunghi de-a lungul liniilor unde textura lui se repetă și mută fiecare bucată în 0..1 (vedeți [Formatul de ieșire](https://holdi601.github.io/3DHeat-GameFiles/ro/output-format.html)). Apoi 0,03% din triunghiurile texturate, peste care o textură se repetă de mai mult de 16 ori, ajung în afară, iar un triunghi pe care tăierea l-ar face în mai mult de 4 bucăți se desenează în culoarea medie a texturii în loc: scoarța se repetă pe fiecare ramură, iar tăiată, copacii unui nivel au trecut de la 6,4 la 24 de milioane de triunghiuri.
 
 Harta de înălțimi nu are o hartă de culoare proprie care să se poată citi. Unde o hartă a fundalului de teren o acoperă, se colorează din ea: coordonatele de textură ale fundalului sunt o funcție liniară de x și z ai lumii (99% din vârfuri în 0,001 de ea; harta acoperă un pătrat de 65.536 m, răsucit cu un sfert), iar aceeași funcție dă și pe cele ale hărții de înălțimi. Nivelul livrează mip-urile acelei hărți de la 2.048 px în jos, deci harta de înălțimi primește 32 m un pixel. Stânca lui întunecată stă pe terenul abrupt: corelația dintre întuneric și pantă este 0,48, și cel mult 0,34 pentru celelalte șapte orientări.
 
@@ -335,7 +335,7 @@ Primul este corectat; celelalte două erau puțin mai aproape de nuanță înain
 
 ## Plasa de navigare {#navigation-mesh}
 
-Sursă: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Sursă: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Un nivel livrează câte o partiție per agent, `<level>/dbt/<level>_navmesh_layer_<n>`: într-un nivel, stratul 0 este soldatul (1,8 m înălțime, 0,18 m pas, rază de 0,4 m), iar alte două sunt vehicule (3,5 și 10 m înălțime). Fiecare partiție ține două tablouri:
 

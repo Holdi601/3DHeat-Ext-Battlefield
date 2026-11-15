@@ -1,6 +1,6 @@
 ---
 title: "Frostbite"
-nav_order: 5
+nav_order: 4
 lang: "cs"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -12,23 +12,23 @@ search_exclude: true
 **Čte úroveň Battlefield 6 až do jejího terénu, jejích umístěných meshů a jejich barevných map a zapisuje ji jako `.glb`.** Hry Frostbite (Battlefield, Need for Speed, Dead Space) drží svůj obsah v blobech `.cas`, popsaných tabulkami obsahu `.toc`. Tabulka úrovně říká, které bundly úroveň načítá, bundly pojmenovávají každý asset a assety říkají, který mesh kde stojí.
 
 Zdroje:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tabulky, balíčky, datové bloky),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (bundly a jejich manifesty),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (oddíly EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (výšková mapa),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (textury a materiály),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (umístění a export).
-Příkazy: `identify`, `levels`, `level` (viz [Příkazy](commands.md#levels-and-level-frostbite)).
+Příkazy: `identify`, `levels`, `level` (viz [Příkazy](../cli-reference.md)).
 
-Nic z toho hra nedokumentuje. Každé rozložení níže bylo přečteno ze souborů a pak ověřeno proti všem z nich, a každá sekce říká, jaká kontrola to byla. Tam, kde starší nástroje Frosty popisují starší verze struktury, názvy polí následují jejich, ale žádný kód z nich převzat nebyl (viz [Pravidla a licence](rules-and-licences.md)).
+Nic z toho hra nedokumentuje. Každé rozložení níže bylo přečteno ze souborů a pak ověřeno proti všem z nich, a každá sekce říká, jaká kontrola to byla. Tam, kde starší nástroje Frosty popisují starší verze struktury, názvy polí následují jejich, ale žádný kód z nich převzat nebyl (viz [Pravidla a licence](../terms.md)).
 
 ## Hlavička, která vypadá zašifrovaně a není {#the-header-that-looks-encrypted-and-is-not}
 
@@ -97,7 +97,7 @@ Nulová komprimovaná velikost znamená uloženo, pokud se to dekomprimuje na st
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), z vlastní DLL `oo2core` hry) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/cs/reader-oodle.html), z vlastní DLL `oo2core` hry) |
 | jiné, se stejnými velikostmi | zkopírováno tak, jak je uloženo |
 | jiné | odmítnuto |
 
@@ -157,7 +157,7 @@ Blueprinty odložené mimo hru se nesledují: vývojové a testovací assety (`g
 
 ## Terén {#terrain}
 
-Zdroj: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Zdroj: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Terén je res TerrainStreamingTree (typ `0x22FE8AC8`) a chunky, které pojmenovává.
 
@@ -229,7 +229,7 @@ Porovnáno s mediánovou barvou země na herních snímcích tří úrovní (chr
 
 ## Dekály terénu {#terrain-decals}
 
-Zdroj: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Zdroj: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Silnice, dráhy, betonové plochy, malované čáry a písmena, stopy pneumatik: res `TerrainDecals` (typ `0x15E1F32E`) je drží jako plochou geometrii, kterou hra položí přes terén.
 
@@ -267,7 +267,7 @@ Kdyby se dekály kreslily jako vlastní geometrie, potřebovaly by alfa prolín�
 
 ## Textury a materiály {#textures-and-materials}
 
-Zdroj: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Zdroj: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Res Texture (typ `0x6BDE20BA`) je 180bajtová hlavička: typ a formát pixelů na +8, šířka a výška na +22, počet mipů na +30, GUID chunku na +40, patnáct velikostí mipů na +56. Chunk je řetěz mipů, největší první. Některé chunky postrádají své největší mipy, které jsou v balíčku ve vysokém rozlišení, a délka chunku říká, od kterého mipu začíná. Chunk toho balíčku je pojmenován na +164; čte se z [doplňků](#which-table-is-the-level) úrovně, když je potřeba mip, který hlavní chunk nemá, a jeho délka plus délka hlavního chunku je celý řetěz.
 
@@ -313,7 +313,7 @@ Blok se zapéká jednou pro každou sadu obsahu a položka depa pro klíč nese 
 
 **Výřezové mapy.** Čtvrtý kanál barevné mapy znamená různé věci podle názvu mapy. V `_cs`, zdaleka nejčastější (893 z vybraných map jedné úrovně), je to hladkost: 1 % alfy mediánové mapy leží do 0.1 od 0 nebo 1. V `_cu` (listí, tráva) a `_ca` (barva a alfa) je to průhlednost: 90 % a 87 %. Barevná mapa pojmenovaná `..._cu` nebo `..._ca`, jejíž alfa je alespoň z 75 % blízko 0 nebo 1, alespoň z 1 % pod 0.5 a alespoň z 5 % nad ním, se zapisuje s alfou jako PNG a její materiál jako glTF `alphaMode` MASK, `alphaCutoff` 0.5, oboustranně; listové karty pak ukazují listí, ne jeho černé rohy. List stromu, který nemá žádnou alfu (nejvýš 4 z 255), je vyříznut geometrií: jeho listy se řežou geometrií, a s jen prvními dvěma podmínkami byla celá koruna vyříznuta pryč.
 
-Souřadnice textur jsou vrcholový užitek `0x21`, dvě poloviční čísla (formát 6), nebo dva floaty (formát 2). Sekce nesou až tři další sady (`0x22` až `0x24`) pro dekálové a detailní vrstvy. Souřadnice se dlaždicují: vnější strana žebrování kontejneru běží od -1.6 do 1.8, dlaždice pozadí terénu leží celé mimo 0..1, a v jedné úrovni leží 23 % texturovaných trojúhelníků částečně mimo 0..1. Zapisují se tak, jak jsou, s opakujícím se vzorkovačem; prohlížeč 3DHeat každou opakující se texturu zabalí do atlasu. Renderer, který je místo toho ořezává, rozmáže žebra na dvojnásobnou šířku, promění betonovou podlahu v pruhy podél jedné osy a dá ocelovým nosníkům věže barvu okraje jejich textury; pro něj `--clamped-uvs` rozřeže každý trojúhelník podél čar, kde se jeho textura opakuje, a přesune každý kus do 0..1 (viz [Výstupní formát](output-format.md)). Potom 0.03 % texturovaných trojúhelníků, přes které se textura opakuje víc než 16krát, leží mimo, a trojúhelník, který by řezání rozdělilo na víc než 4 kusy, se kreslí v průměrné barvě své textury: kůra se opakuje podél každé větve, a rozřezané, stromy úrovně vzrostly z 6.4 na 24 milionů trojúhelníků.
+Souřadnice textur jsou vrcholový užitek `0x21`, dvě poloviční čísla (formát 6), nebo dva floaty (formát 2). Sekce nesou až tři další sady (`0x22` až `0x24`) pro dekálové a detailní vrstvy. Souřadnice se dlaždicují: vnější strana žebrování kontejneru běží od -1.6 do 1.8, dlaždice pozadí terénu leží celé mimo 0..1, a v jedné úrovni leží 23 % texturovaných trojúhelníků částečně mimo 0..1. Zapisují se tak, jak jsou, s opakujícím se vzorkovačem; prohlížeč 3DHeat každou opakující se texturu zabalí do atlasu. Renderer, který je místo toho ořezává, rozmáže žebra na dvojnásobnou šířku, promění betonovou podlahu v pruhy podél jedné osy a dá ocelovým nosníkům věže barvu okraje jejich textury; pro něj `--clamped-uvs` rozřeže každý trojúhelník podél čar, kde se jeho textura opakuje, a přesune každý kus do 0..1 (viz [Výstupní formát](https://holdi601.github.io/3DHeat-GameFiles/cs/output-format.html)). Potom 0.03 % texturovaných trojúhelníků, přes které se textura opakuje víc než 16krát, leží mimo, a trojúhelník, který by řezání rozdělilo na víc než 4 kusy, se kreslí v průměrné barvě své textury: kůra se opakuje podél každé větve, a rozřezané, stromy úrovně vzrostly z 6.4 na 24 milionů trojúhelníků.
 
 Výškové mapě chybí vlastní barevná mapa, kterou by bylo možné přečíst. Kde ji pokrývá některá z barevných map pozadí terénu, je obarvena z ní: souřadnice textur pozadí jsou lineární funkcí světového x a z (99 % vrcholů v rozmezí 0.001 od ní; mapa pokrývá čtverec 65,536 m, otočený o čtvrt otáčky), a táž funkce dává souřadnice výškové mapy. Úroveň dodává mipy té mapy od 2,048 px dolů, takže výšková mapa dostane 32 m na pixel. Její tmavá skála leží na strmé zemi: korelace tmavosti se sklonem je 0.48 a nejvýš 0.34 pro sedm dalších orientací.
 
@@ -333,7 +333,7 @@ První je opravena; zbylé dvě byly před tím v odstínu o trochu blíž. Jedn
 
 ## Navigační mesh {#navigation-mesh}
 
-Zdroj: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Zdroj: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Úroveň dodává jeden oddíl na agenta, `<level>/dbt/<level>_navmesh_layer_<n>`: u jedné úrovně je vrstva 0 voják (1.8 m vysoký, krok 0.18 m, poloměr 0.4 m) a dvě další jsou vozidla (3.5 a 10 m vysoká). Každý oddíl drží dvě pole:
 

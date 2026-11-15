@@ -1,6 +1,6 @@
 ---
 title: Frostbite
-nav_order: 5
+nav_order: 4
 lang: "hr"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -12,23 +12,23 @@ search_exclude: true
 **Čita Battlefield 6 razinu do njezina terena, njezinih postavljenih mreža i njihovih mapa boja, i zapisuje je kao `.glb`.** Frostbite igre (Battlefield, Need for Speed, Dead Space) čuvaju svoj sadržaj u `.cas` blobovima, opisanim `.toc` tablicama sadržaja. Tablica razine kaže koje snopove razina učitava, snopovi imenuju svako sredstvo, a sredstva kažu koja mreža stoji gdje.
 
 Izvori:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tablice, paketi, korisni tereti),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (snopovi i njihovi manifesti),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (EBX particije),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (visinsko polje),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (teksture i materijali),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (postavljanje i izvoz).
-Naredbe: `identify`, `levels`, `level` (vidi [Naredbe](commands.md#levels-and-level-frostbite)).
+Naredbe: `identify`, `levels`, `level` (vidi [Naredbe](../cli-reference.md)).
 
-Igra ovo ništa ne dokumentira. Svaki raspored ispod pročitan je iz datoteka, a zatim provjeren na svima njima, i svaki odjeljak kaže što je bila provjera. Gdje alati za modifikaciju Frosty opisuju starije verzije strukture, nazivi polja slijede njihove; nijedan kod nije preuzet od njih (vidi [Pravila i licence](rules-and-licences.md)).
+Igra ovo ništa ne dokumentira. Svaki raspored ispod pročitan je iz datoteka, a zatim provjeren na svima njima, i svaki odjeljak kaže što je bila provjera. Gdje alati za modifikaciju Frosty opisuju starije verzije strukture, nazivi polja slijede njihove; nijedan kod nije preuzet od njih (vidi [Pravila i licence](../terms.md)).
 
 ## Zaglavlje koje izgleda šifrirano, a nije {#the-header-that-looks-encrypted-and-is-not}
 
@@ -97,7 +97,7 @@ Nulta komprimirana veličina znači da je blok spremljen bez kompresije, ako se 
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), iz vlastite DLL-a igre `oo2core`) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/hr/reader-oodle.html), iz vlastite DLL-a igre `oo2core`) |
 | ostalo, s jednakim veličinama | kopira se kao spremljeno |
 | ostalo | odbijeno |
 
@@ -157,7 +157,7 @@ Blueprinti postavljeni izvan igre se ne prate: razvojna i testna sredstva (`game
 
 ## Teren {#terrain}
 
-Izvor: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Izvor: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Teren je TerrainStreamingTree res (vrsta `0x22FE8AC8`) i chunkovi koje imenuje.
 
@@ -231,7 +231,7 @@ Provjereno prema srednjoj boji tla iz snimaka igranja triju razina (kroma kao cr
 
 ## Dekali terena {#terrain-decals}
 
-Izvor: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Izvor: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Ceste, uzletišta, betonske platforme, naslikane linije i slova, tragovi guma: res `TerrainDecals` (vrsta `0x15E1F32E`) drži ih kao ravnu geometriju koju igra prebacuje preko terena.
 
@@ -269,7 +269,7 @@ Nacrtani kao vlastita geometrija, dekali bi trebali alfa stapanje, koje pisac ne
 
 ## Teksture i materijali {#textures-and-materials}
 
-Izvor: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Izvor: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Res Texture (vrsta `0x6BDE20BA`) je zaglavlje od 180 bajtova: vrsta i format piksela na +8, širina i visina na +22, broj mipova na +30, GUID chunka na +40, petnaest veličina mipova na +56. Chunk je lanac mipova, od najvećeg. Neki chunkovi nemaju svoje najveće mipove, koji se isporučuju u paketu visoke razlučivosti, a duljina chunka kaže od kojeg mipa počinje. Chunk tog paketa imenovan je na +164; čita se iz [dodataka](#which-table-is-the-level) razine kada je potreban mip koji glavni chunk nema, a njegova duljina plus duljina glavnog chunka čine cijeli lanac.
 
@@ -321,7 +321,7 @@ Blok se peče jednom za svaki skup sadržaja, a unos depota za ključ nosi heš 
 
 **Mape izrezivanja.** Četvrti kanal karte boja znači različite stvari prema imenu karte. U `_cs`, daleko najčešćoj (893 od izabranih karata jedne razine), to je glatkoća: 1% alfe medijan karte leži unutar 0.1 od 0 ili 1. U `_cu` (lišće, trava) i `_ca` (boja i alfa) to je neprozirnost: 90% i 87%. Karta boja imenovana `..._cu` ili `..._ca` čija je alfa barem 75% blizu 0 ili 1, barem 1% ispod 0.5 i barem 5% iznad, zapisuje se s alfom, kao PNG, a njezin materijal kao glTF `alphaMode` MASK, `alphaCutoff` 0.5, dvostrano; kartice lišća tada pokazuju lišće, a ne svoje crne kutove. Karta lišća jednog stabla uopće nema alfe (najviše 4 od 255): njezine grane su izrezane geometrijom, a uz samo prva dva uvjeta cijela krošnja bi bila odsječena.
 
-UV koordinate teksture su usage `0x21`, dvije polovice (format 6) ili dva float-a (format 2). Odjeljci nose do tri dodatna skupa (`0x22` do `0x24`) za slojeve dekala i detalja. Koordinate se popločavaju: rebrasta strana spremnika ide od -1.6 do 1.8, pločice pozadine terena leže potpuno izvan 0..1, a u jednoj razini 23% teksturiranih trokuta seže izvan 0..1. Zapisuju se takve kakve jesu, s ponavljajućim uzorkovanjem; preglednik 3DHeat omata svaku ponavljajuću teksturu unutar svog atlasa. Prikazivač koji ih umjesto toga steže razmazuje rebra na dvostruku širinu, pretvara betonski pod u pruge duž jedne osi i daje čeličnim gredama tornja rubnu boju njihove teksture; za njega `--clamped-uvs` reže svaki trokut duž linija na kojima se njegova tekstura ponavlja i pomiče svaki komad u 0..1 (vidi [Format izlaza](output-format.md)). Nakon toga 0.03% teksturiranih trokuta, preko kojih se tekstura ponavlja više od 16 puta, seže izvan, a trokut koji bi rezanje napravilo u više od 4 komada crta se umjesto toga u prosječnoj boji svoje teksture: kora se ponavlja niz svaku granu, a s rezanjem su stabla jedne razine prešla s 6.4 na 24 milijuna trokuta.
+UV koordinate teksture su usage `0x21`, dvije polovice (format 6) ili dva float-a (format 2). Odjeljci nose do tri dodatna skupa (`0x22` do `0x24`) za slojeve dekala i detalja. Koordinate se popločavaju: rebrasta strana spremnika ide od -1.6 do 1.8, pločice pozadine terena leže potpuno izvan 0..1, a u jednoj razini 23% teksturiranih trokuta seže izvan 0..1. Zapisuju se takve kakve jesu, s ponavljajućim uzorkovanjem; preglednik 3DHeat omata svaku ponavljajuću teksturu unutar svog atlasa. Prikazivač koji ih umjesto toga steže razmazuje rebra na dvostruku širinu, pretvara betonski pod u pruge duž jedne osi i daje čeličnim gredama tornja rubnu boju njihove teksture; za njega `--clamped-uvs` reže svaki trokut duž linija na kojima se njegova tekstura ponavlja i pomiče svaki komad u 0..1 (vidi [Format izlaza](https://holdi601.github.io/3DHeat-GameFiles/hr/output-format.html)). Nakon toga 0.03% teksturiranih trokuta, preko kojih se tekstura ponavlja više od 16 puta, seže izvan, a trokut koji bi rezanje napravilo u više od 4 komada crta se umjesto toga u prosječnoj boji svoje teksture: kora se ponavlja niz svaku granu, a s rezanjem su stabla jedne razine prešla s 6.4 na 24 milijuna trokuta.
 
 Visinsko polje nema vlastitu kartu boja koja bi se mogla pročitati. Gdje je pokrije jedna od karata pozadine terena, boji se iz nje: UV koordinate pozadine su linearna funkcija svjetskih x i z (99% njezinih vrhova unutar 0.001 od nje; karta pokriva kvadrat od 65,536 m, okrenut za četvrtinu), a ista funkcija daje one visinskog polja. Razina isporučuje mipove te karte od 2,048 px dolje, pa visinsko polje dobiva 32 m po pikselu. Njegova tamna stijena leži na strmom tlu: korelacija tamnoće i nagiba je 0.48, a najviše 0.34 za sedam drugih orijentacija.
 
@@ -341,7 +341,7 @@ Prva je ispravljena; druge dvije su prije bile malo bliže po nijansi. Jedna boj
 
 ## Navigacijska mreža {#navigation-mesh}
 
-Izvor: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Izvor: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Razina isporučuje po jednu particiju za svakog agenta, `<level>/dbt/<level>_navmesh_layer_<n>`: u jednoj razini sloj 0 je vojnik (visok 1.8 m, korak 0.18 m, polumjer 0.4 m), a dva druga su vozila (visoka 3.5 i 10 m). Svaka particija drži dva niza:
 

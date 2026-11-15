@@ -1,6 +1,6 @@
 ---
 title: "Frostbite: `.toc`, `.cas`, kötegek, hálók és pályák"
-nav_order: 5
+nav_order: 4
 lang: "hu"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -17,27 +17,27 @@ pálya, a kötegek minden eszközt megneveznek, az eszközök pedig megmondják,
 mesh hol áll.
 
 Források:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (táblázatok, csomagok, adatblokkok),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (kötegek és manifesztjeik),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (EBX-partíciók),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (magassági mező),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (textúrák és anyagok),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (elhelyezés és export).
-Parancsok: `identify`, `levels`, `level` (lásd: [Parancsok](commands.md#levels-and-level-frostbite)).
+Parancsok: `identify`, `levels`, `level` (lásd: [Parancsok](../cli-reference.md)).
 
 A játék egyik részt sem dokumentálja. Minden alábbi elrendezést a fájlokról
 olvasták le, majd az összes fájlon ellenőrizték, és minden szakasz leírja, mi
 volt az ellenőrzés. Ahol a Frosty modding-eszközök egy régebbi verzió szerkezetét
 írják le, a mezőnevek az ő neveiket követik; kódot nem vettek át tőlük (lásd:
-[Jogi kérdések és licencek](rules-and-licences.md)).
+[Jogi kérdések és licencek](../terms.md)).
 
 ## Az a fejléc, amely titkosítottnak látszik, de nem az {#the-header-that-looks-encrypted-and-is-not}
 
@@ -152,7 +152,7 @@ ugyanakkora.
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), a játék saját `oo2core` DLL-jéből) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/hu/reader-oodle.html), a játék saját `oo2core` DLL-jéből) |
 | más, azonos méretekkel | ahogy tárolva van, másolva |
 | más | elutasítva |
 
@@ -259,7 +259,7 @@ kiválasztásra; a mesh legdurvább szintje az utolsó valódi.
 
 ## Terep {#terrain}
 
-Forrás: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Forrás: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 A terep egy TerrainStreamingTree res (típus `0x22FE8AC8`), és az általa megnevezett
 darabok.
@@ -445,7 +445,7 @@ hogy a lyukakat tartalmazza-e.
 
 ## Terepi dekálok {#terrain-decals}
 
-Forrás: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Forrás: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Utak, kifutók, betonfelületek, festett vonalak és betűk, gumiabroncs-nyomok: a
 `TerrainDecals` res (típus `0x15E1F32E`) tartalmazza őket, mint lapos geometriát, amelyet
@@ -509,7 +509,7 @@ talaj saját színében tartja őket.
 
 ## Textúrák és anyagok {#textures-and-materials}
 
-Forrás: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Forrás: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Egy Texture res (típus `0x6BDE20BA`) 180 bájtos fejléc: típus és pixelformátum a +8-nál,
 szélesség és magasság a +22-nél, mip-szám a +30-nál, a darab GUID-ja a +40-nél,
@@ -668,7 +668,7 @@ a 3DHeat megjelenítő minden ismétlődő textúrát az atlaszán belül csomag
 amely helyette szorítja őket, a bordákat kétszeres szélességűre nyújtja, egy betonpadlót
 csíkossá tesz egy tengely mentén, és egy torony acélgerendáinak textúrája szélének színét
 kapja; ennek `--clamped-uvs` vágja szét minden háromszöget ott, ahol a textúra ismétlődik,
-és 0..1 közé mozgatja a darabokat (lásd: [Kimeneti formátum](output-format.md)). Ezután a
+és 0..1 közé mozgatja a darabokat (lásd: [Kimeneti formátum](https://holdi601.github.io/3DHeat-GameFiles/hu/output-format.html)). Ezután a
 texturált háromszögek 0,03%-a, amelyeken a textúra 16-nál többször ismétlődik, kívül esik, és
 az a háromszög, amelyet a vágás 4-nél több darabra bontana, a textúra átlagszínével rajzolódik:
 a kéreg minden ágon ismétlődik, és vágva egy pálya fái 6,4-ről 24 millió háromszögre nőttek.
@@ -714,7 +714,7 @@ színt egy egész pályára nem lehet mindenhol helyesen alkalmazni; a maszkok l
 
 ## Navigációs háló {#navigation-mesh}
 
-Forrás: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Forrás: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Egy pálya ágensenként egy partíciót szállít, `<level>/dbt/<level>_navmesh_layer_<n>` néven:
 egy pályán a 0. réteg a katona (1,8 m magas, 0,18 m lépcsőmagasság, 0,4 m sugár), két másik

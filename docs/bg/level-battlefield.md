@@ -1,6 +1,6 @@
 ---
 title: "Нива на Battlefield 6"
-nav_order: 1
+nav_order: 2
 lang: "bg"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -20,8 +20,8 @@ search_exclude: true
 1. **Изброяване на нивата**, които играта има:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<папка на играта>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<папка на играта>"
    ```
 
    Всеки ред е таблица на ниво (`levels/<ниво>/<ниво>.toc`) с размера си и откъде идва: `Data` за основната игра, `Update/<пакет>` за обновление.
@@ -29,20 +29,20 @@ search_exclude: true
 2. **Експорт на едно**, по името му, по уникална част от него или по пътя до `.toc` файла му. Започнете без текстури, за да видиш формата и размера:
 
    ```
-   python -m heat3d_gamefiles level <ниво> -o level.glb
+   heat3d-battlefield-maps level <ниво> -o level.glb
    ```
 
 3. **Добави цвят**, когато изглежда както трябва:
 
    ```
-   python -m heat3d_gamefiles level <ниво> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <ниво> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Добави повърхностите, по които се ходи**, или намали файла:
 
    ```
-   python -m heat3d_gamefiles level <ниво> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <ниво> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <ниво> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <ниво> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Отворете `level.glb`** в панела „Фон / ниво“ на визуализатора на 3DHeat ([зареждане на ниво](https://holdi601.github.io/3DHeat/levels.html)).
@@ -63,7 +63,7 @@ search_exclude: true
 | `--by-mesh` | изключено | по една част за всяка изходна мрежа и материал, за да се открие какво е една част |
 | `--clamped-uvs` | изключено | за рендерери, които не могат да повтарят текстура |
 
-Пълната таблица, с размерите, които да очакваш (цялото ниво е стотици MB), е в [Команди](commands.md#levels-and-level-frostbite). Как се четат таблиците, пакетите, мрежите и теренът е описано в [Frostbite](reader-frostbite.md).
+Пълната таблица, с размерите, които да очакваш (цялото ниво е стотици MB), е в [Команди](../cli-reference.md). Как се четат таблиците, пакетите, мрежите и теренът е описано в [Frostbite](reader-frostbite.md).
 
 ## Примерен изход {#example-output}
 
@@ -87,6 +87,6 @@ Navigation mesh: <tiles read>.
 ## Частите {#the-parts}
 
 `ground:terrain` (височинното поле), `ground:terrain backdrop` и
-`ground:terrain blend`, `structure:<вид>` за всеки вид мрежа (за всяка цветова карта при `--textures`, с ` (destructible)` за това, което може да се разруши по време на мач), и `nav:walkable` при `--navmesh`. Вижте [Формат на изхода](output-format.md).
+`ground:terrain blend`, `structure:<вид>` за всеки вид мрежа (за всяка цветова карта при `--textures`, с ` (destructible)` за това, което може да се разруши по време на мач), и `nav:walkable` при `--navmesh`. Вижте [Формат на изхода](https://holdi601.github.io/3DHeat-GameFiles/bg/output-format.html).
 
-Файлът съдържа съдържанието на играта: предназначен е за машината, на която е направен, а не за разпространение ([Правила и лицензи](rules-and-licences.md)).
+Файлът съдържа съдържанието на играта: предназначен е за машината, на която е направен, а не за разпространение ([Правила и лицензи](../terms.md)).

@@ -1,6 +1,6 @@
 ---
 title: Levely Battlefield 6
-nav_order: 1
+nav_order: 2
 lang: "sk"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -25,8 +25,8 @@ zapečené do zeme a pochôdzne plochy vojakov.
 1. **Vypíšte levely**, ktoré hra obsahuje:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Každý riadok je tabuľka levelu (`levels/<level>/<level>.toc`) s jeho veľkosťou
@@ -36,20 +36,20 @@ zapečené do zeme a pochôdzne plochy vojakov.
    Začnite bez textúr, aby ste videli tvar a veľkosť:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Pridajte farbu**, keď to vyzerá správne:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Pridajte pochôdzne plochy**, alebo zmenšite súbor:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Otvorte `level.glb`** v paneli **Pozadie / level** prehliadača 3DHeat
@@ -72,7 +72,7 @@ zapečené do zeme a pochôdzne plochy vojakov.
 | `--clamped-uvs` | vypnuté | pre renderery, ktoré nevedia opakovať textúru |
 
 Úplná tabuľka, s veľkosťami, ktoré treba čakať (celý level má stovky MB), je na
-stránke [Príkazy](commands.md#levels-and-level-frostbite). Ako sa čítajú tabuľky,
+stránke [Príkazy](../cli-reference.md). Ako sa čítajú tabuľky,
 zväzky, siete a terén, je na stránke [Frostbite](reader-frostbite.md).
 
 ## Príklad výstupu {#example-output}
@@ -100,7 +100,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (výškové pole), `ground:terrain backdrop` a
 `ground:terrain blend`, `structure:<kind>` pre každý druh siete (pre každú farebnú
 mapu s `--textures`, s ` (destructible)` pre to, čo sa dá v zápase zničiť), a
-`nav:walkable` s `--navmesh`. Pozri [Formát výstupu](output-format.md).
+`nav:walkable` s `--navmesh`. Pozri [Formát výstupu](https://holdi601.github.io/3DHeat-GameFiles/sk/output-format.html).
 
 Súbor obsahuje obsah hry: je určený pre počítač, na ktorom vznikol, nie na posielanie
-ďalej ([Pravidlá a licencie](rules-and-licences.md)).
+ďalej ([Pravidlá a licencie](../terms.md)).

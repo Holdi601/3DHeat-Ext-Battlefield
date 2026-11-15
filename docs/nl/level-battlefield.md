@@ -1,6 +1,6 @@
 ---
 title: Battlefield 6-levels
-nav_order: 1
+nav_order: 2
 lang: "nl"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -20,8 +20,8 @@ Exporteert een compleet Frostbite-level van het geïnstalleerde spel: het hoogte
 1. **Toon de levels** die het spel meelevert:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Elke regel is een leveltabel (`levels/<level>/<level>.toc`) met zijn grootte en waar hij vandaan komt: `Data` voor het basisspel, `Update/<pack>` voor een update.
@@ -29,20 +29,20 @@ Exporteert een compleet Frostbite-level van het geïnstalleerde spel: het hoogte
 2. **Exporteer er één**, op naam, op een uniek deel ervan, of op zijn `.toc`-pad. Begin zonder kleur om de vorm en de grootte te zien:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Voeg kleur toe** zodra het er goed uitziet:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Voeg de loopbare oppervlakken toe**, of maak het bestand kleiner:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Open `level.glb`** in het paneel Achtergrond / level van de 3DHeat-viewer ([een level laden](https://holdi601.github.io/3DHeat/levels.html)).
@@ -63,7 +63,7 @@ Exporteert een compleet Frostbite-level van het geïnstalleerde spel: het hoogte
 | `--by-mesh` | uit | één deel per bron-mesh en materiaal, om te zien wat een deel is |
 | `--clamped-uvs` | uit | voor renderers die een textuur niet kunnen herhalen |
 
-De volledige tabel, met de groottes die je kunt verwachten (een compleet level is honderden MB), staat op [Commando's](commands.md#levels-and-level-frostbite). Hoe de tabellen, bundels, meshes en het terrein gelezen worden, staat op [Frostbite](reader-frostbite.md).
+De volledige tabel, met de groottes die je kunt verwachten (een compleet level is honderden MB), staat op [Commando's](../cli-reference.md). Hoe de tabellen, bundels, meshes en het terrein gelezen worden, staat op [Frostbite](reader-frostbite.md).
 
 ## Voorbeelduitvoer {#example-output}
 
@@ -87,6 +87,6 @@ Navigation mesh: <tiles read>.
 ## De onderdelen {#the-parts}
 
 `ground:terrain` (het hoogteveld), `ground:terrain backdrop` en
-`ground:terrain blend`, `structure:<kind>` per soort mesh (per kleurkaart met `--textures`, met ` (destructible)` voor wat in een wedstrijd kan worden vernield), en `nav:walkable` met `--navmesh`. Zie [Uitvoerformaat](output-format.md).
+`ground:terrain blend`, `structure:<kind>` per soort mesh (per kleurkaart met `--textures`, met ` (destructible)` voor wat in een wedstrijd kan worden vernield), en `nav:walkable` met `--navmesh`. Zie [Uitvoerformaat](https://holdi601.github.io/3DHeat-GameFiles/nl/output-format.html).
 
-Het bestand bevat de inhoud van het spel: het is bedoeld voor de computer waarop het gemaakt is, niet om rond te sturen ([Regels en licenties](rules-and-licences.md)).
+Het bestand bevat de inhoud van het spel: het is bedoeld voor de computer waarop het gemaakt is, niet om rond te sturen ([Regels en licenties](../terms.md)).

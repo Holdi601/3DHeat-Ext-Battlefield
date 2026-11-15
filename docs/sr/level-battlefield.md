@@ -1,6 +1,6 @@
 ---
 title: Battlefield 6 нивои
-nav_order: 1
+nav_order: 2
 lang: "sr"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -20,8 +20,8 @@ search_exclude: true
 1. **Испишите нивое** које игра испоручује:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Сваки ред је табела нивоа (`levels/<level>/<level>.toc`) са својом величином и одакле долази: `Data` за основну игру, `Update/<pack>` за ажурирање.
@@ -29,20 +29,20 @@ search_exclude: true
 2. **Извезите један**, по његовом називу, јединственом делу назива или путањи његове `.toc` датотеке. Почните без боје да видите облик и величину:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Додајте боју** кад изгледа исправно:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Додајте ходљиве површине**, или смањите датотеку:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Отворите `level.glb`** у панелу Позадина / ниво 3DHeat приказивача ([учитавање нивоа](https://holdi601.github.io/3DHeat/levels.html)).
@@ -63,7 +63,7 @@ search_exclude: true
 | `--by-mesh` | искључено | по један део за сваку изворну мрежу и материјал, за проналажење шта је који део |
 | `--clamped-uvs` | искључено | за приказиваче који не могу да понове текстуру |
 
-Пун табела, са величинама које треба очекивати (цео ниво је стотине MB), налази се у [Командама](commands.md#levels-and-level-frostbite). Како се табеле, пакети, мреже и терен читају, описано је у [Frostbite](reader-frostbite.md).
+Пун табела, са величинама које треба очекивати (цео ниво је стотине MB), налази се у [Командама](../cli-reference.md). Како се табеле, пакети, мреже и терен читају, описано је у [Frostbite](reader-frostbite.md).
 
 ## Пример излаза {#example-output}
 
@@ -86,6 +86,6 @@ Navigation mesh: <tiles read>.
 
 ## Делови {#the-parts}
 
-`ground:terrain` (висинско поље), `ground:terrain backdrop` и `ground:terrain blend`, `structure:<kind>` по врсти мреже (по мапи боје уз `--textures`, са ` (destructible)` за оно што меч може да уништи), и `nav:walkable` уз `--navmesh`. Видите [Формат излаза](output-format.md).
+`ground:terrain` (висинско поље), `ground:terrain backdrop` и `ground:terrain blend`, `structure:<kind>` по врсти мреже (по мапи боје уз `--textures`, са ` (destructible)` за оно што меч може да уништи), и `nav:walkable` уз `--navmesh`. Видите [Формат излаза](https://holdi601.github.io/3DHeat-GameFiles/sr/output-format.html).
 
-Датотека садржи садржај игре: намењена је рачунару на којем је направљена, а не дељењу ([Правила и лиценце](rules-and-licences.md)).
+Датотека садржи садржај игре: намењена је рачунару на којем је направљена, а не дељењу ([Правила и лиценце](../terms.md)).

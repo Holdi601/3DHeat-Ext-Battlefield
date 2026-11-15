@@ -1,6 +1,6 @@
 ---
 title: Níveis do Battlefield 6
-nav_order: 1
+nav_order: 2
 lang: "pt"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -27,8 +27,8 @@ dos soldados.
 1. **Listar os níveis** que o jogo traz:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Cada linha é uma tabela de nível (`levels/<level>/<level>.toc`) com o seu tamanho e
@@ -38,20 +38,20 @@ dos soldados.
    Comece sem textura para ver a forma e o tamanho:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Adicionar cor** quando estiver certo:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Adicionar as superfícies caminháveis**, ou diminuir o ficheiro:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Abrir o `level.glb`** no painel Fundo / nível do visualizador do 3DHeat
@@ -74,7 +74,7 @@ dos soldados.
 | `--clamped-uvs` | desligado | para renderizadores que não conseguem repetir uma textura |
 
 A tabela completa, com os tamanhos a esperar (um nível inteiro tem centenas de MB),
-está em [Comandos](commands.md#levels-and-level-frostbite). Como as tabelas, os
+está em [Comandos](../cli-reference.md). Como as tabelas, os
 bundles, as malhas e o terreno são lidos está em [Frostbite](reader-frostbite.md).
 
 ## Exemplo de saída {#example-output}
@@ -102,7 +102,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (o heightfield), `ground:terrain backdrop` e
 `ground:terrain blend`, `structure:<kind>` por tipo de malha (por mapa de cor com
 `--textures`, com ` (destructible)` para o que uma partida pode destruir), e
-`nav:walkable` com `--navmesh`. Veja [Formato de saída](output-format.md).
+`nav:walkable` com `--navmesh`. Veja [Formato de saída](https://holdi601.github.io/3DHeat-GameFiles/pt/output-format.html).
 
 O ficheiro guarda o conteúdo do jogo: ele é para a máquina em que foi feito, e não para
-ser passado adiante ([Regras e licenças](rules-and-licences.md)).
+ser passado adiante ([Regras e licenças](../terms.md)).

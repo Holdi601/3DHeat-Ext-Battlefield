@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(põhimäng ja uuendused)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Eelarve",
+ "Level table": "Taseme tabel",
+ "Options": "Valikud",
+ "bundles, meshes,": "paketid, võrgud,",
+ "coarser levels of detail": "jämedamad detailitasemed",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 tase ühte .glb-sse",
+ "levels": "levels",
+ "lists every level": "loetleb iga taseme",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "maastik, paigutus",
+ "until --detail-budget fits": "kuni --detail-budget mahub"
+}

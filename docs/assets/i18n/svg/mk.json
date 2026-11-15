@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(основна игра и ажурирања)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Буџет",
+ "Level table": "Табела на нивоа",
+ "Options": "Опции",
+ "bundles, meshes,": "пакети, мрежи,",
+ "coarser levels of detail": "погруби нивоа на детали",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: ниво од Battlefield 6 во една .glb",
+ "levels": "levels",
+ "lists every level": "ги наведува сите нивоа",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "терен, поставување",
+ "until --detail-budget fits": "додека --detail-budget не собере"
+}

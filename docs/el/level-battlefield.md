@@ -1,6 +1,6 @@
 ---
 title: Πίστες του Battlefield 6
-nav_order: 1
+nav_order: 2
 lang: "el"
 source: level-battlefield.md
 source_hash: "0be2a07c0850"
@@ -20,8 +20,8 @@ search_exclude: true
 1. **Παραθέστε τις πίστες** που έχει το παιχνίδι:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Κάθε γραμμή είναι ένας πίνακας πίστας (`levels/<level>/<level>.toc`) με το μέγεθός του και από πού προέρχεται: `Data` για το βασικό παιχνίδι, `Update/<pack>` για ενημέρωση.
@@ -29,20 +29,20 @@ search_exclude: true
 2. **Εξάγετε μία**, με το όνομά της, ένα μοναδικό μέρος του, ή τη διαδρομή του `.toc` της. Ξεκινήστε χωρίς υφές για να δείτε το σχήμα και το μέγεθος:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Προσθέστε χρώμα** όταν φαίνεται σωστή:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Προσθέστε τις επιφάνειες όπου περπατούν οι στρατιώτες**, ή μικρύνετε το αρχείο:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Ανοίξτε το `level.glb`** στο πάνελ Φόντο / πίστα του προβολέα του 3DHeat ([φόρτωση πίστας](https://holdi601.github.io/3DHeat/levels.html)).
@@ -63,7 +63,7 @@ search_exclude: true
 | `--by-mesh` | κλειστή | ένα τμήμα ανά mesh πηγής και υλικό, για να βρείτε τι είναι ένα τμήμα |
 | `--clamped-uvs` | κλειστή | για απεικονιστές που δεν μπορούν να επαναλάβουν υφή |
 
-Ο πλήρης πίνακας, με τα μεγέθη που να περιμένετε (ολόκληρη πίστα είναι εκατοντάδες MB), είναι στις [Εντολές](commands.md#levels-and-level-frostbite). Πώς διαβάζονται οι πίνακες, τα bundles, τα mesh και το έδαφος είναι στο [Frostbite](reader-frostbite.md).
+Ο πλήρης πίνακας, με τα μεγέθη που να περιμένετε (ολόκληρη πίστα είναι εκατοντάδες MB), είναι στις [Εντολές](../cli-reference.md). Πώς διαβάζονται οι πίνακες, τα bundles, τα mesh και το έδαφος είναι στο [Frostbite](reader-frostbite.md).
 
 ## Παράδειγμα εξόδου {#example-output}
 
@@ -86,6 +86,6 @@ Navigation mesh: <tiles read>.
 
 ## Τα μέρη {#the-parts}
 
-`ground:terrain` (ο χάρτης ύψους), `ground:terrain backdrop` και `ground:terrain blend`, `structure:<kind>` ανά είδος mesh (ανά χάρτη χρωμάτων με `--textures`, με ` (destructible)` για ό,τι μπορεί να καταστραφεί σε αγώνα), και `nav:walkable` με `--navmesh`. Δείτε [Μορφή εξόδου](output-format.md).
+`ground:terrain` (ο χάρτης ύψους), `ground:terrain backdrop` και `ground:terrain blend`, `structure:<kind>` ανά είδος mesh (ανά χάρτη χρωμάτων με `--textures`, με ` (destructible)` για ό,τι μπορεί να καταστραφεί σε αγώνα), και `nav:walkable` με `--navmesh`. Δείτε [Μορφή εξόδου](https://holdi601.github.io/3DHeat-GameFiles/el/output-format.html).
 
-Το αρχείο περιέχει περιεχόμενο του παιχνιδιού: προορίζεται για τον υπολογιστή όπου έγινε, και όχι για να το μοιράζεστε ([Κανόνες και άδειες](rules-and-licences.md)).
+Το αρχείο περιέχει περιεχόμενο του παιχνιδιού: προορίζεται για τον υπολογιστή όπου έγινε, και όχι για να το μοιράζεστε ([Κανόνες και άδειες](../terms.md)).

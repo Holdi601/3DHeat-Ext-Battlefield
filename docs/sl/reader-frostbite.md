@@ -1,6 +1,6 @@
 ---
 title: Frostbite
-nav_order: 5
+nav_order: 4
 lang: "sl"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -16,26 +16,26 @@ kateri paketi nivo naložijo, paketi imenujejo vsako sredstvo, sredstva pa poved
 kje stoji.
 
 Viri:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tabele, namestitveni paketi, koristni tovori),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (paketi in njihovi manifesti),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (particije EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (višinski model),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (teksture in materiali),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (postavitev in izvoz).
-Ukazi: `identify`, `levels`, `level` (glejte [Ukazi](commands.md#levels-and-level-frostbite)).
+Ukazi: `identify`, `levels`, `level` (glejte [Ukazi](../cli-reference.md)).
 
 Igra tega ni dokumentirala. Vsaka postavitev spodaj je bila prebrana iz datotek in nato
 preverjena na vseh datotekah, vsak oddelek pa pove, kakšen je bil preizkus. Kjer kakšna stran
 opisuje starejše različice strukture, imena polj sledijo njihovim, vendar kode od tam ni
-(glejte [Pravila in licence](rules-and-licences.md)).
+(glejte [Pravila in licence](../terms.md)).
 
 ## Glava, ki izgleda šifrirana, pa ni {#the-header-that-looks-encrypted-and-is-not}
 
@@ -139,7 +139,7 @@ Ničelna stisnjena velikost pomeni shranjeno, če se le-ta dekompresira v isto.
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), iz igrine lastne DLL `oo2core`) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/sl/reader-oodle.html), iz igrine lastne DLL `oo2core`) |
 | drugo, z enakima velikostma | kopirano, kot je shranjeno |
 | drugo | zavrnjeno |
 
@@ -235,7 +235,7 @@ njena najfinejša stopnja nima, se nikoli ne izbere; najgrobejša stopnja mreže
 ## Teren {#terrain}
 
 Vir:
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Teren je res TerrainStreamingTree (tip `0x22FE8AC8`) in kosi, ki jih imenuje.
 
@@ -392,7 +392,7 @@ luknje.
 ## Dekali terena {#terrain-decals}
 
 Vir:
-[`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+[`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Ceste, vzletne steze, betonske ploščadi, naslikane črte in črke, sledi pnevmatik: res `TerrainDecals`
 (tip `0x15E1F32E`) jih hrani kot ploska geometrija, ki jo igra položi čez teren.
@@ -450,7 +450,7 @@ terenom pa bi se z odmikom bolj prepirali z njim; pečenje jih ohrani v lastni b
 ## Teksture in materiali {#textures-and-materials}
 
 Vir:
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Res Texture (tip `0x6BDE20BA`) je 180-bajtna glava: tip in format pikslov pri +8, širina in višina pri +22,
 število mipov pri +30, GUID kosa pri +40, petnajst velikosti mipov pri +56. Kos je veriga mipov, največji
@@ -570,7 +570,7 @@ od -1,6 do 1,8, ploščice terena v ozadju ležijo povsem zunaj 0..1, v enem niv
 zunaj 0..1. Zapišejo se, kakršne so, s ponavljajočim vzorčilnikom; 3DHeat pregledovalnik ovije vsako ponavljajočo se teksturo
 znotraj svojega atlasa. Upodabljalnik, ki jih namesto tega vpne, raztegne rebra na dvakratno širino, betonsko ploščad
 spremeni v proge vzdolž ene osi in da nosilcem stolpa robno barvo svoje teksture; zanj `--clamped-uvs` razreže vsak trikotnik
-vzdolž črt, kjer se tekstura ponavlja, in vsak kos premakne v 0..1 (glejte [Oblika izhoda](output-format.md)). Potem
+vzdolž črt, kjer se tekstura ponavlja, in vsak kos premakne v 0..1 (glejte [Oblika izhoda](https://holdi601.github.io/3DHeat-GameFiles/sl/output-format.html)). Potem
 0,03 % teksturiranih trikotnikov, čez katere se tekstura ponovi več kot 16-krat, seže ven, trikotnik, ki bi ga rezanje
 razdelilo na več kot 4 kose, pa se nariše v povprečni barvi teksture: lubje se ponavlja po vsaki veji, in razrezana so
 drevesa nivoja šla z 6,4 na 24 milijonov trikotnikov.
@@ -610,7 +610,7 @@ prava povsod; prave bi bile maske.
 ## Navigacijska mreža {#navigation-mesh}
 
 Vir:
-[`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+[`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Nivo dostavlja eno particijo na agenta, `<level>/dbt/<level>_navmesh_layer_<n>`: v enem nivoju je plast 0
 vojak (1,8 m visok, korak 0,18 m, polmer 0,4 m), dve drugi sta vozili (3,5 in 10 m visoki). Vsaka particija

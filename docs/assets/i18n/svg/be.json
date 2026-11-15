@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(базавая гульня і абнаўленні)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Бюджэт",
+ "Level table": "Табліца ўзроўняў",
+ "Options": "Опцыі",
+ "bundles, meshes,": "пакеты, меши,",
+ "coarser levels of detail": "грубейшыя ўзроўні дэталізацыі",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: узровень Battlefield 6 у адзін .glb",
+ "levels": "levels",
+ "lists every level": "пералічвае кожны ўзровень",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "рэльеф, размяшчэнне",
+ "until --detail-budget fits": "пакуль --detail-budget не ўмесціцца"
+}

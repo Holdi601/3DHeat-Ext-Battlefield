@@ -1,6 +1,6 @@
 ---
 title: "Niveaux Battlefield 6"
-nav_order: 1
+nav_order: 2
 lang: "fr"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -26,8 +26,8 @@ terrain cuits dans le sol et les surfaces praticables par les soldats.
 1. **Lister les niveaux** livrés avec le jeu :
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Chaque ligne est une table de niveau (`levels/<level>/<level>.toc`) avec sa taille et son
@@ -37,20 +37,20 @@ terrain cuits dans le sol et les surfaces praticables par les soldats.
    Commencez sans texture pour voir la forme et la taille :
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Ajouter la couleur** une fois que cela a la bonne allure :
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Ajouter les surfaces praticables**, ou réduire le fichier :
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Ouvrez `level.glb`** dans le panneau Arrière-plan / niveau de la visionneuse 3DHeat
@@ -73,7 +73,7 @@ terrain cuits dans le sol et les surfaces praticables par les soldats.
 | `--clamped-uvs` | désactivé | pour les moteurs qui ne savent pas répéter une texture |
 
 Le tableau complet, avec les tailles à attendre (un niveau entier fait des centaines de Mo), se
-trouve dans [Commandes](commands.md#levels-and-level-frostbite). La manière dont les tables, bundles,
+trouve dans [Commandes](../cli-reference.md). La manière dont les tables, bundles,
 maillages et terrains sont lus est décrite dans [Frostbite](reader-frostbite.md).
 
 ## Exemple de sortie {#example-output}
@@ -101,7 +101,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (le champ de hauteurs), `ground:terrain backdrop` et `ground:terrain blend`,
 `structure:<kind>` par nature de maillage (par carte de couleur avec `--textures`, avec
 ` (destructible)` pour ce qu'une partie peut détruire), et `nav:walkable` avec `--navmesh`. Voir
-[Format de sortie](output-format.md).
+[Format de sortie](https://holdi601.github.io/3DHeat-GameFiles/fr/output-format.html).
 
 Le fichier contient le contenu du jeu : il est fait pour la machine où il a été produit, pas pour
-circuler ([Règles et licences](rules-and-licences.md)).
+circuler ([Règles et licences](../terms.md)).

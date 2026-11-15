@@ -608,7 +608,7 @@ def decompress_payload(payload: bytes) -> bytes:
                 ) from exc
             out += lz4.block.decompress(raw, uncompressed_size=block.decompressed)
         elif name == "oodle":
-            from .oodle import decompress_oodle
+            from heat3d_gamefiles.oodle import decompress_oodle
 
             out += decompress_oodle(raw, block.decompressed)
         else:

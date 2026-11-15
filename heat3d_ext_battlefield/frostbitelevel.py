@@ -728,7 +728,7 @@ def build_level(
     metres; 0 leaves it out. `ground_texture`, in metres a pixel, bakes the
     terrain decals into the heightfield's colour where they are; 0 does not.
     """
-    from .detail import DEFAULT_BUDGET, auto_budget, choose_levels
+    from heat3d_gamefiles.detail import DEFAULT_BUDGET, auto_budget, choose_levels
 
     table = find_level(root, name)
     toc = table.toc
@@ -1635,7 +1635,7 @@ def write_level(model: LevelModel, out: str | Path, clamped: bool = False) -> Pa
     colour instead, in a part named '... (average colour)'.
     """
     from .frostbitematerial import ALPHA_CUTOFF
-    from .glb import Part, write_glb
+    from heat3d_gamefiles.glb import Part, write_glb
 
     positions = []
     uvs = []

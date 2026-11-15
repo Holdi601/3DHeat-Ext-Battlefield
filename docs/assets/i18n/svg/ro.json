@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(jocul de bază și actualizările)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Buget",
+ "Level table": "Tabelul nivelului",
+ "Options": "Opțiuni",
+ "bundles, meshes,": "pachete, meshe,",
+ "coarser levels of detail": "niveluri de detaliu mai grosiere",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: un nivel Battlefield 6 într-un singur .glb",
+ "levels": "niveluri",
+ "lists every level": "listează fiecare nivel",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "teren, plasare",
+ "until --detail-budget fits": "până când --detail-budget încape"
+}

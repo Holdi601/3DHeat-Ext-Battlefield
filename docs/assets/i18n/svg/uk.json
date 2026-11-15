@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(базова гра і оновлення)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Бюджет",
+ "Level table": "Таблиця рівнів",
+ "Options": "Параметри",
+ "bundles, meshes,": "пакети, сітки,",
+ "coarser levels of detail": "грубіші рівні деталізації",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: рівень Battlefield 6 в один .glb",
+ "levels": "levels",
+ "lists every level": "перелічує кожен рівень",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "рельєф, розміщення",
+ "until --detail-budget fits": "доки не вміститься в --detail-budget"
+}

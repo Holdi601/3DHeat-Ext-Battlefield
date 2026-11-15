@@ -1,6 +1,6 @@
 ---
 title: Frostbite
-nav_order: 5
+nav_order: 4
 lang: "el"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -12,24 +12,24 @@ search_exclude: true
 **Διαβάζει μια πίστα του Battlefield 6 μέχρι το έδαφος, τα τοποθετημένα πλέγματά της και τους χάρτες χρώματός τους, και τη γράφει ως `.glb`.** Τα παιχνίδια Frostbite (Battlefield, Need for Speed, Dead Space) κρατούν το περιεχόμενό τους σε αρχεία `.cas`, που περιγράφονται από πίνακες περιεχομένων `.toc`. Ο πίνακας μιας πίστας λέει ποιες δέσμες φορτώνει η πίστα, οι δέσμες ονομάζουν κάθε στοιχείο, και τα στοιχεία λένε ποιο πλέγμα στέκεται πού.
 
 Πηγές:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (πίνακες, πακέτα, φορτία),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (δέσμες και τα μανιφέστα τους),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (διαμερίσματα EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (ύψος εδάφους),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (υφές και υλικά),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (τοποθέτηση και εξαγωγή).
-Εντολές: `identify`, `levels`, `level` (δείτε [Εντολές](commands.md#levels-and-level-frostbite)).
+Εντολές: `identify`, `levels`, `level` (δείτε [Εντολές](../cli-reference.md)).
 
 Τίποτα εδώ δεν τεκμηριώνεται από το παιχνίδι. Κάθε διάταξη παρακάτω διαβάστηκε από τα αρχεία και ελέγχθηκε απέναντι σε όλα, και κάθε ενότητα λέει τι ήταν ο έλεγχος.
-Εκεί όπου τα εργαλεία modding του Frosty περιγράφουν παλιότερες εκδόσεις μιας δομής, τα ονόματα των πεδίων ακολουθούν τα δικά τους· δεν πάρθηκε κώδικας από αυτά (δείτε [Κανόνες και άδειες](rules-and-licences.md)).
+Εκεί όπου τα εργαλεία modding του Frosty περιγράφουν παλιότερες εκδόσεις μιας δομής, τα ονόματα των πεδίων ακολουθούν τα δικά τους· δεν πάρθηκε κώδικας από αυτά (δείτε [Κανόνες και άδειες](../terms.md)).
 
 ## Η κεφαλίδα που μοιάζει κρυπτογραφημένη και δεν είναι {#the-header-that-looks-encrypted-and-is-not}
 
@@ -102,7 +102,7 @@ search_exclude: true
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), από τη δική του DLL `oo2core` του παιχνιδιού) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/el/reader-oodle.html), από τη δική του DLL `oo2core` του παιχνιδιού) |
 | άλλο, με ίσα μεγέθη | αντιγράφεται όπως είναι αποθηκευμένο |
 | άλλο | απορρίπτεται |
 
@@ -164,7 +164,7 @@ search_exclude: true
 
 ## Έδαφος {#terrain}
 
-Πηγή: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Πηγή: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Το έδαφος είναι ένα res TerrainStreamingTree (τύπος `0x22FE8AC8`) και τα chunks που ονομάζει.
 
@@ -238,7 +238,7 @@ search_exclude: true
 
 ## Διακοσμήσεις εδάφους {#terrain-decals}
 
-Πηγή: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Πηγή: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Δρόμοι, διάδρομοι, τσιμεντένιες πλατφόρμες, ζωγραφισμένες γραμμές και γράμματα, σήματα ελαστικών: το res `TerrainDecals` (τύπος `0x15E1F32E`) κρατά τα ως επίπεδη γεωμετρία που το παιχνίδι απλώνει πάνω στο έδαφος.
 
@@ -276,7 +276,7 @@ search_exclude: true
 
 ## Υφές και υλικά {#textures-and-materials}
 
-Πηγή: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Πηγή: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Ένα res Texture (τύπος `0x6BDE20BA`) είναι μια κεφαλίδα 180 bytes: τύπος και μορφή pixel στο +8, πλάτος και ύψος στο +22, πλήθος mip στο +30, το GUID του chunk στο +40, δεκαπέντε μεγέθη mip στο +56. Το chunk είναι η αλυσίδα των mip, από το μεγαλύτερο. Μερικά chunks δεν έχουν τα μεγαλύτερα mips τους, που έρχονται σε πακέτο υψηλής ανάλυσης, και το μήκος του chunk δείχνει από ποιο mip αρχίζει. Το chunk αυτού του πακέτου ονομάζεται στο +164· διαβάζεται από τα [συμπληρώματα](#which-table-is-the-level) της πίστας όταν λείπει κάποιο mip από το κύριο chunk, και το μήκος του μαζί με το μήκος του κύριου chunk είναι ολόκληρη η αλυσίδα.
 
@@ -322,7 +322,7 @@ search_exclude: true
 
 **Κομμένοι χάρτες.** Το τέταρτο κανάλι του χάρτη χρώματος σημαίνει διαφορετικά πράγματα ανάλογα με το όνομα του χάρτη. Στο `_cs`, το πιο συνηθισμένο (893 από τους επιλεγμένους χάρτες μιας πίστας), είναι η λειότητα: το 1% του άλφα ενός διάμεσου χάρτη βρίσκεται μέσα στο 0,1 από το 0 ή το 1. Στο `_cu` (φύλλα, γρασίδι) και στο `_ca` (χρώμα και άλφα) είναι αδιαφάνεια: 90% και 87%. Ένας χάρτης χρώματος με όνομα `..._cu` ή `..._ca` του οποίου το άλφα είναι τουλάχιστον 75% κοντά στο 0 ή το 1, τουλάχιστον 1% κάτω από 0,5 και τουλάχιστον 5% πάνω από αυτό, γράφεται με το άλφα του, ως PNG, και το υλικό του ως glTF `alphaMode` MASK, `alphaCutoff` 0,5, διπλής όψης· έτσι οι κάρτες φύλλων δείχνουν φύλλα και όχι τις μαύρες γωνίες τους. Ένας χάρτης φύλλου ενός δέντρου δεν έχει καθόλου άλφα (το πολύ 4 από 255): τα φυλλώματά του κόβονται από τη γεωμετρία, και με μόνο τις δύο πρώτες συνθήκες όλο το στέμμα έφευγε.
 
-Οι συντεταγμένες υφής είναι η χρήση κορυφής `0x21`, δύο half (μορφή 6) ή δύο float (μορφή 2). Οι ενότητες φέρουν έως τρία ακόμη σύνολα (`0x22` έως `0x24`) για επίπεδα διακοσμήσεων και λεπτομερειών. Οι συντεταγμένες πλακιδιώνονται: η πλαϊνή νερβούρα ενός κοντέινερ πηγαίνει από -1,6 έως 1,8, τα πλακίδια του υποβάθρου του εδάφους βρίσκονται εντελώς έξω από το 0..1, και σε μια πίστα το 23% των τριγώνων με υφή φτάνει έξω από το 0..1. Γράφονται ως είναι, με sampler που επαναλαμβάνει· ο viewer του 3DHeat τυλίγει κάθε επαναλαμβανόμενη υφή μέσα στον άτλαντά του. Ένας renderer που τις κλείνει (clamp) τεντώνει τις νερβούρες στο διπλάσιο πλάτος τους, γυρίζει ένα σκυρόδεμα δαπέδου σε ρίγες κατά μήκος ενός άξονα, και δίνει στις δοκούς ενός πύργου το χρώμα της άκρης της υφής· γι' αυτόν, το `--clamped-uvs` κόβει κάθε τρίγωνο κατά τις γραμμές όπου επαναλαμβάνεται η υφή και μεταφέρει κάθε κομμάτι στο 0..1 (δείτε [Μορφή αρχείου](output-format.md)). Μετά, το 0,03% των τριγώνων με υφή, πάνω από τα οποία η υφή επαναλαμβάνεται περισσότερο από 16 φορές, φτάνει έξω, και ένα τρίγωνο που το κόψιμο θα το έκανε πάνω από 4 κομμάτια σχεδιάζεται με το μέσο χρώμα της υφής του: ο φλοιός επαναλαμβάνεται σε κάθε κλαδί, και κομμένα, τα δέντρα μιας πίστας πήγαν από 6,4 σε 24 εκατομμύρια τρίγωνα.
+Οι συντεταγμένες υφής είναι η χρήση κορυφής `0x21`, δύο half (μορφή 6) ή δύο float (μορφή 2). Οι ενότητες φέρουν έως τρία ακόμη σύνολα (`0x22` έως `0x24`) για επίπεδα διακοσμήσεων και λεπτομερειών. Οι συντεταγμένες πλακιδιώνονται: η πλαϊνή νερβούρα ενός κοντέινερ πηγαίνει από -1,6 έως 1,8, τα πλακίδια του υποβάθρου του εδάφους βρίσκονται εντελώς έξω από το 0..1, και σε μια πίστα το 23% των τριγώνων με υφή φτάνει έξω από το 0..1. Γράφονται ως είναι, με sampler που επαναλαμβάνει· ο viewer του 3DHeat τυλίγει κάθε επαναλαμβανόμενη υφή μέσα στον άτλαντά του. Ένας renderer που τις κλείνει (clamp) τεντώνει τις νερβούρες στο διπλάσιο πλάτος τους, γυρίζει ένα σκυρόδεμα δαπέδου σε ρίγες κατά μήκος ενός άξονα, και δίνει στις δοκούς ενός πύργου το χρώμα της άκρης της υφής· γι' αυτόν, το `--clamped-uvs` κόβει κάθε τρίγωνο κατά τις γραμμές όπου επαναλαμβάνεται η υφή και μεταφέρει κάθε κομμάτι στο 0..1 (δείτε [Μορφή αρχείου](https://holdi601.github.io/3DHeat-GameFiles/el/output-format.html)). Μετά, το 0,03% των τριγώνων με υφή, πάνω από τα οποία η υφή επαναλαμβάνεται περισσότερο από 16 φορές, φτάνει έξω, και ένα τρίγωνο που το κόψιμο θα το έκανε πάνω από 4 κομμάτια σχεδιάζεται με το μέσο χρώμα της υφής του: ο φλοιός επαναλαμβάνεται σε κάθε κλαδί, και κομμένα, τα δέντρα μιας πίστας πήγαν από 6,4 σε 24 εκατομμύρια τρίγωνα.
 
 Το ύψος δεν έχει χάρτη χρώματος δικό του που θα μπορούσε να διαβαστεί. Όπου καλύπτεται από έναν από τους χάρτες του υποβάθρου του εδάφους, χρωματίζεται από αυτόν: οι συντεταγμένες υφής του υποβάθρου είναι γραμμική συνάρτηση του x και του z του κόσμου (99% των κορυφών του μέσα στο 0,001 της), ο χάρτης καλύπτει ένα τετράγωνο 65.536 m, γυρισμένο κατά ένα τέταρτο, και η ίδια συνάρτηση δίνει και τις συντεταγμένες του ύψους. Η πίστα φορτώνει τα mips αυτού του χάρτη από τα 2.048 px και κάτω, οπότε το ύψος παίρνει 32 m το εικονοστοιχείο. Το σκούρο βράχο του βρίσκεται στις απότομες πλαγιές: η συσχέτιση του σκουρότητας με την κλίση είναι 0,48, και το πολύ 0,34 για τους άλλους επτά προσανατολισμούς.
 
@@ -342,7 +342,7 @@ search_exclude: true
 
 ## Πλέγμα πλοήγησης {#navigation-mesh}
 
-Πηγή: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Πηγή: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Μια πίστα έχει ένα διαμέρισμα για κάθε πράκτορα, `<level>/dbt/<level>_navmesh_layer_<n>`: σε μία πίστα, το στρώμα 0 είναι ο στρατιώτης (1,8 m ύψος, 0,18 m βήμα, 0,4 m ακτίνα) και δύο άλλα είναι οχήματα (3,5 και 10 m ύψος). Κάθε διαμέρισμα κρατά δύο πίνακες:
 

@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(bunchluiche agus nuashonruithe)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Buiséad",
+ "Level table": "Tábla leibhéal",
+ "Options": "Roghanna",
+ "bundles, meshes,": "burlaí, mogaill,",
+ "coarser levels of detail": "leibhéil mionsonraí níos garbha",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: leibhéal Battlefield 6 ina .glb amháin",
+ "levels": "levels",
+ "lists every level": "liostaíonn gach leibhéal",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "tír-raon, cur",
+ "until --detail-budget fits": "go dtí go n-oireann --detail-budget"
+}

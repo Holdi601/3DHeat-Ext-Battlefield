@@ -1,6 +1,6 @@
 ---
 title: "Нивоа на Battlefield 6"
-nav_order: 1
+nav_order: 2
 lang: "mk"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -26,8 +26,8 @@ search_exclude: true
 1. **Наведете ги нивоата** што ги испорачува играта:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Секоја линија е табела на ниво (`levels/<level>/<level>.toc`) со нејзината големина и
@@ -37,20 +37,20 @@ search_exclude: true
    Почнете без текстури за да ги видите обликот и големината:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Додајте боја** кога ќе изгледа добро:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Додајте ги површините за одење**, или смалете ја датотеката:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Отворете ја `level.glb`** во панелот Позадина / ниво на прегледувачот 3DHeat ([вчитување ниво](https://holdi601.github.io/3DHeat/levels.html)).
@@ -72,7 +72,7 @@ search_exclude: true
 | `--clamped-uvs` | исклучено | за рендерери што не можат да повторуваат текстура |
 
 Целосната табела, со големините што да ги очекувате (цело ниво се стотици MB), е на
-[Команди](commands.md#levels-and-level-frostbite). Како се читаат табелите, пакетите,
+[Команди](../cli-reference.md). Како се читаат табелите, пакетите,
 мрежите и теренот е на [Frostbite](reader-frostbite.md).
 
 ## Пример за излез {#example-output}
@@ -100,7 +100,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (висинското поле), `ground:terrain backdrop` и
 `ground:terrain blend`, `structure:<kind>` по вид мрежа (по мапа со боја
 со `--textures`, со ` (destructible)` за она што може да се уништи во натпревар), и
-`nav:walkable` со `--navmesh`. Видете [Формат на излезот](output-format.md).
+`nav:walkable` со `--navmesh`. Видете [Формат на излезот](https://holdi601.github.io/3DHeat-GameFiles/mk/output-format.html).
 
 Датотеката ја содржи содржината на играта: е за машината на која е направена, а не за
-препраќање ([Правила и лиценци](rules-and-licences.md)).
+препраќање ([Правила и лиценци](../terms.md)).

@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(pamatspēle un atjauninājumi)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Budžets",
+ "Level table": "Līmeņu tabula",
+ "Options": "Iespējas",
+ "bundles, meshes,": "paketes, tīkli,",
+ "coarser levels of detail": "rupjāki detalizācijas līmeņi",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 līmenis vienā .glb",
+ "levels": "levels",
+ "lists every level": "uzskaita katru līmeni",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "reljefs, novietojums",
+ "until --detail-budget fits": "kamēr --detail-budget ietilpst"
+}

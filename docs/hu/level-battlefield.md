@@ -1,6 +1,6 @@
 ---
 title: "Battlefield 6 pályák"
-nav_order: 1
+nav_order: 2
 lang: "hu"
 source: level-battlefield.md
 source_hash: "0be2a07c0850"
@@ -25,8 +25,8 @@ térkép körüli terepi hátteret, és kérésre a felületek színtérképeit,
 1. **Listázd a pályákat**, amelyeket a játék tartalmaz:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Minden sor egy pályatáblát (`levels/<level>/<level>.toc`) ír ki a méretével és a forrásával:
@@ -36,20 +36,20 @@ térkép körüli terepi hátteret, és kérésre a felületek színtérképeit,
    nélkül, hogy lásd az alakot és a méretet:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Adj színt**, ha már jónak látszik:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Add hozzá a járható felületeket**, vagy zsugorítsd a fájlt:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **Nyisd meg a `level.glb`-t** a 3DHeat nézegető Háttér / pálya paneljében ([pálya betöltése](https://holdi601.github.io/3DHeat/levels.html)).
@@ -71,7 +71,7 @@ térkép körüli terepi hátteret, és kérésre a felületek színtérképeit,
 | `--clamped-uvs` | ki | olyan megjelenítőknek, amelyek nem tudnak textúrát ismételni |
 
 A teljes táblázat, a várható méretekkel (egy egész pálya több száz MB), a
-[Parancsok](commands.md#levels-and-level-frostbite) oldalon van. Hogyan olvassuk a
+[Parancsok](../cli-reference.md) oldalon van. Hogyan olvassuk a
 táblákat, csomagokat, hálókat és a terepet, a [Frostbite](reader-frostbite.md) oldalon.
 
 ## Példa kimenet {#example-output}
@@ -99,7 +99,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (a magasságmező), `ground:terrain backdrop` és `ground:terrain blend`,
 `structure:<kind>` típusonként (színtérképenként `--textures` mellett, a ` (destructible)`
 utótaggal azoknál, amelyeket egy meccsen el lehet pusztítani), és `nav:walkable` a
-`--navmesh`-sel. Lásd: [Kimeneti formátum](output-format.md).
+`--navmesh`-sel. Lásd: [Kimeneti formátum](https://holdi601.github.io/3DHeat-GameFiles/hu/output-format.html).
 
 A fájl a játék tartalmát hordozza: a készítő gépéhez való, nem arra, hogy továbbadják
-([Szabályok és licencek](rules-and-licences.md)).
+([Szabályok és licencek](../terms.md)).

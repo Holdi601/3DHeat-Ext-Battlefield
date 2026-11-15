@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(juego base y parches)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Presupuesto",
+ "Level table": "Tabla de nivel",
+ "Options": "Opciones",
+ "bundles, meshes,": "paquetes, mallas,",
+ "coarser levels of detail": "niveles de detalle más bajos",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: un nivel de Battlefield 6 en un .glb",
+ "levels": "niveles",
+ "lists every level": "lista cada nivel",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "terreno, colocación",
+ "until --detail-budget fits": "hasta que --detail-budget encaje"
+}

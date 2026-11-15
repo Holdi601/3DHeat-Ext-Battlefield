@@ -1,6 +1,6 @@
 ---
 title: "Frostbite"
-nav_order: 5
+nav_order: 4
 lang: "es"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -12,23 +12,23 @@ search_exclude: true
 **Lee un nivel de Battlefield 6 hasta su terreno, sus mallas colocadas y sus mapas de color, y lo escribe como un `.glb`.** Los juegos Frostbite (Battlefield, Need for Speed, Dead Space) guardan su contenido en blobs `.cas`, descritos por tablas de contenido `.toc`. La tabla de un nivel dice qué paquetes carga el nivel, los paquetes nombran cada activo, y los activos dicen qué malla va en qué sitio.
 
 Fuentes:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tablas, instalaciones, cargas),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (paquetes y sus manifiestos),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (particiones EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (mapa de alturas),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (texturas y materiales),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (colocación y exportación).
-Comandos: `identify`, `levels`, `level` (mira [Comandos](commands.md#levels-and-level-frostbite)).
+Comandos: `identify`, `levels`, `level` (mira [Comandos](../cli-reference.md)).
 
-Nada de esto lo documenta el juego. Cada diseño de abajo se leyó de los archivos y luego se contrastó con todos ellos, y cada sección dice cuál fue la comprobación. Cuando las páginas de herramientas de modding de Frosty describen versiones anteriores de una estructura, los nombres de los campos siguen los suyos; no se tomó código de ellas (mira [Reglas y licencias](rules-and-licences.md)).
+Nada de esto lo documenta el juego. Cada diseño de abajo se leyó de los archivos y luego se contrastó con todos ellos, y cada sección dice cuál fue la comprobación. Cuando las páginas de herramientas de modding de Frosty describen versiones anteriores de una estructura, los nombres de los campos siguen los suyos; no se tomó código de ellas (mira [Reglas y licencias](../terms.md)).
 
 ## La cabecera que parece cifrada y no lo está {#the-header-that-looks-encrypted-and-is-not}
 
@@ -97,7 +97,7 @@ Un tamaño comprimido cero significa guardado sin comprimir, siempre que descomp
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), desde la propia DLL `oo2core` del juego) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/es/reader-oodle.html), desde la propia DLL `oo2core` del juego) |
 | otra, con tamaños iguales | copiada tal cual |
 | otra | rechazada |
 
@@ -157,7 +157,7 @@ No se siguen los planos retirados de la escena: los activos de desarrollo y de p
 
 ## Terreno {#terrain}
 
-Fuente: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Fuente: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 El terreno es un res TerrainStreamingTree (tipo `0x22FE8AC8`) y los fragmentos que nombra.
 
@@ -231,7 +231,7 @@ Comparado con el color mediano del suelo de fotogramas de juego de tres niveles 
 
 ## Calcomanías del terreno {#terrain-decals}
 
-Fuente: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Fuente: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Carreteras, pistas, plataformas de hormigón, líneas y letras pintadas, huellas de neumáticos: el res `TerrainDecals` (tipo `0x15E1F32E`) las guarda como geometría plana que el juego coloca sobre el terreno.
 
@@ -269,7 +269,7 @@ Dibujadas como geometría propia, las calcomanías necesitarían mezcla alfa, qu
 
 ## Texturas y materiales {#textures-and-materials}
 
-Fuente: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Fuente: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Un res Texture (tipo `0x6BDE20BA`) es una cabecera de 180 bytes: tipo y formato de píxel en +8, ancho y alto en +22, número de mips en +30, el GUID del fragmento en +40, quince tamaños de mip en +56. El fragmento es la cadena de mips, del más grande al más pequeño. Algunos fragmentos no traen sus mips más grandes, que vienen en un paquete de alta resolución, y la longitud del fragmento dice desde qué mip empieza. El fragmento de ese paquete se nombra en +164; se lee desde los [complementos](#which-table-is-the-level) del nivel cuando hace falta un mip que falta en el fragmento principal, y su longitud más la del fragmento principal es la cadena completa.
 
@@ -315,7 +315,7 @@ Un bloque se hornea una vez por cada conjunto de contenidos, y la entrada del de
 
 **Mapas de recorte.** El cuarto canal del mapa de color significa cosas distintas según el nombre del mapa. En `_cs`, con gran diferencia el más común (893 de los mapas elegidos de un nivel), es suavidad: el 1 % del alfa de un mapa mediano cae a 0,1 de 0 o de 1. En `_cu` (hojas, hierba) y `_ca` (color y alfa) es opacidad: el 90 % y el 87 %. Un mapa de color llamado `..._cu` o `..._ca` cuyo alfa está al menos un 75 % cerca de 0 o de 1, al menos un 1 % por debajo de 0,5 y al menos un 5 % por encima, se escribe con su alfa, como PNG, y su material como `alphaMode` MASK de glTF, `alphaCutoff` 0,5, doble cara; así las tarjetas de hoja muestran hojas, no sus esquinas negras. La hoja de un árbol no tiene alfa alguno (4 de 255 como mucho): sus frondes se recortan por geometría, y con solo las dos primeras condiciones se recortaba toda la copa.
 
-Las coordenadas de textura son el uso de vértice `0x21`, dos medias (formato 6) o dos flotantes (formato 2). Las secciones llevan hasta tres conjuntos más (`0x22` a `0x24`) para capas de calcomanía y de detalle. Las coordenadas hacen mosaico: el lado acanalado de un contenedor va de -1,6 a 1,8, las losetas de fondo del terreno caen enteras fuera de 0..1, y en un nivel el 23 % de los triángulos texturizados llega fuera de 0..1. Se escriben tal cual, con un muestreador que repite; el visor de 3DHeat envuelve cada textura que se repite dentro de su atlas. Un renderizador que las recorta en su lugar estira las costillas al doble de su ancho, convierte un suelo de hormigón en rayas a lo largo de un eje, y da a las vigas de acero de una torre el color del borde de su textura; para él, `--clamped-uvs` corta cada triángulo a lo largo de las líneas donde su textura se repite y mueve cada trozo a 0..1 (mira [Formato de salida](output-format.md)). Después, el 0,03 % de los triángulos texturizados, sobre los que una textura se repite más de 16 veces, llega fuera, y un triángulo que el corte dejaría en más de 4 trozos se dibuja con el color medio de su textura: la corteza se repite por cada rama, y cortada, los árboles de un nivel pasaron de 6,4 a 24 millones de triángulos.
+Las coordenadas de textura son el uso de vértice `0x21`, dos medias (formato 6) o dos flotantes (formato 2). Las secciones llevan hasta tres conjuntos más (`0x22` a `0x24`) para capas de calcomanía y de detalle. Las coordenadas hacen mosaico: el lado acanalado de un contenedor va de -1,6 a 1,8, las losetas de fondo del terreno caen enteras fuera de 0..1, y en un nivel el 23 % de los triángulos texturizados llega fuera de 0..1. Se escriben tal cual, con un muestreador que repite; el visor de 3DHeat envuelve cada textura que se repite dentro de su atlas. Un renderizador que las recorta en su lugar estira las costillas al doble de su ancho, convierte un suelo de hormigón en rayas a lo largo de un eje, y da a las vigas de acero de una torre el color del borde de su textura; para él, `--clamped-uvs` corta cada triángulo a lo largo de las líneas donde su textura se repite y mueve cada trozo a 0..1 (mira [Formato de salida](https://holdi601.github.io/3DHeat-GameFiles/es/output-format.html)). Después, el 0,03 % de los triángulos texturizados, sobre los que una textura se repite más de 16 veces, llega fuera, y un triángulo que el corte dejaría en más de 4 trozos se dibuja con el color medio de su textura: la corteza se repite por cada rama, y cortada, los árboles de un nivel pasaron de 6,4 a 24 millones de triángulos.
 
 El mapa de alturas no tiene un mapa de color propio que se pueda leer. Donde lo cubre uno de los mapas del fondo del terreno, se colorea desde él: las coordenadas de textura del fondo son una función lineal de x y z del mundo (el 99 % de sus vértices a menos de 0,001 de ella; el mapa cubre un cuadrado de 65.536 m, girado un cuarto de vuelta), y la misma función da las del mapa de alturas. El nivel trae los mips de ese mapa desde 2.048 px hacia abajo, así que el mapa de alturas recibe 32 m por píxel. Su roca oscura está en el suelo empinado: la correlación entre oscuridad y pendiente es 0,48, y como mucho 0,34 para las otras siete orientaciones.
 
@@ -335,7 +335,7 @@ El primero se corrigió; los otros dos estaban antes un poco más cerca en matiz
 
 ## Malla de navegación {#navigation-mesh}
 
-Fuente: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Fuente: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Un nivel trae una partición por agente, `<level>/dbt/<level>_navmesh_layer_<n>`: en un nivel la capa 0 es el soldado (1,8 m de alto, paso de 0,18 m, radio de 0,4 m) y otras dos son vehículos (3,5 y 10 m de alto). Cada partición tiene dos arrays:
 

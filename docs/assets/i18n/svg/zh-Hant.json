@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(本體遊戲與更新)",
+ "--navmesh, --skip": "--navmesh、--skip",
+ "--textures, --ground-texture,": "--textures、--ground-texture，",
+ "<level>.glb": "<level>.glb",
+ "Budget": "預算",
+ "Level table": "關卡表",
+ "Options": "選項",
+ "bundles, meshes,": "封裝、網格，",
+ "coarser levels of detail": "較粗的細節層級",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level：將一個 Battlefield 6 關卡寫成一個 .glb",
+ "levels": "levels",
+ "lists every level": "列出每個關卡",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "地形、放置",
+ "until --detail-budget fits": "直到 --detail-budget 符合"
+}

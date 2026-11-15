@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(βασικό + ενημερώσεις)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Προϋπ.",
+ "Level table": "Πίν. επιπέδου",
+ "Options": "Επιλογές",
+ "bundles, meshes,": "δέσμες, πλέγματα,",
+ "coarser levels of detail": "χονδρότερες λεπτομέρειες",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: ένα επίπεδο του Battlefield 6 σε ένα .glb",
+ "levels": "levels",
+ "lists every level": "καταγράφει κάθε επίπεδο",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "έδαφος, τοποθέτηση",
+ "until --detail-budget fits": "ώσπου να χωρέσει --detail-budget"
+}

@@ -1,6 +1,6 @@
 ---
 title: Battlefield-6-Level
-nav_order: 1
+nav_order: 2
 lang: "de"
 source: level-battlefield.md
 source_hash: "3927f45541dc"
@@ -27,8 +27,8 @@ begehbaren Flächen der Soldaten.
 1. **Die Levels auflisten**, die das Spiel mitbringt:
 
    ```
-   python -m heat3d_gamefiles levels
-   python -m heat3d_gamefiles levels --install "D:\Games\<game folder>"
+   heat3d-battlefield-maps levels
+   heat3d-battlefield-maps levels --install "D:\Games\<game folder>"
    ```
 
    Jede Zeile ist eine Level-Tabelle (`levels/<level>/<level>.toc`) mit ihrer Größe
@@ -38,20 +38,20 @@ begehbaren Flächen der Soldaten.
    `.toc`-Pfad. Beginne ohne Farbe, um Form und Größe zu sehen:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb
+   heat3d-battlefield-maps level <level> -o level.glb
    ```
 
 3. **Farbe hinzufügen**, sobald es richtig aussieht:
 
    ```
-   python -m heat3d_gamefiles level <level> -o level.glb --textures 512 --ground-texture 0.5
+   heat3d-battlefield-maps level <level> -o level.glb --textures 512 --ground-texture 0.5
    ```
 
 4. **Die begehbaren Flächen hinzufügen** oder die Datei verkleinern:
 
    ```
-   python -m heat3d_gamefiles level <level> --textures 512 --ground-texture 0.5 --navmesh
-   python -m heat3d_gamefiles level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
+   heat3d-battlefield-maps level <level> --textures 512 --ground-texture 0.5 --navmesh
+   heat3d-battlefield-maps level <level> --textures 256 --detail-budget 3000000 --ground-spacing 8
    ```
 
 5. **`level.glb` öffnen** im Bereich Hintergrund / Level des 3DHeat-Viewers
@@ -74,7 +74,7 @@ begehbaren Flächen der Soldaten.
 | `--clamped-uvs` | aus | für Renderer, die eine Textur nicht wiederholen können |
 
 Die vollständige Tabelle mit den zu erwartenden Größen (ein ganzes Level sind
-hunderte MB) steht unter [Befehle](commands.md#levels-and-level-frostbite). Wie die
+hunderte MB) steht unter [Befehle](../cli-reference.md). Wie die
 Tabellen, Bundles, Meshes und das Gelände gelesen werden, steht unter [Frostbite](reader-frostbite.md).
 
 ## Beispielausgabe {#example-output}
@@ -102,7 +102,7 @@ Navigation mesh: <tiles read>.
 `ground:terrain` (das Höhenfeld), `ground:terrain backdrop` und
 `ground:terrain blend`, `structure:<kind>` je Art von Mesh (je Farbkarte mit
 `--textures`, mit ` (destructible)` für das, was ein Match zerstören kann), und
-`nav:walkable` mit `--navmesh`. Siehe [Ausgabeformat](output-format.md).
+`nav:walkable` mit `--navmesh`. Siehe [Ausgabeformat](https://holdi601.github.io/3DHeat-GameFiles/de/output-format.html).
 
 Die Datei enthält die Inhalte des Spiels: Sie ist für den Rechner gedacht, auf dem
-sie entstanden ist, nicht zum Weitergeben ([Regeln und Lizenzen](rules-and-licences.md)).
+sie entstanden ist, nicht zum Weitergeben ([Regeln und Lizenzen](../terms.md)).

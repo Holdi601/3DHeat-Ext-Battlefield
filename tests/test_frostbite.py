@@ -29,7 +29,7 @@ from pathlib import Path
 
 import pytest
 
-from heat3d_gamefiles.frostbite import (
+from heat3d_ext_battlefield.frostbite import (
     MAGIC_OBFUSCATED,
     MAGIC_PLAIN,
     MAGIC_SIGNED,

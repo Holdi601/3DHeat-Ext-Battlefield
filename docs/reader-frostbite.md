@@ -1,7 +1,6 @@
 ---
 title: Frostbite
-parent: Archive readers
-nav_order: 5
+nav_order: 4
 ---
 
 # Frostbite: `.toc`, `.cas`, bundles, meshes and levels
@@ -13,27 +12,27 @@ says which bundles the level loads, the bundles name every asset, and the
 assets say which mesh stands where.
 
 Sources:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tables, packages, payloads),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (bundles and their manifests),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (EBX partitions),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (heightfield),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (textures and materials),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (placement and export).
-Commands: `identify`, `levels`, `level` (see [Commands](commands.md#levels-and-level-frostbite)).
+Commands: [`identify`](identify.md), [`levels` and `level`](level-battlefield.md) (every option: [Command reference](cli-reference.md)).
 
 Nothing here is documented by the game. Every layout below was read off the
 files and then held against all of them, and each section says what the check
 was. Where the Frosty modding tools describe older versions of a structure, the
 field names follow theirs; no code was taken from them (see
-[Rules and licences](rules-and-licences.md)).
+[Terms and licence](terms.md)).
 
 ## The header that looks encrypted and is not
 
@@ -146,7 +145,7 @@ A zero compressed size means stored, as long as it decompresses to.
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), from the game's own `oo2core` DLL) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/reader-oodle.html), from the game's own `oo2core` DLL) |
 | other, with equal sizes | copied as stored |
 | other | refused |
 
@@ -252,7 +251,7 @@ does not have, is never chosen; the mesh's coarsest is the last real one.
 
 ## Terrain
 
-Source: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Source: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 The terrain is a TerrainStreamingTree res (type `0x22FE8AC8`) and the chunks it
 names.
@@ -439,7 +438,7 @@ known to hold the holes.
 
 ## Terrain decals
 
-Source: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Source: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Roads, runways, concrete aprons, painted lines and letters, tyre marks: the
 `TerrainDecals` res (type `0x15E1F32E`) holds them
@@ -502,7 +501,7 @@ with; baking keeps them in the ground's own colour.
 
 ## Textures and materials
 
-Source: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Source: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 A Texture res (type `0x6BDE20BA`) is a 180-byte header: type and pixel format
 at +8, width and height at +22, mip count at +30, the chunk GUID at +40, fifteen
@@ -667,7 +666,7 @@ texture inside its atlas. A renderer that clamps them instead smears the ribs
 to twice their width, turns a concrete floor into streaks along one axis, and
 gives a tower's steel beams their texture's edge colour; for it,
 `--clamped-uvs` cuts each triangle along the lines where its texture repeats
-and moves each piece into 0..1 (see [Output format](output-format.md)).
+and moves each piece into 0..1 (see [Output format](https://holdi601.github.io/3DHeat-GameFiles/output-format.html)).
 Afterwards 0.03% of the textured triangles, across which a texture repeats more
 than 16 times, reach outside, and a triangle the cutting would make more than
 4 pieces of is drawn in its texture's average colour instead: bark repeats
@@ -720,7 +719,7 @@ colour for a whole level cannot be right everywhere; the masks would be.
 
 ## Navigation mesh
 
-Source: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Source: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 A level ships one partition per agent, `<level>/dbt/<level>_navmesh_layer_<n>`:
 in one level layer 0 is the soldier (1.8 m tall, 0.18 m step, 0.4 m radius) and

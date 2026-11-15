@@ -1,6 +1,6 @@
 ---
 title: Frostbite
-nav_order: 5
+nav_order: 4
 lang: "pl"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -16,26 +16,26 @@ Tabela poziomu mówi, które paczki (bundle) ładuje poziom, paczki nazywają ka
 a zasoby mówią, która siatka gdzie stoi.
 
 Źródła:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tabele, pakiety, ładunki),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (paczki i ich manifesty),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (partycje EBX),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (mapa wysokości),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (tekstury i materiały),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (rozmieszczenie i eksport).
-Polecenia: `identify`, `levels`, `level` (zobacz [Polecenia](commands.md#levels-and-level-frostbite)).
+Polecenia: `identify`, `levels`, `level` (zobacz [Polecenia](../cli-reference.md)).
 
 Gra niczego z tego nie dokumentuje. Każdy poniższy układ został odczytany z plików,
 a potem sprawdzony na wszystkich z nich, i każda sekcja mówi, jak wyglądało sprawdzenie.
 Tam, gdzie opisy Frosty opisują starsze wersje struktury, nazwy pól idą za ich nazwami;
-nie wzięto żadnego kodu z tamtych narzędzi (zobacz [Zasady i licencje](rules-and-licences.md)).
+nie wzięto żadnego kodu z tamtych narzędzi (zobacz [Zasady i licencje](../terms.md)).
 
 ## Nagłówek, który wygląda na zaszyfrowany, a nie jest {#the-header-that-looks-encrypted-and-is-not}
 
@@ -147,7 +147,7 @@ daje to tyle samo.
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), z własnej biblioteki DLL `oo2core` gry) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/pl/reader-oodle.html), z własnej biblioteki DLL `oo2core` gry) |
 | inne, z równymi rozmiarami | skopiowane tak, jak zapisane |
 | inne | odrzucone |
 
@@ -250,7 +250,7 @@ prawdziwym.
 
 ## Teren {#terrain}
 
-Źródło: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Źródło: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Teren to res TerrainStreamingTree (typ `0x22FE8AC8`) i fragmenty, które nazywa.
 
@@ -408,7 +408,7 @@ umieszczonych kafli, więc nie wiadomo, czy któreś trzyma dziury.
 
 ## Dekale terenu {#terrain-decals}
 
-Źródło: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Źródło: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Drogi, pasy startowe, betonowe place, malowane linie i litery, ślady opon: res
 `TerrainDecals` (typ `0x15E1F32E`) trzyma je jako płaską geometrię, którą gra
@@ -467,7 +467,7 @@ kolorze samego gruntu.
 
 ## Tekstury i materiały {#textures-and-materials}
 
-Źródło: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Źródło: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Res Texture (typ `0x6BDE20BA`) to 180-bajtowy nagłówek: typ i format pikseli pod +8,
 szerokość i wysokość pod +22, liczba mipów pod +30, GUID fragmentu pod +40, piętnaście
@@ -615,7 +615,7 @@ sięga poza 0..1. Zapisuje się je tak, jak są, z powtarzającym się próbniki
 rozmazuje żebra do dwukrotnej szerokości, zamienia betonową podłogę w smugi wzdłuż jednej osi
 i daje belkom stalowym wieży kolor krawędzi tekstury; dla niego `--clamped-uvs` tnie każdy
 trójkąt wzdłuż linii, gdzie jego tekstura się powtarza, i przesuwa każdy kawałek w 0..1 (zobacz
-[Format pliku wyjściowego](output-format.md)). Potem 0,03% trójkątów z teksturą, na których
+[Format pliku wyjściowego](https://holdi601.github.io/3DHeat-GameFiles/pl/output-format.html)). Potem 0,03% trójkątów z teksturą, na których
 tekstura powtarza się ponad 16 razy, sięga poza zakres, a trójkąt, który cięcie podzieliłoby
 na więcej niż 4 kawałki, rysuje się w średnim kolorze tekstury: kora powtarza się w dół każdej
 gałęzi, a pocięte drzewa poziomu wzrosły z 6,4 do 24 milionów trójkątów.
@@ -661,7 +661,7 @@ dla całego poziomu nie może być dobry wszędzie; mogłyby nim być maski.
 
 ## Siatka nawigacyjna {#navigation-mesh}
 
-Źródło: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Źródło: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Poziom dostarcza po jednej partycji na agenta, `<level>/dbt/<level>_navmesh_layer_<n>`:
 w jednym poziomie warstwa 0 to żołnierz (1,8 m wysokości, 0,18 m schodek, 0,4 m promienia), a

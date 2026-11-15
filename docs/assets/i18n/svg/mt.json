@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(logħba bażi u aġġornamenti)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Budget",
+ "Level table": "Tabella tal-livelli",
+ "Options": "Għażliet",
+ "bundles, meshes,": "bundles, meshes,",
+ "coarser levels of detail": "livelli ta' dettall aktar goffi",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: livell ta' Battlefield 6 f'.glb wieħed",
+ "levels": "levels",
+ "lists every level": "jelenka kull livell",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "terren, tqegħid",
+ "until --detail-budget fits": "sakemm --detail-budget jidħol"
+}

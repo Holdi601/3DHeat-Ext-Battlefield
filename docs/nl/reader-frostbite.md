@@ -1,6 +1,6 @@
 ---
 title: "Frostbite"
-nav_order: 5
+nav_order: 4
 lang: "nl"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -15,26 +15,26 @@ het als een `.glb`.** Frostbite-spellen (Battlefield, Need for Speed, Dead Space
 laadt, de bundels noemen elk asset, en de assets zeggen welk mesh waar staat.
 
 Bronnen:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (tabellen, pakketten, payloads),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (bundels en hun manifesten),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (EBX-partities),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (hoogteveld),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (texturen en materialen),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (plaatsing en export).
-Commando's: `identify`, `levels`, `level` (zie [Commando's](commands.md#levels-and-level-frostbite)).
+Commando's: `identify`, `levels`, `level` (zie [Commando's](../cli-reference.md)).
 
 Niets hier is door het spel gedocumenteerd. Elke indeling hieronder is van de bestanden afgelezen en daarna
 tegen alle bestanden gecontroleerd, en elke sectie zegt wat de controle was. Waar de Frosty-modding-tools oudere
 versies van een structuur beschrijven, volgen de veldnamen die van hen; er is geen code van hen overgenomen (zie
-[Regels en licenties](rules-and-licences.md)).
+[Regels en licenties](../terms.md)).
 
 ## De kop die versleuteld lijkt en het niet is {#the-header-that-looks-encrypted-and-is-not}
 
@@ -134,7 +134,7 @@ Een compressed size van nul betekent opgeslagen, zolang het decomprimeert tot de
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), uit de eigen `oo2core`-DLL van het spel) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/nl/reader-oodle.html), uit de eigen `oo2core`-DLL van het spel) |
 | andere, met gelijke groottes | gekopieerd zoals opgeslagen |
 | andere | geweigerd |
 
@@ -227,7 +227,7 @@ niet heeft, wordt nooit gekozen; het grofste niveau van het mesh is het laatste 
 
 ## Terrein {#terrain}
 
-Bron: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Bron: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Het terrein is een TerrainStreamingTree-res (type `0x22FE8AC8`) en de chunks die hij noemt.
 
@@ -374,7 +374,7 @@ regelmatige reeksen. Geen van beide tegels is nog geplaatst, dus van geen van be
 
 ## Terreindecals {#terrain-decals}
 
-Bron: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Bron: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Wegen, landingsbanen, betonnen platforms, geschilderde lijnen en letters, bandensporen: de `TerrainDecals`-res (type
 `0x15E1F32E`) bevat ze als platte geometrie die het spel over het terrein legt.
@@ -430,7 +430,7 @@ terrein zou ermee vechten; bakken houdt ze in de eigen kleur van de grond.
 
 ## Texturen en materialen {#textures-and-materials}
 
-Bron: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Bron: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Een Texture-res (type `0x6BDE20BA`) is een kop van 180 bytes: type en pixelformaat op +8, breedte en hoogte op +22, aantal mips
 op +30, de chunk-GUID op +40, vijftien mipgroottes op +56. De chunk is de mipketen, het grootste eerst. Sommige chunks missen hun
@@ -546,7 +546,7 @@ van de terreinachtergrond liggen geheel buiten 0..1, en in één level valt 23% 
 zoals ze zijn, met een herhalende sampler; de 3DHeat-viewer wikkelt elke herhalende textuur binnen zijn atlas. Een renderer die ze in plaats daarvan
 afknipt, smeert de ribben uit tot twee keer hun breedte, verandert een betonnen vloer in strepen langs één as, en geeft de balken van een toren de
 randkleur van hun textuur; voor zo'n renderer knipt `--clamped-uvs` elke driehoek langs de lijnen waar zijn textuur zich herhaalt, en verplaatst
-elk stuk naar 0..1 (zie [Uitvoerformaat](output-format.md)). Daarna valt 0,03% van de getextureerde driehoeken, waarover een textuur zich meer dan
+elk stuk naar 0..1 (zie [Uitvoerformaat](https://holdi601.github.io/3DHeat-GameFiles/nl/output-format.html)). Daarna valt 0,03% van de getextureerde driehoeken, waarover een textuur zich meer dan
 16 keer herhaalt, buiten, en een driehoek die door het knippen in meer dan 4 stukken zou vallen, wordt in plaats daarvan in de gemiddelde kleur van
 zijn textuur getekend: schors herhaalt zich langs elke tak, en geknipt steeg het aantal driehoeken van de bomen van een level van 6,4 naar 24 miljoen.
 
@@ -584,7 +584,7 @@ maskers wel.
 
 ## Navigatiemesh {#navigation-mesh}
 
-Bron: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Bron: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Een level levert één partitie per agent, `<level>/dbt/<level>_navmesh_layer_<n>`: in één level is laag 0 de soldaat (1,8 m hoog, 0,18 m stap, 0,4 m straal) en
 zijn twee andere voertuigen (3,5 en 10 m hoog). Elke partitie bevat twee arrays:

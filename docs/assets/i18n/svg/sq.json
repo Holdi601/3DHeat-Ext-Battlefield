@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(loja bazë dhe përditësimet)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Buxheti",
+ "Level table": "Tabela e niveleve",
+ "Options": "Opsionet",
+ "bundles, meshes,": "bundle, mesh,",
+ "coarser levels of detail": "nivele më të ashpra detajesh",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: një nivel Battlefield 6 në një .glb",
+ "levels": "levels",
+ "lists every level": "liston çdo nivel",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "terreni, vendosja",
+ "until --detail-budget fits": "derisa --detail-budget të përshtatet"
+}

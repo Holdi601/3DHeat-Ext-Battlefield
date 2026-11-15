@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(grunnleikur og uppfærslur)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Hámark",
+ "Level table": "Borðatafla",
+ "Options": "Valkostir",
+ "bundles, meshes,": "búnt, net,",
+ "coarser levels of detail": "grófari smáatriðastig",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: Battlefield 6 borð í eina .glb",
+ "levels": "levels",
+ "lists every level": "telur upp öll borð",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "landslag, staðsetning",
+ "until --detail-budget fits": "þar til --detail-budget passar"
+}

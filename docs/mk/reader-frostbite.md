@@ -1,6 +1,6 @@
 ---
 title: "Frostbite"
-nav_order: 5
+nav_order: 4
 lang: "mk"
 source: reader-frostbite.md
 source_hash: "5aa518f14f3a"
@@ -16,27 +16,27 @@ search_exclude: true
 а средствата кажуваат која мрежа каде стои.
 
 Извори:
-[`frostbite.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbite.py)
+[`frostbite.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbite.py)
 (табели, пакети, податоци),
-[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitebundle.py)
+[`frostbitebundle.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitebundle.py)
 (пакети и нивните манифести),
-[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteebx.py)
+[`frostbiteebx.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteebx.py)
 (EBX партиции),
-[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitemesh.py)
+[`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
-[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py)
+[`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
 (висинско поле),
-[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py)
+[`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (текстури и материјали),
-[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitelevel.py)
+[`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (поставување и извоз).
-Команди: `identify`, `levels`, `level` (видете [Команди](commands.md#levels-and-level-frostbite)).
+Команди: `identify`, `levels`, `level` (видете [Команди](../cli-reference.md)).
 
 Ништо од ова не е документирано од играта. Секој распоред подолу е прочитан од
 датотеките и потоа проверен спрема сите нив, а секој дел кажува каква била
 проверката. Таму каде алатките за модирање Frosty опишуваат постари верзии на структура,
 имињата на полињата ги следат нивните; не е земен код од нив (видете
-[Правила и лиценци](rules-and-licences.md)).
+[Правила и лиценци](../terms.md)).
 
 ## Заглавието што изгледа шифрирано, а не е {#the-header-that-looks-encrypted-and-is-not}
 
@@ -149,7 +149,7 @@ id-ови, GUID-и на делови, низи од знаци. Останати
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](reader-oodle.md), од сопствената `oo2core` DLL на играта) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/mk/reader-oodle.html), од сопствената `oo2core` DLL на играта) |
 | друго, со еднакви големини | копирано како зачувано |
 | друго | се одбива |
 
@@ -253,7 +253,7 @@ prefab ја става својата содржина на локалните �
 
 ## Терен {#terrain}
 
-Извор: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbiteterrain.py).
+Извор: [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py).
 
 Теренот е TerrainStreamingTree res (тип `0x22FE8AC8`) и деловите што ги
 именува.
@@ -439,7 +439,7 @@ BC4 страници; колормапата на едно ниво отиде �
 
 ## Декали на терен {#terrain-decals}
 
-Извор: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitedecals.py).
+Извор: [`frostbitedecals.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitedecals.py).
 
 Патишта, писти, бетонски платформи, насликани линии и букви, траги од гуми: res
 `TerrainDecals` (тип `0x15E1F32E`) ги држи
@@ -502,7 +502,7 @@ BC4 страници; колормапата на едно ниво отиде �
 
 ## Текстури и материјали {#textures-and-materials}
 
-Извор: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitematerial.py).
+Извор: [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py).
 
 Texture res (тип `0x6BDE20BA`) е заглавие од 180 бајти: тип и формат на пиксели
 на +8, ширина и висина на +22, број на mip на +30, GUID на делот на +40, петнаесет
@@ -667,7 +667,7 @@ float (формат 2). Секциите носат до три сета пов�
 на двојна ширина, претвора бетонски под во шари по една оска, и
 им дава на челичните греди на кулата бојата на работ на нивната текстура; за него,
 `--clamped-uvs` го сече секој триаголник по линиите каде неговата текстура се повторува
-и го поместува секое парче во 0..1 (видете [Формат на излезот](output-format.md)).
+и го поместува секое парче во 0..1 (видете [Формат на излезот](https://holdi601.github.io/3DHeat-GameFiles/mk/output-format.html)).
 Потоа 0,03% од текстурираните триаголници, преку кои текстурата се повторува повеќе
 од 16 пати, излегуваат надвор, а триаголник што сечењето би го направило повеќе од
 4 парчиња се црта во просечната боја на својата текстура: кората се повторува
@@ -720,7 +720,7 @@ float (формат 2). Секциите носат до три сета пов�
 
 ## Навигациска мрежа {#navigation-mesh}
 
-Извор: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-GameFiles/blob/main/heat3d_gamefiles/frostbitenav.py).
+Извор: [`frostbitenav.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitenav.py).
 
 Нивото испорачува по една партиција за агент, `<level>/dbt/<level>_navmesh_layer_<n>`:
 во едно ниво слојот 0 е војникот (висок 1,8 m, скалило 0,18 m, радиус 0,4 m), а

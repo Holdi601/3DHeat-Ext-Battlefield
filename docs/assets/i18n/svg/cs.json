@@ -1,0 +1,18 @@
+{
+ "(base game and updates)": "(základní hra a aktualizace)",
+ "--navmesh, --skip": "--navmesh, --skip",
+ "--textures, --ground-texture,": "--textures, --ground-texture,",
+ "<level>.glb": "<level>.glb",
+ "Budget": "Rozpočet",
+ "Level table": "Tabulka úrovně",
+ "Options": "Možnosti",
+ "bundles, meshes,": "balíčky, sítě,",
+ "coarser levels of detail": "hrubší úrovně detailu",
+ "ground:terrain ...": "ground:terrain ...",
+ "level: a Battlefield 6 level into one .glb": "level: úroveň Battlefield 6 do jednoho .glb",
+ "levels": "levels",
+ "lists every level": "vypíše každou úroveň",
+ "structure:... nav:walkable": "structure:... nav:walkable",
+ "terrain, placement": "terén, umístění",
+ "until --detail-budget fits": "dokud se nevejde --detail-budget"
+}
