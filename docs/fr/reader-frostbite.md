@@ -3,7 +3,7 @@ title: "Frostbite : `.toc`, `.cas`, bundles, maillages et niveaux"
 nav_order: 4
 lang: "fr"
 source: reader-frostbite.md
-source_hash: "5aa518f14f3a"
+source_hash: "dac0fd4c8daa"
 nav_exclude: true
 search_exclude: true
 ---
@@ -26,13 +26,13 @@ Sources :
 (textures et matériaux),
 [`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (placement et export).
-Commandes : `identify`, `levels`, `level` (voir [Commandes](../cli-reference.md)).
+Commandes : [`identify`](identify.md), [`levels` et `level`](level-battlefield.md) (toutes les options : [Commandes](../cli-reference.md)).
 
 Rien de ceci n'est documenté par le jeu. Chaque disposition ci-dessous a été lue dans les
 fichiers, puis vérifiée sur l'ensemble de ceux-ci, et chaque section indique la vérification
 faite. Là où les outils de modding Frosty décrivent d'anciennes versions d'une structure, les
 noms de champs suivent les leurs ; aucun code n'a été repris d'eux (voir
-[Règles et licences](../terms.md)).
+[Règles et licences](terms.md)).
 
 ## L'en-tête qui semble chiffré et ne l'est pas {#the-header-that-looks-encrypted-and-is-not}
 
@@ -420,7 +420,7 @@ Vérifications :
 
 Après les GUID de texture, la queue porte les paramètres de matériau du lot, codés comme ceux d'un bloc de
 shader (voir Teintes plus bas). La couleur de peinture d'un marquage, d'une trace de piste ou d'une ligne est
-le float3 de hachage `607e` : un 0,64, 0,56, 0,48 sablonneux pour les traces dans le sable, presque noir pour
+le float3 de hachage `607e` : un beige sableux (0,64, 0,56, 0,48) pour les traces dans le sable, presque noir pour
 le goudron. Les cartes d'opacité sont surtout au format 62, un canal à 8 octets par bloc, lu comme BC4.
 
 Un lot applique sa texture soit par position dans le monde (u = x, v = z, la texture se répétant tous les
@@ -491,7 +491,7 @@ concrete, wall), puis ceux du nom du maillage, puis une qui n'est pas une carte 
 son panneau `t_com_highwaysignage_01_cs` et une feuille de décalcomanie `t_de_com_highwaysignage_01_ca` avec
 un bouclier couché ; les deux correspondent aux mots, et sans la règle de décalcomanie la feuille gagnait à
 l'usage et le panneau montrait le bouclier tourné d'un quart, à travers chaque jeu de coordonnées de texture
-de la section. Les signed distance fields (`..._sdf`), les palettes et les masques de canaux (`_rgb`) ne sont
+de la section. Les champs de distance signés (`..._sdf`), les palettes et les masques de canaux (`_rgb`) ne sont
 jamais choisis, quels que soient les mots qu'ils partagent (les `_rgba` le sont : la plupart sont de la couleur
 avec un alpha, et les laisser de côté remplaçait par des cartes sans rapport la carte propre d'un pylône et
 celle d'un escalier) : l'atlas de végétation d'un arrière-plan `..._atlas_a_sdf`, dessiné en couleur, montrait
@@ -594,7 +594,7 @@ Les coordonnées de texture sont l'usage de sommet `0x21`, deux demi-flottants (
 (format 2). Les sections portent jusqu'à trois autres jeux (`0x22` à `0x24`) pour les couches de décalcomanie et de
 détail. Les coordonnées se répètent en mosaïque : le côté nervuré d'un conteneur va de -1,6 à 1,8, les tuiles du
 décor de terrain sont entièrement hors de 0..1, et dans un niveau 23 % des triangles texturés atteignent hors de 0..1.
-Elles sont écrites telles quelles, avec un échantillonneur qui répète ; la visionneuse 3DHeat enroule chaque texture
+Elles sont écrites telles quelles, avec un échantillonneur qui répète ; le visualiseur 3DHeat enroule chaque texture
 répétée dans son atlas. Un moteur qui les bride à la place étire les nervures au double de leur largeur, transforme un
 sol de béton en traînées le long d'un axe, et donne aux poutres d'acier d'une tour la couleur du bord de leur texture ;
 pour lui, `--clamped-uvs` découpe chaque triangle le long des lignes où sa texture se répète et déplace chaque morceau
@@ -627,7 +627,7 @@ dans un niveau, sa moyenne (95, 99, 80 en sRGB) donnait au sol de la zone de jeu
 quel, et cuite avec les décalcomanies par-dessus, sur l'étendue des décalcomanies et de la carte de couleur.
 
 Face au jeu, la couleur médiane du sol de la zone de jeu cuite de chaque niveau et celle des images de jeu (lignes à
-55 à 72 % de l'image à côté de l'ATH, 24 images chacun ; sRGB ; les images sont éclairées et étalonnées, donc les rapports
+55 à 72 % de l'image à côté du HUD, 24 images chacun ; sRGB ; les images sont éclairées et étalonnées, donc les rapports
 r/g et b/g sont la comparaison juste) :
 
 | Niveau | Images | Moyenne du décor | Maintenant |

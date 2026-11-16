@@ -4,7 +4,7 @@
  "--textures, --ground-texture,": "--textures, --ground-texture,",
  "<level>.glb": "<niveau>.glb",
  "Budget": "Budget",
- "Level table": "Table des niveaux",
+ "Level table": "Table niveau",
  "Options": "Options",
  "bundles, meshes,": "bundles, maillages,",
  "coarser levels of detail": "niveaux de détail plus grossiers",
@@ -14,5 +14,5 @@
  "lists every level": "liste chaque niveau",
  "structure:... nav:walkable": "structure:... nav:walkable",
  "terrain, placement": "terrain, placement",
- "until --detail-budget fits": "jusqu'à ce que --detail-budget tienne"
+ "until --detail-budget fits": "jusqu'au --detail-budget"
 }

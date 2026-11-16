@@ -3,7 +3,7 @@ title: Frostbite
 nav_order: 4
 lang: "it"
 source: reader-frostbite.md
-source_hash: "5aa518f14f3a"
+source_hash: "dac0fd4c8daa"
 nav_exclude: true
 search_exclude: true
 ---
@@ -25,17 +25,17 @@ Fonti:
 [`frostbitemesh.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitemesh.py)
 (MeshSet),
 [`frostbiteterrain.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbiteterrain.py)
-(campo altimetrico),
+(mappa delle altezze),
 [`frostbitematerial.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitematerial.py)
 (texture e materiali),
 [`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (posizionamento ed esportazione).
-Comandi: `identify`, `levels`, `level` (vedi [Comandi](../cli-reference.md)).
+Comandi: [`identify`](identify.md), [`levels` e `level`](level-battlefield.md) (ogni opzione: [Riferimento dei comandi](../cli-reference.md)).
 
 Niente di qui è documentato dal gioco. Ogni disposizione qui sotto è stata letta dai file
 e poi verificata su tutti i file, e ogni sezione dice quale fosse il controllo. Dove i
 strumenti di modding Frosty descrivono versioni più vecchie di una struttura, i nomi dei
-campi seguono i loro; nessun codice è stato preso da loro (vedi [Regole e licenze](../terms.md)).
+campi seguono i loro; nessun codice è stato preso da loro (vedi [Termini e licenza](terms.md)).
 
 ## L'intestazione che sembra cifrata e non lo è {#the-header-that-looks-encrypted-and-is-not}
 
@@ -249,7 +249,7 @@ Il terreno è una res TerrainStreamingTree (tipo `0x22FE8AC8`) e i chunk che ess
 | Parte | Disposizione |
 |---|---|
 | intestazione | 34 byte; il numero di nodi a 25 |
-| alberi raster | un byte di tipo e una lunghezza u32 ciascuno, finché un byte di tipo `0xFF`. Il tipo 0 è il campo altimetrico: campioni per lato a +5 (265), intervallo di altezze a +21 (1.280 m), il quadrato del terreno nel suo primo record di nodo a +77 (8.192 m nel livello controllato). Contiene i riquadri dei nodi e una piramide min/max 16 x 16 per nodo, non le altezze |
+| alberi raster | un byte di tipo e una lunghezza u32 ciascuno, finché un byte di tipo `0xFF`. Il tipo 0 è la mappa delle altezze: campioni per lato a +5 (265), intervallo di altezze a +21 (1.280 m), il quadrato del terreno nel suo primo record di nodo a +77 (8.192 m nel livello controllato). Contiene i riquadri dei nodi e una piramide min/max 16 x 16 per nodo, non le altezze |
 | nodi di streaming | il quadtree, in profondità: dimensione del chunk e GUID; un secondo chunk facoltativo; un byte di flag (bit 0: il chunk inizia con una pagina di altezza); ha-figli. I figli nell'ordine (0,0), (1,0), (1,1), (0,1) |
 | pagina di altezza | le prime 265 x 265 u16 del chunk di un nodo con flag, riga per riga; altezza = valore x 1.280 / 65.535 m; colonne lungo x, righe lungo z, dall'angolo basso del nodo; un bordo di 4 campioni, quindi 256 celle per nodo |
 
@@ -279,7 +279,7 @@ severo: le sue origini stanno a una mediana di 0,07 m dalla superficie. Gli edif
 perché la categoria contiene muri, pavimenti e pezzi di kit di strutture a più piani e sotterranee.
 Spostando il terreno di 64 m di lato, la quota di copie entro 0,5 m scende dal 29% al 10%.
 
-`level` disegna il campo altimetrico come `ground:terrain`, ogni sua parte dal nodo più fine con
+`level` disegna la mappa delle altezze come `ground:terrain`, ogni sua parte dal nodo più fine con
 altezze lì e non più fine di `--ground-spacing` (4 m di default: 3,7 milioni di triangoli per il livello
 controllato, i cui nodi più fini sono 0,5 m). Pezzi di risoluzione diversa si incontrano con piccoli
 gradini; nulla li cuce insieme.
@@ -292,12 +292,12 @@ il suo secondo chunk termina con la mappa di colore del nodo (vedi [Strati del t
 Il gioco ombreggia il terreno vicino a un giocatore facendo splatting di materiali superficiali in
 mosaico tramite maschere dipinte, con una mappa di colore sopra, e disegnando decal (strade, rattoppi
 di asfalto, segnaletica di piste) sopra. Il resoconto di Frostbite sul sistema (Widmark, "Terrain in
-Battlefield 3", GDC 2012) elenca i raster del terreno come il campo altimetrico, le maschere di splatting
+Battlefield 3", GDC 2012) elenca i raster del terreno come la mappa delle altezze, le maschere di splatting
 dello shader, una mappa di colore usata "come sovrapposizione sopra lo shader splatting", materiali fisici,
 una maschera di profondità della distruzione, una mappa dell'albedo per la luce riflessa e canali di
 maschera aggiuntivi; un tassello di raster porta un bordo per gli algoritmi di rendering. L'albero dei nodi
 dei livelli controllati ha sette alberi raster, di tipo 0, 1, 2, 4, 5, 7 e 8, le cui intestazioni iniziano
-con la dimensione del tassello: 265 per il campo altimetrico (tipo 0) e il tipo 2, 72 o 66 per le maschere
+con la dimensione del tassello: 265 per la mappa delle altezze (tipo 0) e il tipo 2, 72 o 66 per le maschere
 (tipo 1), 132 con un bordo di 2 per la mappa di colore (tipo 4), 260 con un bordo di 2 per il tipo 5.
 
 **L'elenco degli strati.** La res `....layergraphs` del terreno elenca una voce di 32 byte per strato, nell'ordine
@@ -374,8 +374,8 @@ del chunk: in un livello i nodi più grossolani portano altre quattro di queste 
 raster a colore piatto, e leggere le ultime quattro pagine del chunk perdeva la mappa di colore su nove
 decimi del terreno. Senza quel conteggio la mappa di colore veniva persa anche nei livelli con pagine di
 maschera non compresse, le cui pagine non sono un numero intero di pagine BC4; in un livello la mappa di
-colore è passata da 0,4 a 0,94 del suo terreno. L'ordine è stato stimato: confrontando i bordi del campo
-altimetrico di ogni quadrante, ogni pagina dei nodi con caratteristiche combacia con un quadrante, non
+colore è passata da 0,4 a 0,94 del suo terreno. L'ordine è stato stimato: confrontando i bordi della mappa
+delle altezze di ogni quadrante, ogni pagina dei nodi con caratteristiche combacia con un quadrante, non
 ribaltata, a 0,3-0,54 dove il posizionamento successivo migliore è sotto 0,2. Cucita così, le pagine di un
 livello si uniscono senza giunture nelle strade, nell'acqua e nelle zone edificate del livello di prova, a 0,5 m
 per texel nella zona di gioco. Dove sono gli strati a fare il lavoro, la mappa di colore è quasi neutra (mediana
@@ -389,8 +389,8 @@ pagine di maschera intere, e il payload del tipo 5 non è stato localizzato.
 
 **I buchi.** L'asset del terreno di un livello (res di tipo `0x1CA38E06`) nomina tre shader: uno shader di
 superficie predefinito, uno shader di superficie per i buchi e uno shader sorgente predefinito. Quale strato
-legga lo shader dei buchi non è stato trovato, quindi il campo altimetrico non viene tagliato. In un livello
-la mesh di navigazione può passare su mesh di roccia decine di metri sotto il campo altimetrico, dove il gioco
+legga lo shader dei buchi non è stato trovato, quindi la mappa delle altezze non viene tagliata. In un livello
+la mesh di navigazione può passare su mesh di roccia decine di metri sotto la mappa delle altezze, dove il gioco
 deve averle tagliate via. Cercato e non trovato lì: la maschera di uno strato, il raster 67 x 67, un'altezza
 riservata (nessuna pagina di altezza del livello contiene 0 o 65.535) e un flag di nodo (ogni nodo sotto la
 radice ha flag 1). Restano gli alberi raster 7 e 8. Entrambi sono codificati a lunghezza di sequenza: un byte
@@ -436,7 +436,7 @@ pneumatico). I record vengono disegnati nell'ordine del file.
 **La cottura.** `level --ground-texture METRI` dipinge, sotto l'estensione dei decal e in tasselli di al massimo 4.096
 pixel, la mappa di colore dello sfondo (bilineare) e poi ogni batch sopra di essa secondo la sua opacità × l'alfa
 del vertice. Il colore dei vertici non viene usato: alcuni vertici dei batch sono verde o blu puri, il che tingeva
-le marcature di un livello con quei colori. I triangoli del campo altimetrico in quel punto diventano parti
+le marcature di un livello con quei colori. I triangoli della mappa delle altezze in quel punto diventano parti
 `ground:terrain x<x> z<z>` che portano il tassello. Ogni batch viene disegnato con:
 
 | I batch nominano | Disegnato come |
@@ -585,7 +585,7 @@ viene scritta con il suo alfa, come PNG, e il suo materiale come `alphaMode` MAS
 così le schede delle foglie mostrano foglie, non i loro angoli neri. Una mappa di foglie di un albero non ha alcun alfa (4 di
 255 al massimo): le sue fronde vengono tagliate dalla geometria, e con solo le prime due condizioni tutta la chioma veniva tagliata via.
 
-Le coordinate di texture sono uso di vertice `0x21`, due half (formato 6) o due float (formato 2). Le sezioni portano fino a
+Le coordinate di texture sono uso di vertice `0x21`, due half (formato 6) o due float (formato 2). Le sezioni portano fino ad
 altri tre set (`0x22` a `0x24`) per strati di decal e di dettaglio. Le coordinate tassellano: il lato con nervature di un
 contenitore va da -1,6 a 1,8, le tessere di sfondo del terreno stanno tutte fuori da 0..1, e in un livello il 23% dei
 triangoli testurizzati esce da 0..1. Vengono scritte così come sono, con un campionatore che si ripete; il visualizzatore 3DHeat
@@ -597,23 +597,23 @@ testurizzati, attraverso i quali una texture si ripete più di 16 volte, esce, e
 4 pezzi viene disegnato invece con il colore medio della sua texture: la corteccia si ripete lungo ogni ramo, e tagliata, gli
 alberi di un livello passavano da 6,4 a 24 milioni di triangoli.
 
-Il campo altimetrico non ha una mappa di colore propria che si possa leggere. Dove lo copre una delle mappe di sfondo del
+La mappa delle altezze non ha una mappa di colore propria che si possa leggere. Dove lo copre una delle mappe di sfondo del
 terreno, viene colorato da quella: le coordinate di texture dello sfondo sono una funzione lineare di x e z del mondo (il 99%
 dei suoi vertici sta entro 0,001 da essa; la mappa copre un quadrato di 65.536 m, ruotato di un quarto), e la stessa funzione
-dà quelle del campo altimetrico. Il livello distribuisce i mip di quella mappa a partire da 2.048 px in giù, quindi il campo
-altimetrico ottiene 32 m per pixel. La sua roccia scura sta sui pendii ripidi: la correlazione tra oscurità e pendenza è 0,48,
+dà quelle della mappa delle altezze. Il livello distribuisce i mip di quella mappa a partire da 2.048 px in giù, quindi la mappa
+delle altezze ottiene 32 m per pixel. La sua roccia scura sta sui pendii ripidi: la correlazione tra oscurità e pendenza è 0,48,
 e al massimo 0,34 per le altre sette orientazioni.
 
 Lo sfondo di un altro livello sono otto tessere vicine e otto lontane intorno alla zona di gioco, ciascuna che ripete la sua
-texture sulla tessera, e nessuna raggiunge il campo altimetrico. Ogni texture di sfondo viene adattata da sola, e quando
-nessuna copre il campo altimetrico prende il colore medio che lo sfondo mostra entro un chilometro dal quadrato del terreno,
+texture sulla tessera, e nessuna raggiunge la mappa delle altezze. Ogni texture di sfondo viene adattata da sola, e quando
+nessuna copre la mappa delle altezze prende il colore medio che lo sfondo mostra entro un chilometro dal quadrato del terreno,
 su cui `--ground-texture` cuoce i decal.
 Un materiale di sfondo è uno il cui nome contiene `TerrainBackdrop`, oppure `BD_` e `Terrain` (`M_BD_<sito>_Terrain..._Near`);
 oppure una mesh di sfondo (`bd_..._terrain<sito>_04_far_mesh`) porta un semplice materiale di terreno
 (`M_<regione>_Terrain<sito>_04_Far`), che le prime due regole non prendevano in un livello, e quindi colorava il suo suolo
 dalle sue superfici.
 
-Dove nessuna mappa di sfondo copre il campo altimetrico, invece, esso prende il colore medio centrale delle superfici del
+Dove nessuna mappa di sfondo copre la mappa delle altezze, invece, essa prende il colore mediano delle superfici del
 terreno stesso prima della media dello sfondo: le mappe di colore `_cv` che i blocchi di shader del layer graph nominano (27
 in un livello: sabbie, ghiaie, terreni, erba, cemento screpolato), ciascuna mediata, poi la mediana di ciascun canale, senza
 la superficie predefinita del motore. Uno sfondo può essere un altro paesaggio del tutto: in un livello la sua media (95, 99,
@@ -684,7 +684,7 @@ i giocatori.
 ## Non implementato {#not-implemented}
 
 - Il layer graph del terreno, che mescola i suoi strati superficiali (vedi [Strati del terreno](#terrain-layers)): il colore
-  del suolo segue una regola di questo lettore, dalle maschere degli strati e dalla pendenza del campo altimetrico, e i livelli
+  del suolo segue una regola di questo lettore, dalle maschere degli strati e dalla pendenza della mappa delle altezze, e i livelli
   le cui pagine di maschera non combaciano ricevono un solo colore.
 - I parametri di colore dei materiali dei decal: la segnaletica tramite maschere di canali viene dipinta in un colore neutro.
 - I blueprint di oggetti che non sono mesh (logica di gioco, effetti, suoni).
@@ -694,7 +694,7 @@ i giocatori.
   e normali (calcolate dallo scrittore).
 - Mappe di normali, rugosità e altre; alfa diverso dal ritaglio (il vetro traslucido e i decal vengono disegnati opachi).
 - Buchi del terreno: uno shader di superficie per i buchi è nominato, ma ciò che legge non è stato trovato (vedi
-  [Strati del terreno](#terrain-layers)), quindi il campo altimetrico non viene tagliato dove sotto scorre il terreno percorribile.
+  [Strati del terreno](#terrain-layers)), quindi la mappa delle altezze non viene tagliata dove sotto scorre il terreno percorribile.
 - Quale tinta va con quale canale della maschera di un materiale: una mappa di colore grigia prende la prima tinta che non sia
   neutra (vedi [Texture e materiali](#textures-and-materials)).
 - Effetti (percorsi `fx/`) e le mesh dei cavi, i cui riquadri sono lunghi decine di chilometri; vengono lasciati fuori e contati nel riepilogo.

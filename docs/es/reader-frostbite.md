@@ -1,9 +1,9 @@
 ---
-title: "Frostbite"
+title: Frostbite
 nav_order: 4
 lang: "es"
 source: reader-frostbite.md
-source_hash: "5aa518f14f3a"
+source_hash: "dac0fd4c8daa"
 nav_exclude: true
 search_exclude: true
 ---
@@ -26,9 +26,9 @@ Fuentes:
 (texturas y materiales),
 [`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (colocación y exportación).
-Comandos: `identify`, `levels`, `level` (mira [Comandos](../cli-reference.md)).
+Comandos: [`identify`](identify.md), [`levels` y `level`](level-battlefield.md) (todas las opciones: [Referencia de comandos](../cli-reference.md)).
 
-Nada de esto lo documenta el juego. Cada diseño de abajo se leyó de los archivos y luego se contrastó con todos ellos, y cada sección dice cuál fue la comprobación. Cuando las páginas de herramientas de modding de Frosty describen versiones anteriores de una estructura, los nombres de los campos siguen los suyos; no se tomó código de ellas (mira [Reglas y licencias](../terms.md)).
+Nada de esto lo documenta el juego. Cada diseño de abajo se leyó de los archivos y luego se contrastó con todos ellos, y cada sección dice cuál fue la comprobación. Cuando las páginas de herramientas de modding de Frosty describen versiones anteriores de una estructura, los nombres de los campos siguen los suyos; no se tomó código de ellas (mira [Condiciones y licencias](terms.md)).
 
 ## La cabecera que parece cifrada y no lo está {#the-header-that-looks-encrypted-and-is-not}
 
@@ -97,7 +97,7 @@ Un tamaño comprimido cero significa guardado sin comprimir, siempre que descomp
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/es/reader-oodle.html), desde la propia DLL `oo2core` del juego) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/reader-oodle.html), desde la propia DLL `oo2core` del juego) |
 | otra, con tamaños iguales | copiada tal cual |
 | otra | rechazada |
 
@@ -206,7 +206,7 @@ El juego sombrea el terreno cerca de un jugador mezclando materiales de superfic
 
 Los registros de un grupo son los cuatro cuadrantes de su nodo, capa por capa, y los cuadrantes de cada capa en el orden (0,0), (1,0), (1,1), (0,1). Un registro con la segunda marca activa cubre su cuadrante entero y no tiene página; uno sin ella tiene la página siguiente; un cuadrante sin registro de una capa que su grupo nombra está vacío de esa capa; la primera marca está desactivada exactamente cuando la capa continúa en el propio grupo del cuadrante, un nivel más abajo, que la reemplaza allí. El número de páginas es el número de registros con página.
 
-Las páginas: tras la página de alturas del propio grupo del nodo de flujo vienen sus páginas, en su fragmento, una sección de 4.358 bytes de 16 bits y un raster de 67 x 67 de ocho bits (desde el inicio del fragmento cuando no tiene página de alturas); su segundo fragmento guarda las páginas de los cuatro grupos de cuadrantes un nivel más abajo, en el orden de los cuadrantes del mapa de color, y luego el propio mapa de color. Una página es de 64 x 64 texels del cuadrante, con filas a lo largo de z y columnas a lo largo de x, con un borde copiado de sus vecinos: 4 texels en una página BC4, 1 en una sin comprimir. Las páginas se numeran y se ordenan en su lugar. El borde de cada página cabe en la siguiente.
+Las páginas: tras la página de alturas del propio grupo del nodo de flujo vienen sus páginas, en su fragmento, una sección de 4.358 bytes de 16 bits y un raster de 67 x 67 de ocho bits (desde el inicio del fragmento cuando no tiene página de alturas); su segundo fragmento guarda las páginas de los cuatro grupos de cuadrantes un nivel más abajo, en el orden de los cuadrantes del mapa de color, y luego el propio mapa de color. Una página es de 64 x 64 texels del cuadrante, con filas a lo largo de z y columnas a lo largo de x, con un borde copiado de sus vecinos: 4 texels en una página BC4, 1 en una sin comprimir.
 
 Los bordes prueban la colocación sin juicio: dos páginas de una misma capa una junto a otra deben llevarse los texels de borde la una de la otra. `read_masks` lo comprueba para cada par que coloca, y rechaza un nivel en el que menos del 99 % coincida. Alrededor de un tercio de los niveles comprobados se leen, con sus bordes coincidiendo; unos pocos no tienen máscaras pintadas; el resto se rechaza, casi todos por esa comprobación (sus fragmentos de nodo guardan más de lo que este diseño conoce). El suelo de un nivel rechazado toma el color medio de sus materiales de superficie, y la exportación dice por qué. Los bordes frente a un cuadrante lleno valen 255, y los frente a uno vacío 0.
 
@@ -225,7 +225,7 @@ Comparado con el color mediano del suelo de fotogramas de juego de tres niveles 
 
 **El albedo de la luz rebotada** se buscó y no se encontró: los fragmentos del nodo raíz y de los nodos del primer nivel son páginas de máscara enteras, y el contenido del tipo 5 no se localiza.
 
-**Huecos.** El activo del terreno de un nivel (tipo de res `0x1CA38E06`) nombra tres sombreadores: un sombreador de superficie por defecto, un sombreador de huecos y un sombreador de origen por defecto. No se encuentra qué capa lee el sombreador de huecos, así que el mapa de alturas no se recorta. En un nivel la malla de navegación puede correr sobre mallas de roca decenas de metros por debajo del mapa de alturas, donde el juego debe de haberla recortado. Se buscó y no se encontró allí: la máscara de una capa, el raster de 67 x 67, una altura reservada (ninguna página de alturas del nivel contiene 0 ni 65.535) y una marca de nodo (todo nodo por debajo de la raíz tiene marca 1). Quedan los árboles raster 7 y 8. Ambos usan codificación por longitudes: un byte igual al anterior va seguido de un recuento de copias adicionales (`ff ff 84` son 134 bytes de 255). El árbol 7 (loseta de 256, un cuadtree completo de cinco niveles, cuatro bits por muestra) se decodifica en pares de bytes con valores de 0 a 3; el árbol 8 (loseta de 265) en bytes sobre todo 255, con sus demás valores en series regulares. No se conoce que ninguno de los dos contenga los huecos, porque aún no se colocan sus losetas.
+**Huecos.** El activo del terreno de un nivel (tipo de res `0x1CA38E06`) nombra tres sombreadores: un sombreador de superficie por defecto, un sombreador de huecos y un sombreador de origen por defecto. No se encuentra qué capa lee el sombreador de huecos, así que el mapa de alturas no se recorta. En un nivel la malla de navegación puede correr sobre mallas de roca decenas de metros por debajo del mapa de alturas, donde el juego debe de haberla recortado. Se buscó y no se encontró allí: la máscara de una capa, el raster de 67 x 67, una altura reservada (ninguna página de alturas del nivel contiene 0 ni 65.535) y una marca de nodo (todo nodo por debajo de la raíz tiene marca 1). Quedan los árboles raster 7 y 8. Ambos usan codificación por longitudes: un byte igual al anterior va seguido de un recuento de copias adicionales (`ff ff 84` son 134 bytes de 255). El árbol 7 (loseta de 256, un cuadtree completo de cinco niveles, cuatro bits por muestra) se decodifica en pares de bytes con valores de 0 a 3; el árbol 8 (loseta de 265) en bytes sobre todo 255, con sus demás valores en series regulares. No se sabe si alguno de los dos contiene los huecos: aún no se colocan sus losetas.
 
 **Las calcomanías** se leen y se hornean; mira [Calcomanías del terreno](#terrain-decals).
 
@@ -265,7 +265,7 @@ Una máscara de variación de carretera no es pintura: varía la superficie bajo
 
 Casi todos los lotes se dibujan, en unas pocas losetas de 0,5 m por píxel; la exportación crece unos pocos MB y tarda unos segundos más. Vistos desde arriba, las plataformas, las calles de rodaje y la red de carreteras quedan bajo las vallas y los edificios de los recintos y llevan a sus puertas.
 
-Dibujadas como geometría propia, las calcomanías necesitarían mezcla alfa, que el escritor no lleva, y un desplazamiento sobre un terreno chocaría con él; el horneado las mantiene en el color propio del suelo.
+Dibujadas como geometría propia, las calcomanías necesitarían mezcla alfa, que el escritor no lleva, y un desplazamiento por encima de un terreno haría que parpadearan junto a él (z-fighting); el horneado las mantiene en el color propio del suelo.
 
 ## Texturas y materiales {#textures-and-materials}
 
@@ -315,7 +315,7 @@ Un bloque se hornea una vez por cada conjunto de contenidos, y la entrada del de
 
 **Mapas de recorte.** El cuarto canal del mapa de color significa cosas distintas según el nombre del mapa. En `_cs`, con gran diferencia el más común (893 de los mapas elegidos de un nivel), es suavidad: el 1 % del alfa de un mapa mediano cae a 0,1 de 0 o de 1. En `_cu` (hojas, hierba) y `_ca` (color y alfa) es opacidad: el 90 % y el 87 %. Un mapa de color llamado `..._cu` o `..._ca` cuyo alfa está al menos un 75 % cerca de 0 o de 1, al menos un 1 % por debajo de 0,5 y al menos un 5 % por encima, se escribe con su alfa, como PNG, y su material como `alphaMode` MASK de glTF, `alphaCutoff` 0,5, doble cara; así las tarjetas de hoja muestran hojas, no sus esquinas negras. La hoja de un árbol no tiene alfa alguno (4 de 255 como mucho): sus frondes se recortan por geometría, y con solo las dos primeras condiciones se recortaba toda la copa.
 
-Las coordenadas de textura son el uso de vértice `0x21`, dos medias (formato 6) o dos flotantes (formato 2). Las secciones llevan hasta tres conjuntos más (`0x22` a `0x24`) para capas de calcomanía y de detalle. Las coordenadas hacen mosaico: el lado acanalado de un contenedor va de -1,6 a 1,8, las losetas de fondo del terreno caen enteras fuera de 0..1, y en un nivel el 23 % de los triángulos texturizados llega fuera de 0..1. Se escriben tal cual, con un muestreador que repite; el visor de 3DHeat envuelve cada textura que se repite dentro de su atlas. Un renderizador que las recorta en su lugar estira las costillas al doble de su ancho, convierte un suelo de hormigón en rayas a lo largo de un eje, y da a las vigas de acero de una torre el color del borde de su textura; para él, `--clamped-uvs` corta cada triángulo a lo largo de las líneas donde su textura se repite y mueve cada trozo a 0..1 (mira [Formato de salida](https://holdi601.github.io/3DHeat-GameFiles/es/output-format.html)). Después, el 0,03 % de los triángulos texturizados, sobre los que una textura se repite más de 16 veces, llega fuera, y un triángulo que el corte dejaría en más de 4 trozos se dibuja con el color medio de su textura: la corteza se repite por cada rama, y cortada, los árboles de un nivel pasaron de 6,4 a 24 millones de triángulos.
+Las coordenadas de textura son el uso de vértice `0x21`, dos medias (formato 6) o dos flotantes (formato 2). Las secciones llevan hasta tres conjuntos más (`0x22` a `0x24`) para capas de calcomanía y de detalle. Las coordenadas hacen mosaico: el lado acanalado de un contenedor va de -1,6 a 1,8, las losetas de fondo del terreno caen enteras fuera de 0..1, y en un nivel el 23 % de los triángulos texturizados llega fuera de 0..1. Se escriben tal cual, con un muestreador que repite; el visor de 3DHeat envuelve cada textura que se repite dentro de su atlas. Un renderizador que las recorta en su lugar estira las costillas al doble de su ancho, convierte un suelo de hormigón en rayas a lo largo de un eje, y da a las vigas de acero de una torre el color del borde de su textura; para él, `--clamped-uvs` corta cada triángulo a lo largo de las líneas donde su textura se repite y mueve cada trozo a 0..1 (mira [Formato de salida](https://holdi601.github.io/3DHeat-GameFiles/output-format.html)). Después, el 0,03 % de los triángulos texturizados, sobre los que una textura se repite más de 16 veces, llega fuera, y un triángulo que el corte dejaría en más de 4 trozos se dibuja con el color medio de su textura: la corteza se repite por cada rama, y cortada, los árboles de un nivel pasaron de 6,4 a 24 millones de triángulos.
 
 El mapa de alturas no tiene un mapa de color propio que se pueda leer. Donde lo cubre uno de los mapas del fondo del terreno, se colorea desde él: las coordenadas de textura del fondo son una función lineal de x y z del mundo (el 99 % de sus vértices a menos de 0,001 de ella; el mapa cubre un cuadrado de 65.536 m, girado un cuarto de vuelta), y la misma función da las del mapa de alturas. El nivel trae los mips de ese mapa desde 2.048 px hacia abajo, así que el mapa de alturas recibe 32 m por píxel. Su roca oscura está en el suelo empinado: la correlación entre oscuridad y pendiente es 0,48, y como mucho 0,34 para las otras siete orientaciones.
 

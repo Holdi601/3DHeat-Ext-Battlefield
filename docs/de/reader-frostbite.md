@@ -1,9 +1,9 @@
 ---
-title: "Frostbite: `.toc`, `.cas`, Bundles, Meshes und Level"
+title: Frostbite
 nav_order: 4
 lang: "de"
 source: reader-frostbite.md
-source_hash: "5aa518f14f3a"
+source_hash: "dac0fd4c8daa"
 nav_exclude: true
 search_exclude: true
 ---
@@ -30,12 +30,12 @@ Quellen:
 (Texturen und Materialien),
 [`frostbitelevel.py`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/heat3d_ext_battlefield/frostbitelevel.py)
 (Platzierung und Export).
-Befehle: `identify`, `levels`, `level` (siehe [Befehle](../cli-reference.md)).
+Befehle: [`identify`](identify.md), [`levels` und `level`](level-battlefield.md) (alle Optionen: [Befehlsreferenz](../cli-reference.md)).
 
 Nichts davon ist vom Spiel dokumentiert. Jedes Layout unten wurde aus den Dateien abgelesen und dann
 gegen alle Dateien geprüft, und jeder Abschnitt sagt, was die Prüfung war. Wo die Frosty-Modding-Werkzeuge
 ältere Versionen einer Struktur beschreiben, folgen die Feldnamen ihren; es wurde kein Code von ihnen
-übernommen (siehe [Regeln und Lizenzen](../terms.md)).
+übernommen (siehe [Bedingungen und Lizenz](terms.md)).
 
 ## Der Header, der verschlüsselt aussieht und es nicht ist {#the-header-that-looks-encrypted-and-is-not}
 
@@ -50,7 +50,7 @@ sind eine Signatur, kein Chiffretext.
 
 ## Der DbObject-Baum {#the-dbobject-tree}
 
-Eine einzige rekursive Struktur. Jedes Feld ist ein Typbyte (die unteren fünf Bits der Typ, Bit 7
+Eine einzige rekursive Struktur. Jedes Feld ist ein Typbyte (die unteren fünf Bits sind der Typ, Bit 7
 "anonym"), ein optionaler Name und ein Wert. Container tragen ihre Länge als variable Ganzzahl und enden
 mit einem Null-Byte. `parse_toc` prüft die Länge jedes Containers, daher heißt eine Datei, die sich
 parsen lässt, dass sie verstanden wurde. `layout.toc` liegt in dieser Form vor.
@@ -125,8 +125,8 @@ Einträge enden.
 Ressourcentypen sind Hashes. `0x49B156D4` ist MeshSet (jede res dieses Typs heißt `..._mesh`),
 `0x6BDE20BA` Texture, `0x22FE8AC8` TerrainStreamingTree.
 
-`LevelCatalogue` liest all dies für ein Level in wenigen Sekunden: ein Level hat dutzende Bundles und
-zehntausende ebx-, res- und Chunk-Einträge.
+`LevelCatalogue` liest all dies für ein Level in wenigen Sekunden: ein Level hat Dutzende Bundles und
+Zehntausende ebx-, res- und Chunk-Einträge.
 
 ## Nutzdaten-Blöcke {#payload-blocks}
 
@@ -142,7 +142,7 @@ Eine komprimierte Größe von null heißt gespeichert, solange es sich zu dersel
 | `0x0270` | zlib |
 | `0x0970` | LZ4 |
 | `0x0F70` | Zstandard |
-| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/de/reader-oodle.html), aus der eigenen DLL `oo2core` des Spiels) |
+| `0x1170`, `0x1570` | Oodle ([Oodle](https://holdi601.github.io/3DHeat-GameFiles/reader-oodle.html), aus der eigenen DLL `oo2core` des Spiels) |
 | anderes, bei gleichen Größen | wird so kopiert, wie gespeichert |
 | anderes | abgelehnt |
 
@@ -489,7 +489,7 @@ eine sRGB-2D-Textur, deren Name die meisten Wörter des Materialnamens enthält 
 wall), dann die des Meshes, dann eine, die weder Detail-, Decal- (`t_de_...`) noch Schadenskarte ist, dann die,
 die die wenigsten Blöcke benutzen. Der Block eines Straßenschildes nennt seine Tafel `t_com_highwaysignage_01_cs`
 und eine Decal-Bahn `t_de_com_highwaysignage_01_ca` mit einem Schild, das auf der Seite liegt; beide passen auf
-die Wörter, und ohne die Decal-Regel gewann die Bahn durch Nutzung, und das Schild zeigte das Schild um ein
+die Wörter, und ohne die Decal-Regel gewann die Bahn durch Nutzung, und das Schild erschien um ein
 Viertel gedreht, über jeden Texturkoordinatensatz des Abschnitts. Signed Distance Fields (`..._sdf`), Paletten
 und Kanalmasken (`_rgb`) werden nie gewählt, egal welche Wörter sie teilen (`_rgba`-Karten schon: die meisten
 sind Farbe mit Alpha, und ihr Weglassen tauschte die eigenen Karten eines Strommastes und einer Treppe gegen
@@ -597,7 +597,7 @@ werden so geschrieben, wie sie sind, mit einem sich wiederholenden Sampler; der 
 wiederholende Textur in seinen Atlas ein. Ein Renderer, der sie stattdessen klemmt, verschmiert die Rippen auf die
 doppelte Breite, macht aus einem Betonboden Schlieren entlang einer Achse und gibt den Stahlträgern eines Turms
 die Randfarbe ihrer Textur; für ihn schneidet `--clamped-uvs` jedes Dreieck entlang der Linien, an denen sich seine
-Textur wiederholt, und verschiebt jedes Stück nach 0..1 (siehe [Ausgabeformat](https://holdi601.github.io/3DHeat-GameFiles/de/output-format.html)). Danach liegen
+Textur wiederholt, und verschiebt jedes Stück nach 0..1 (siehe [Ausgabeformat](https://holdi601.github.io/3DHeat-GameFiles/output-format.html)). Danach liegen
 0,03 % der texturierten Dreiecke, über die sich eine Textur mehr als 16-mal wiederholt, außerhalb, und ein Dreieck,
 das das Schneiden in mehr als 4 Stücke zerlegen würde, wird in der durchschnittlichen Farbe seiner Textur gezeichnet:
 Rinde wiederholt sich an jedem Ast, und geschnitten wuchsen die Bäume eines Levels von 6,4 auf 24 Millionen
