@@ -3,32 +3,32 @@ title: "Condiciones y licencias"
 nav_order: 8
 lang: "es"
 source: terms.md
-source_hash: "81e5e54e5585"
+source_hash: "50d8b31139d6"
 nav_exclude: true
 search_exclude: true
 ---
 # Condiciones y licencias {#terms-and-licence}
 
-Esta página es un registro de lo que dicen las licencias, no asesoramiento jurídico.
-
 ## El juego de EA {#ea-s-game}
 
-Battlefield 6 y sus niveles pertenecen a Electronic Arts, que no respalda este proyecto. Esta herramienta no incluye nada del juego ni descarga nada: lee
+Battlefield 6 y sus niveles pertenecen a Electronic Arts. 3DHeat Battlefield no está afiliado a Electronic Arts ni cuenta con su respaldo. Battlefield y los nombres y marcas relacionados pertenecen a sus titulares.
+
+Esta herramienta no incluye nada del juego ni descarga nada: ni recursos del juego, ni código del juego, ni DLL. Lee
 los archivos de la copia que **tú** instalaste, en tu equipo, fuera del juego. No cambia nada en el juego, no se ejecuta junto a él y no se comunica con ningún servidor.
 
-Lo que le indiques sigue siendo tu responsabilidad. Los juegos tienen sus propias condiciones de licencia, y los contratos de licencia de usuario final (EULA) suelen prohibir la ingeniería inversa. Son contratos exigibles, y la obligación recae en quien ejecuta la herramienta. Usarla es tu decisión, bajo las condiciones que aceptaste para el juego y la tienda donde lo compraste (el Acuerdo de Usuario de EA, y el de Steam, el de la aplicación de EA o el de Epic).
+El nivel que escribe se queda en tu equipo: guarda los `.glb` exportados, y las texturas que contienen,
+para tu propio análisis, y no publiques, compartas ni vendas los niveles, modelos ni texturas exportados. El `.gitignore` del repositorio mantiene los archivos del juego y las exportaciones fuera del control de versiones, por tipo de archivo.
 
-El nivel que escribe es contenido de la empresa editora del juego: guarda los `.glb` exportados, y las texturas que contienen,
-para tu propio análisis. No publiques, compartas ni vendas los niveles, modelos ni texturas exportados. El `.gitignore` del repositorio mantiene los archivos del juego y las exportaciones fuera del control de versiones, por tipo de archivo.
+Cada lector de juego es un pequeño proyecto propio, con su propio archivo de licencia, sus propias versiones y su propio gestor de incidencias, de modo que puede instalarse, actualizarse, mantenerse - o retirarse a petición de un titular de derechos - por separado, sin afectar al visor ni a las demás herramientas.
 
-Por eso es un paquete aparte: si EA alguna vez pide que se retire, se retira solo, y el visor, GameFiles y las demás herramientas se quedan.
+Titulares de derechos: abran una incidencia en [github.com/Holdi601/3DHeat-Ext-Battlefield/issues](https://github.com/Holdi601/3DHeat-Ext-Battlefield/issues); respondemos rápido y retiramos lo que se nos pida.
 
 ## Nada cifrado se abre {#nothing-encrypted-is-opened}
 
 - **Sin claves: ninguna incluida, ninguna recuperada.** Nada busca una clave dentro de un ejecutable, y nada lee la memoria de otro proceso.
-- **La ofuscación tampoco está implementada.** Las tablas de Frostbite ofuscadas con XOR guardan su clave en el propio archivo, así que son ofuscación y no un control de acceso. Aun así se detectan y se rechazan, porque ningún archivo disponible usa esa forma y no habría nada con que comprobar una implementación.
+- **La ofuscación tampoco está implementada.** Las tablas de Frostbite ofuscadas con XOR se detectan y se rechazan: ningún archivo disponible usa esa forma y no habría nada con que comprobar una implementación.
 - **Los archivos cifrados siguen cerrados.** El sistema de archivos inicial de Battlefield 6, que guarda la biblioteca de tipos del juego, está cifrado y no se lee. La exportación del nivel trabaja con los archivos que no están cifrados, y construye los dos tipos que necesita a partir de los datos.
-- **Nada se inyecta en el proceso de un juego.** Inyectar código en un título con sistema anticheat pone en riesgo la cuenta de quien lo ejecuta.
+- **Nada se inyecta en el proceso de un juego.** La herramienta solo lee archivos del disco.
 
 ## Oodle se encuentra, no se incluye {#oodle-is-found-not-bundled}
 
@@ -38,7 +38,7 @@ Por eso esta herramienta nunca lo incluye: `oodle.py` de 3DHeat GameFiles carga 
 
 ## El formato en sí {#the-format-itself}
 
-Los `.toc`, paquetes, particiones EBX, MeshSet y el terreno de Frostbite no están documentados. Leerlos es ingeniería inversa de un contenedor. Los lectores de aquí se diseñaron a partir de los propios archivos de Battlefield 6. Las descripciones públicas de versiones anteriores de Frostbite (las herramientas de modding Frosty, una nota de formato de Need for Speed Heat, una charla de GDC) aportaron nombres de campos y un mapa de lo que buscar. No se tomó código de ninguna de ellas; cada desplazamiento se midió en los archivos (las fuentes y sus licencias están en
+Los `.toc`, paquetes, particiones EBX, MeshSet y el terreno de Frostbite no están documentados. Los lectores de aquí se diseñaron a partir de los propios archivos de Battlefield 6. Las descripciones públicas de versiones anteriores de Frostbite (las herramientas de modding Frosty, una nota de formato de Need for Speed Heat, una charla de GDC) aportaron nombres de campos y un mapa de lo que buscar. No se tomó código de ninguna de ellas; cada desplazamiento se midió en los archivos (las fuentes y sus licencias están en
 [`LICENSES.md`](https://github.com/Holdi601/3DHeat-Ext-Battlefield/blob/main/LICENSES.md)).
 
 ## Licencia y fuentes {#licence-and-sources}

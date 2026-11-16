@@ -3,7 +3,7 @@ title: "Startseite"
 nav_order: 1
 lang: "de"
 source: index.md
-source_hash: "52e652b3dd93"
+source_hash: "33aebf769b1c"
 nav_exclude: true
 search_exclude: true
 permalink: /de/
@@ -45,6 +45,8 @@ und listet je Zeile ein Level; `level` endet mit `-> level.glb (<n> MB)`. Lade d
 Das Level wird aus den Dateien des Spiels gebaut und bleibt **auf deinem Rechner**: zum
 Ansehen, nicht zum Teilen oder Veröffentlichen ([Bedingungen und Lizenz](terms.md)).
 
+Jeder Spiele-Leser ist ein eigenes kleines Projekt mit eigener Lizenzdatei, eigenen Releases und eigenem Issue-Tracker. So lässt er sich für sich allein installieren, aktualisieren und pflegen - oder auf Wunsch eines Rechteinhabers zurückziehen -, ohne dass der Viewer oder die anderen Werkzeuge davon berührt werden.
+
 ## Seiten {#pages}
 
 | Seite | Was sie behandelt |
@@ -53,7 +55,7 @@ Ansehen, nicht zum Teilen oder Veröffentlichen ([Bedingungen und Lizenz](terms.
 | [Battlefield-6-Level: levels und level](level-battlefield.md) | die Levels auflisten, jede Option eines Exports, seine Teile, die zu erwartenden Größen |
 | [Eine Datei erkennen: identify](identify.md) | ob eine Datei eine Frostbite-Inhaltstabelle ist und was sie enthält |
 | [Frostbite](reader-frostbite.md) | wie Tabellen, Bundles, Meshes, Gelände und Texturen gelesen werden und wie jedes geprüft wurde |
-| [Bedingungen und Lizenz](terms.md) | EAs Spiel, Oodle, die Quellen, warum dies ein eigenes Paket ist |
+| [Bedingungen und Lizenz](terms.md) | EAs Spiel, Oodle, die Quellen, ein Projekt für sich |
 | [Befehlsreferenz](../cli-reference.md) | jede Option, aus dem Code erzeugt |
 | [Diese Doku pflegen](maintaining.md) | die Checkliste für jedes Release |
 

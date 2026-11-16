@@ -19,10 +19,9 @@ after the magic are a signature, not ciphertext — the tree begins in plain sig
 at offset 556. Treating the whole file as encrypted because its first kilobyte
 looks random is the easy mistake here, and it is wrong.
 
-The third is XOR obfuscation with the key carried in the file's own header. That
-is not an access control and no key is needed from anyone, but it is also not
-something any file on hand uses, so it is detected and reported rather than
-implemented against nothing.
+The third is XOR obfuscation with the key carried in the file's own header. No
+file on hand uses it, so it is detected and reported rather than implemented
+against nothing.
 
 The tree
 --------

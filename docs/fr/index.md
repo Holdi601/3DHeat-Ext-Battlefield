@@ -3,7 +3,7 @@ title: "Accueil"
 nav_order: 1
 lang: "fr"
 source: index.md
-source_hash: "52e652b3dd93"
+source_hash: "33aebf769b1c"
 nav_exclude: true
 search_exclude: true
 permalink: /fr/
@@ -45,6 +45,8 @@ et liste un niveau par ligne ; `level` se termine par `-> level.glb (<n> MB)`. C
 Le niveau est construit à partir des fichiers du jeu : il reste **sur votre machine**, pour le
 regarder, et non pour le partager ou le publier ([Règles et licences](terms.md)).
 
+Chaque lecteur de jeu est un petit projet à part, avec son propre fichier de licence, ses propres versions et son propre suivi des tickets : il peut être installé, mis à jour, maintenu - ou retiré à la demande d'un ayant droit - seul, sans toucher au visualiseur ni aux autres outils.
+
 ## Pages {#pages}
 
 | Page | Ce qu'elle couvre |
@@ -53,7 +55,7 @@ regarder, et non pour le partager ou le publier ([Règles et licences](terms.md)
 | [Niveaux Battlefield 6 : `levels` et `level`](level-battlefield.md) | lister les niveaux, chaque option d'un export, ses parties, les tailles à attendre |
 | [Identifier un fichier : `identify`](identify.md) | si un fichier est une table des matières Frostbite, et ce qu'elle contient |
 | [Frostbite](reader-frostbite.md) | comment les tables, bundles, maillages, terrains et textures sont lus, et comment chacun a été vérifié |
-| [Règles et licences](terms.md) | le jeu d'EA, Oodle, les sources, pourquoi c'est un paquet à part |
+| [Règles et licences](terms.md) | le jeu d'EA, Oodle, les sources, un projet à part entière |
 | [Commandes](../cli-reference.md) | chaque option, générée à partir du code |
 | [Maintenance de ces docs](maintaining.md) | la liste de contrôle de chaque version |
 

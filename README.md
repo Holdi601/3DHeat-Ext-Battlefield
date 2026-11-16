@@ -17,9 +17,12 @@ and the buildings under it, in the game's own coordinates.
 command with step-by-step use and example output. Part of
 [3DHeat](https://github.com/Holdi601/3DHeat) ([documentation](https://holdi601.github.io/3DHeat/)).
 
-This tool is kept outside the 3DHeat tools on purpose: it reads EA's game
-files. If it ever has to go, nothing else goes with it. The levels it writes
-stay on your machine.
+Each game reader is its own small project with its own licence file, releases
+and issue tracker, so it can be installed, updated, maintained - or withdrawn
+on a rights holder's request - on its own, without affecting the viewer or the
+other tools.
+
+The levels it writes stay on your machine.
 
 ## Install
 
@@ -84,12 +87,17 @@ of mesh (per colour map with `--textures`), and `nav:walkable` with
 
 ## Terms
 
-Battlefield 6 and its levels belong to Electronic Arts, who do not endorse this
-project. Nothing of the game is in this repository or downloaded by it, and
-nothing encrypted is opened; Oodle is never bundled, but loaded from the copy
-the game ships. The level comes out of your own install and is yours to view,
-not to share
+3DHeat Battlefield is not affiliated with or endorsed by Electronic Arts.
+Battlefield and related names and trademarks belong to their owners. The tool
+reads the files of your own install; nothing of the game is in this repository
+or downloaded by it - no game assets, no game code, no DLLs - and nothing
+encrypted is opened. Oodle is never bundled, but loaded from the copy the game
+ships. The level comes out of your own install and stays on your machine
 ([Terms and licence](https://holdi601.github.io/3DHeat-Ext-Battlefield/terms.html)).
+
+Rights holders: open an issue at
+[github.com/Holdi601/3DHeat-Ext-Battlefield/issues](https://github.com/Holdi601/3DHeat-Ext-Battlefield/issues)
+- we respond quickly and remove anything on request.
 
 ## Tests
 

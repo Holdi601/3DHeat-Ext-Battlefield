@@ -18,9 +18,8 @@ component's terms changed after that, the source is what counts.
 
 ## The format, and where it was learned
 
-Frostbite's `.toc`, bundles and EBX are undocumented file formats. Reading them
-is reverse engineering of a container; none of the readers here is derived
-from another project's source.
+Frostbite's `.toc`, bundles and EBX are undocumented file formats. None of the
+readers here is derived from another project's source.
 
 The Frostbite readers (`frostbitebundle.py`, `frostbiteebx.py`,
 `frostbitemesh.py`, `frostbitelevel.py`) were worked out from Battlefield 6's
@@ -42,8 +41,9 @@ level export needs were laid out from the data instead.
 
 ## The game's files
 
-Battlefield 6 belongs to Electronic Arts, under EA's User Agreement and the
-terms of the store it was bought from. This repository holds no file of the
-game and no level made from one; the tool reads the copy the user installed,
-on the user's machine, and the level it writes stays there. See
+Battlefield 6 belongs to Electronic Arts. This tool is not affiliated with or
+endorsed by Electronic Arts; Battlefield and related names and trademarks
+belong to their owners. This repository holds no file of the game and no level
+made from one; the tool reads the copy the user installed, on the user's
+machine, and the level it writes stays there. See
 [Terms and licence](https://holdi601.github.io/3DHeat-Ext-Battlefield/terms.html).

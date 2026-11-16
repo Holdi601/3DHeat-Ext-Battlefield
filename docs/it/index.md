@@ -3,7 +3,7 @@ title: Home
 nav_order: 1
 lang: "it"
 source: index.md
-source_hash: "52e652b3dd93"
+source_hash: "33aebf769b1c"
 nav_exclude: true
 search_exclude: true
 permalink: /it/
@@ -45,6 +45,8 @@ carica `level.glb` nel pannello **Sfondo / livello** del visualizzatore
 Il livello è costruito a partire dai file del gioco: resta **sul tuo computer**, per
 guardarlo, non per condividerlo o pubblicarlo ([Termini](terms.md)).
 
+Ogni lettore di gioco è un piccolo progetto a sé, con il proprio file di licenza, le proprie release e il proprio issue tracker: può essere installato, aggiornato, mantenuto - o ritirato su richiesta di un titolare dei diritti - da solo, senza toccare il visualizzatore o gli altri strumenti.
+
 ## Pagine {#pages}
 
 | Pagina | Cosa contiene |
@@ -53,7 +55,7 @@ guardarlo, non per condividerlo o pubblicarlo ([Termini](terms.md)).
 | [Livelli di Battlefield 6: levels e level](level-battlefield.md) | elencare i livelli, ogni opzione di un'esportazione, le sue parti, le dimensioni da aspettarsi |
 | [Identificare un file: identify](identify.md) | se un file è un indice Frostbite, e che cosa contiene |
 | [Frostbite](reader-frostbite.md) | come vengono letti indici, bundle, mesh, terreno e texture, e come ciascuno è stato verificato |
-| [Termini e licenza](terms.md) | il gioco di EA, Oodle, le fonti, perché questo è un pacchetto separato |
+| [Termini e licenza](terms.md) | il gioco di EA, Oodle, le fonti, un progetto a sé |
 | [Riferimento dei comandi](../cli-reference.md) | ogni opzione, generata dal codice |
 | [Manutenzione di queste pagine](maintaining.md) | la checklist di rilascio |
 

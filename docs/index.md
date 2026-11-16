@@ -42,6 +42,11 @@ load `level.glb` in the viewer's **Background / level** panel
 The level is built from the game's files: it stays **on your machine**, to
 view, not to share or publish ([Terms](terms.md)).
 
+Each game reader is its own small project with its own licence file, releases
+and issue tracker, so it can be installed, updated, maintained - or withdrawn
+on a rights holder's request - on its own, without affecting the viewer or the
+other tools.
+
 ## Pages
 
 | Page | What it covers |
@@ -50,7 +55,7 @@ view, not to share or publish ([Terms](terms.md)).
 | [Battlefield 6 levels: levels and level](level-battlefield.md) | listing the levels, every option of an export, its parts, the sizes to expect |
 | [Identifying a file: identify](identify.md) | whether a file is a Frostbite table of contents, and what it holds |
 | [Frostbite](reader-frostbite.md) | how the tables, bundles, meshes, terrain and textures are read, and how each was checked |
-| [Terms and licence](terms.md) | EA's game, Oodle, the sources, why this is a separate package |
+| [Terms and licence](terms.md) | EA's game, Oodle, the sources, a project of its own |
 | [Command reference](cli-reference.md) | every option, generated from the code |
 | [Maintaining these docs](maintaining.md) | the release checklist |
 

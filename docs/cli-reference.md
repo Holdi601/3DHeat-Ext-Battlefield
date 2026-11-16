@@ -27,8 +27,7 @@ options:
   -h, --help            show this help message and exit
   --version             show program's version number and exit
 
-What you point it at is subject to the game's own licence; the levels it writes are
-for your own use.
+It reads the files of your own install; the levels it writes stay on your machine.
 ```
 
 ## `levels`

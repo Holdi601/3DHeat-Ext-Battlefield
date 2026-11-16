@@ -232,7 +232,7 @@ def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog=PROG,
         description="Battlefield 6 levels (Frostbite) from your own install into 3DHeat levels.",
-        epilog="What you point it at is subject to the game's own licence; the levels it writes are for your own use.",
+        epilog="It reads the files of your own install; the levels it writes stay on your machine.",
     )
     ap.add_argument("--version", action="version", version=__version__)
     sub = ap.add_subparsers(dest="verb", required=True)
