@@ -1,11 +1,13 @@
 """
-heat3d-battlefield-maps levels   [--install folder]
+heat3d-battlefield-maps levels   [--game folder]
 heat3d-battlefield-maps level    <level> [-o map.glb] [--detail-budget n] [--textures [px]]
                                  [--ground-texture [m]] [--navmesh] [--skip text ...] ...
 heat3d-battlefield-maps identify <file>
 
 `levels` lists the levels of the installed Battlefield 6 (any Frostbite game
-whose `Data` holds a `layout.toc`), `level` writes one of them as a `.glb`,
+whose `Data` holds a `layout.toc`), or the multiplayer levels of a Battlefield 4
+or Battlefield 1 folder given with --game, `level` writes one of them (or `all`)
+as a `.glb`,
 `identify` says whether a file is a Frostbite table of contents. 3DHeat
 GameFiles' `levels`, `level` and `identify` run these.
 
@@ -16,6 +18,7 @@ Frostbite file, 3DHeat GameFiles missing); the message says what to do.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -75,6 +78,8 @@ def _frostbite_install(given: Path | None) -> Path | None:
 
     if given is not None:
         return given
+    if os.environ.get(GAME_ENV):
+        return Path(os.environ[GAME_ENV])
     roots = [library / "steamapps" / "common" for library in [Path(p) for p in STEAM_DEFAULTS] + steam_libraries()]
     for common in roots + [Path(p) for p in LAUNCHER_FOLDERS]:
         if not common.is_dir():
@@ -85,6 +90,70 @@ def _frostbite_install(given: Path | None) -> Path | None:
     return None
 
 
+#: The game's folder, when neither --game nor --install gives it.
+GAME_ENV = "HEAT3D_BATTLEFIELD_GAME"
+
+
+def _legacy(install: Path):
+    """A Battlefield 4 or Battlefield 1 install (`legacy`), or None for any other."""
+    from .frostbite import UnsupportedFrostbite
+    from .legacy import LegacyInstall
+
+    try:
+        return LegacyInstall(install)
+    except UnsupportedFrostbite:
+        return None
+
+
+def _legacy_levels(game, install: Path) -> int:
+    levels = game.multiplayer_levels()
+    print(f"{len(levels)} multiplayer levels in {install}")
+    for name, tocs in sorted(levels.items()):
+        layer = tocs[0].relative_to(install).parts[0]
+        print(f"  {name:<30} {layer}")
+    return 0
+
+
+def _legacy_level(game, install: Path, args) -> int:
+    import time
+
+    from heat3d_gamefiles import levelshome
+
+    from .frostbite import UnsupportedFrostbite
+    from .legacylevel import BUDGET, build_legacy_level, write_legacy_level
+
+    folder = levelshome.game_folder(install)
+    if args.level.lower() == "all":
+        names = sorted(game.multiplayer_levels())
+        if args.order:
+            wanted = [line.split()[-1].lower() for line in Path(args.order).read_text().splitlines() if line.strip()]
+            names = [n for n in wanted if n in names] + [n for n in names if n not in wanted]
+    else:
+        names = [args.level]
+    failed = 0
+    for name in names:
+        start = time.time()
+        print(f"== {name}", flush=True)
+        try:
+            model = build_legacy_level(game, name, budget=args.detail_budget or BUDGET)
+            if args.out is not None and (len(names) > 1 or args.out.suffix.lower() != ".glb"):
+                out = args.out / f"{model.name}.glb"
+            elif args.out is not None:
+                out = args.out
+            else:
+                out = levelshome.default(f"{model.name}.glb", folder)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            write_legacy_level(model, out, folder)
+        except (UnsupportedFrostbite, ValueError) as exc:
+            print(f"   failed: {exc}", file=sys.stderr, flush=True)
+            failed += 1
+            continue
+        for key, value in model.report.items():
+            print(f"   {key}: {value:,}" if isinstance(value, int) else f"   {key}: {value}")
+        print(f"-> {out} ({out.stat().st_size / 1e6:,.0f} MB, {time.time() - start:,.0f} s)", flush=True)
+    return 1 if failed == len(names) else 0
+
+
 def _levels(args) -> int:
     from .frostbite import UnsupportedFrostbite
     from .frostbitebundle import level_sources
@@ -93,6 +162,9 @@ def _levels(args) -> int:
     if install is None:
         print(NOT_FOUND, file=sys.stderr)
         return 2
+    game = _legacy(install)
+    if game is not None:
+        return _legacy_levels(game, install)
     try:
         tables = level_sources(install)
     except UnsupportedFrostbite as exc:
@@ -115,6 +187,9 @@ def _level(args) -> int:
     if install is None:
         print(NOT_FOUND, file=sys.stderr)
         return 2
+    game = _legacy(install)
+    if game is not None:
+        return _legacy_level(game, install, args)
     out = args.out or levelshome.default(f"{Path(args.level).stem}.glb", levelshome.game_folder(install))
     out.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -238,17 +313,19 @@ def parser() -> argparse.ArgumentParser:
     sub = ap.add_subparsers(dest="verb", required=True)
 
     p = sub.add_parser("levels", help="list the levels of an installed Frostbite game")
-    p.add_argument("--install", type=Path, default=None, help="the game's folder, if not in a Steam library")
+    p.add_argument("--install", "--game", dest="install", type=Path, default=None,
+                   help=f"the game's folder (or set {GAME_ENV}); needed for Battlefield 4 and 1")
 
     p = sub.add_parser(
         "level", help="export a Frostbite level: its terrain backdrop and placed meshes"
     )
-    p.add_argument("level", help="the level's name as `levels` lists it, or its .toc")
+    p.add_argument("level", help="the level's name as `levels` lists it, or its .toc; `all` for every multiplayer level of Battlefield 4 or 1")
     p.add_argument(
         "-o", "--out", type=Path, default=None,
         help="the .glb (default: <level>.glb, in $HEAT3D_LEVELS/<game> when that is set)",
     )
-    p.add_argument("--install", type=Path, default=None, help="the game's folder, if not in a Steam library")
+    p.add_argument("--install", "--game", dest="install", type=Path, default=None,
+                   help=f"the game's folder (or set {GAME_ENV}); needed for Battlefield 4 and 1")
     p.add_argument(
         "--detail-budget",
         type=int,
@@ -316,6 +393,13 @@ def parser() -> argparse.ArgumentParser:
         default=4.0,
         metavar="METRES",
         help="the terrain heightfield's finest spacing (default 4; 0 leaves it out)",
+    )
+    p.add_argument(
+        "--order",
+        type=Path,
+        default=None,
+        metavar="FILE",
+        help="with `all` (Battlefield 4 and 1): a file of level names, one a line, to export first in that order",
     )
     p.add_argument(
         "--skip",

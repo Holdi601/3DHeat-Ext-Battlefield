@@ -35,15 +35,23 @@ every offset the readers use was measured on the shipped files, which is why
 they differ from all of those sources. None of those licences is compatible
 with copying into an MIT repository, and none was copied.
 
+The readers of Battlefield 4 and Battlefield 1 (`legacy.py`, `legacyebx.py`,
+`legacymesh.py`, `legacyhavok.py`, `legacyterrain.py`, `legacylevel.py`)
+were worked out the same way, from those games' own files: public
+descriptions of the superbundle and partition formats and of Havok's
+packfile header were a map of what to look for, and every layout was measured
+and checked on the shipped files (see each module's notes). No code from
+another project is in them.
+
 The game's own type library sits in its initial file system, which is
 encrypted. It is not read: no key is recovered or used, and the few types the
 level export needs were laid out from the data instead.
 
 ## The game's files
 
-Battlefield 6 belongs to Electronic Arts. This tool is not affiliated with or
-endorsed by Electronic Arts; Battlefield and related names and trademarks
-belong to their owners. This repository holds no file of the game and no level
+Battlefield 6, Battlefield 4 and Battlefield 1 belong to Electronic Arts. This
+tool is not affiliated with or endorsed by EA or DICE; Battlefield and related
+names and trademarks belong to their owners. This repository holds no file of the game and no level
 made from one; the tool reads the copy the user installed, on the user's
 machine, and the level it writes stays there. See
 [Terms and licence](https://holdi601.github.io/3DHeat-Ext-Battlefield/terms.html).

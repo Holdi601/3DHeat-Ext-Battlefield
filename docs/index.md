@@ -53,6 +53,7 @@ other tools.
 |---|---|
 | [Before you start](before-you-start.md) | Python, GameFiles, a terminal, a first run |
 | [Battlefield 6 levels: levels and level](level-battlefield.md) | listing the levels, every option of an export, its parts, the sizes to expect |
+| [Battlefield 4 and Battlefield 1 levels](level-battlefield-older.md) | the multiplayer levels of the two older games, from a folder you give: options, parts, how the viewer matches them, how they are read |
 | [Identifying a file: identify](identify.md) | whether a file is a Frostbite table of contents, and what it holds |
 | [Frostbite](reader-frostbite.md) | how the tables, bundles, meshes, terrain and textures are read, and how each was checked |
 | [Terms and licence](terms.md) | EA's game, Oodle, the sources, a project of its own |

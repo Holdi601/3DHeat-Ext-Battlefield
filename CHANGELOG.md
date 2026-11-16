@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0
+
+- Battlefield 4 and Battlefield 1: `levels --game <folder>` lists their
+  multiplayer levels and `level <level>` (or `all`) writes each as
+  `<Level>.glb` - terrain (coloured by the game's colour map in Battlefield 1),
+  every placed mesh in flat colours by kind, decimated to a triangle budget.
+  New readers for the older superbundle form, its self-describing partitions,
+  patched payloads, the meshes and terrain of both games, and the static
+  model groups' copies from their collision. Part names end in
+  ` @battlefield-4/<Level>` so the viewer can match a level to tables on it.
+- `--game` is another name for `--install`; `HEAT3D_BATTLEFIELD_GAME` gives
+  the folder when neither is given.
+
 ## 0.1.0
 
 - First version, moved out of 3DHeat GameFiles with its history (GameFiles'
@@ -24,6 +37,7 @@ Where each feature is documented
 |---|---|
 | Installing, GameFiles, a first run | [Before you start](docs/before-you-start.md) |
 | Listing levels and exporting one (`levels`, `level` and every option), where the game is found, sizes, parts | [Battlefield 6 levels](docs/level-battlefield.md) |
+| Battlefield 4 and Battlefield 1 levels | [Battlefield 4 and Battlefield 1 levels](docs/level-battlefield-older.md) |
 | `identify` | [Identifying a file](docs/identify.md) |
 | How the tables, bundles, meshes, terrain, textures and navigation mesh are read and checked | [Frostbite](docs/reader-frostbite.md) |
 | EA's game, Oodle, the format sources | [Terms and licence](docs/terms.md) |

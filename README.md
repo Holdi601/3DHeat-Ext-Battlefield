@@ -1,4 +1,4 @@
-# 3DHeat Battlefield: Battlefield 6 levels as 3D levels
+# 3DHeat Battlefield: Battlefield 6, 4 and 1 levels as 3D levels
 
 **What is it?** This tool turns a Battlefield 6 level, read from your own
 install, into a 3D model you can fly over in the
@@ -12,6 +12,11 @@ and the buildings under it, in the game's own coordinates.
 
 **Example:** `heat3d-battlefield-maps level <level> -o level.glb --textures` ->
 `level.glb`, a few hundred MB.
+
+**Battlefield 4 and Battlefield 1:** every multiplayer level, from the game
+folder you give: `heat3d-battlefield-maps level all --game "<folder>" -o <dir>`
+writes `<Level>.glb` per level (terrain, placed meshes, flat colours, about
+100 MB each). See [Battlefield 4 and Battlefield 1 levels](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield-older.html).
 
 **Documentation:** [holdi601.github.io/3DHeat-Ext-Battlefield](https://holdi601.github.io/3DHeat-Ext-Battlefield/), a page per
 command with step-by-step use and example output. Part of
@@ -49,6 +54,7 @@ Without pip, the tool finds GameFiles in `HEAT3D_GAMEFILES`, in `../../gamefiles
 |---|---|---|
 | `levels [--install FOLDER]` | where the game is, and every level it ships | [levels and level](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield.html) |
 | `level <level> [-o FILE] [options]` | one level as a `.glb` | [levels and level](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield.html) |
+| `levels --game FOLDER`, `level <level>\|all --game FOLDER` | Battlefield 4 and Battlefield 1: their multiplayer levels | [Battlefield 4 and 1](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield-older.html) |
 | `identify <file>` | whether a file is a Frostbite table of contents, and what it holds | [identify](https://holdi601.github.io/3DHeat-Ext-Battlefield/identify.html) |
 
 ```bash

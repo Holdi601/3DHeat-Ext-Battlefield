@@ -53,6 +53,7 @@ Jeder Spiele-Leser ist ein eigenes kleines Projekt mit eigener Lizenzdatei, eige
 |---|---|
 | [Bevor du anfängst](before-you-start.md) | Python, GameFiles, ein Terminal, ein erster Lauf |
 | [Battlefield-6-Level: levels und level](level-battlefield.md) | die Levels auflisten, jede Option eines Exports, seine Teile, die zu erwartenden Größen |
+| [Level aus Battlefield 4 und Battlefield 1](level-battlefield-older.md) | die Mehrspieler-Level der beiden älteren Spiele aus einem angegebenen Ordner: Optionen, Teile, wie der Viewer sie zuordnet, wie sie gelesen werden |
 | [Eine Datei erkennen: identify](identify.md) | ob eine Datei eine Frostbite-Inhaltstabelle ist und was sie enthält |
 | [Frostbite](reader-frostbite.md) | wie Tabellen, Bundles, Meshes, Gelände und Texturen gelesen werden und wie jedes geprüft wurde |
 | [Bedingungen und Lizenz](terms.md) | EAs Spiel, Oodle, die Quellen, ein Projekt für sich |

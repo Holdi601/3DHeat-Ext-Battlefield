@@ -1,3 +1,3 @@
-"""Battlefield 6 levels (Frostbite) from your own install into 3DHeat levels: terrain, placed meshes, colour, walkable surfaces."""
+"""Battlefield 6, 4 and 1 levels (Frostbite) from your own install into 3DHeat levels: terrain, placed meshes, colour, walkable surfaces."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
