@@ -1,7 +1,8 @@
 # The English pages' hashes; written by tools/docs_i18n.py hashes. Do not edit.
 before-you-start.md: "f55c65c6279e"
 identify.md: "29c92138c83c"
-index.md: "33aebf769b1c"
+index.md: "42fa7cbbd4cd"
+level-battlefield-older.md: "ba3ba6da31b5"
 level-battlefield.md: "1c1b4a11ff5b"
 maintaining.md: "6c87ae3635d6"
 reader-frostbite.md: "dac0fd4c8daa"

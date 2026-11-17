@@ -22,25 +22,35 @@ made with.)
 
 ## Quick start
 
+You need Windows, Python 3.10 or later ("Add python.exe to PATH" ticked in its
+installer), the game installed and about 130 MB of disk space a level; no Git.
 New to the command line? Read [Before you start](before-you-start.md) first.
-You need Python 3.10 or later, [3DHeat GameFiles](https://holdi601.github.io/3DHeat-GameFiles/)
-(the library this tool reads with) and Battlefield 6 installed. Run these in the
-folder you cloned or unzipped:
 
 ```bash
-python -m pip install -e .                                  # installs heat3d-battlefield-maps, and GameFiles with it
-heat3d-battlefield-maps levels                              # where the game is, and its levels
-heat3d-battlefield-maps level <level> -o level.glb          # one level, flat colours
-heat3d-battlefield-maps level <level> -o level.glb --textures --ground-texture   # with colour
+python -m pip install https://github.com/Holdi601/3DHeat-Ext-Battlefield/archive/refs/tags/v0.2.0.zip
+heat3d-battlefield-maps levels --game "C:\Program Files\EA Games\Battlefield 4"                 # its levels
+heat3d-battlefield-maps level MP_Prison --game "C:\Program Files\EA Games\Battlefield 4" -o levels
+heat3d-battlefield-maps level all --game "C:\Program Files\EA Games\Battlefield 1" -o levels\bf1
+heat3d-battlefield-maps levels                                                                   # Battlefield 6, found by itself
+heat3d-battlefield-maps level <level> -o levels --textures --ground-texture                       # a Battlefield 6 level, with colour
 ```
 
-`levels` starts with a line like `<n> levels in D:\Games\Steam\steamapps\common\Battlefield 6`
-and lists one level per line; `level` ends with `-> level.glb (<n> MB)`. Then
-load `level.glb` in the viewer's **Background / level** panel
-([loading a level](https://holdi601.github.io/3DHeat/levels.html)).
+Battlefield 4 and 1 need their folder with `--game` (the EA app installs them
+under `C:\Program Files\EA Games\`, Steam under `...\steamapps\common\`).
+`levels` starts with a line like `34 multiplayer levels in <folder>` and lists
+one level per line; `level` ends with `-> levels\MP_Prison.glb (133 MB, 37 s)`.
+A Battlefield 4 or 1 level takes 20 to 60 seconds, a large one a few minutes;
+`all` writes every multiplayer level, roughly 4 to 5 GB.
 
-The level is built from the game's files: it stays **on your machine**, to
-view, not to share or publish ([Terms](terms.md)).
+Then open the `.glb` in the [3DHeat viewer](https://github.com/Holdi601/3DHeat#quick-start):
+download it (**Code -> Download ZIP**, unpack), double-click `start.bat` (it
+offers to install Node.js when it is missing and opens `http://127.0.0.1:5273`),
+then **Background / level -> 3D model...** and pick the file
+([loading a level](https://holdi601.github.io/3DHeat/levels.html)). The level
+stays on your machine.
+
+When a new release is out, the tool says so when it starts and offers to
+update itself.
 
 Each game reader is its own small project with its own licence file, releases
 and issue tracker, so it can be installed, updated, maintained - or withdrawn

@@ -29,7 +29,45 @@ other tools.
 
 The levels it writes stay on your machine.
 
-## Install
+## Quick start for new users
+
+You need: Windows, [Python](https://www.python.org/downloads/) 3.10 or later
+("Add python.exe to PATH" ticked in its installer), the game installed, and
+about 130 MB of disk space per level. No Git is needed.
+
+1. Install the tool (one line, in PowerShell or a command prompt):
+
+   ```bash
+   python -m pip install https://github.com/Holdi601/3DHeat-Ext-Battlefield/archive/refs/tags/v0.2.0.zip
+   ```
+
+2. List the levels and export one. Battlefield 4 and Battlefield 1 need their
+   folder with `--game` (the EA app installs them under
+   `C:\Program Files\EA Games\`; Steam under `...\steamapps\common\`):
+
+   ```bash
+   heat3d-battlefield-maps levels --game "C:\Program Files\EA Games\Battlefield 4"
+   heat3d-battlefield-maps level MP_Prison --game "C:\Program Files\EA Games\Battlefield 4" -o levels
+   heat3d-battlefield-maps level all --game "C:\Program Files\EA Games\Battlefield 1" -o levels\bf1
+   ```
+
+   Battlefield 6 is found by itself: `heat3d-battlefield-maps levels`, then
+   `heat3d-battlefield-maps level <level> -o levels`.
+
+3. The output is one `<Level>.glb` per level in the `-o` folder (here
+   `levels\MP_Prison.glb`, about 130 MB). A Battlefield 4 or 1 level takes
+   20 to 60 seconds (a large one a few minutes); `all` writes every
+   multiplayer level, roughly 4 to 5 GB.
+4. Open it in the [3DHeat viewer](https://github.com/Holdi601/3DHeat#quick-start):
+   download the viewer (**Code -> Download ZIP**, unpack) and double-click
+   `start.bat`; it offers to install [Node.js](https://nodejs.org/) when it is
+   missing and opens Chrome or Edge at `http://127.0.0.1:5273`. There, **Background / level ->
+   3D model...** and pick the `.glb`.
+
+When a new release is out, the tool says so when it starts and offers to
+update itself (`python -m heat3d_ext_battlefield.update` does the same).
+
+## Install from a checkout
 
 New to the command line? Read [Before you start](https://holdi601.github.io/3DHeat-Ext-Battlefield/before-you-start.html) first.
 

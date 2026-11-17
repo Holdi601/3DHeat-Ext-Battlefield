@@ -3,7 +3,7 @@ title: "Startseite"
 nav_order: 1
 lang: "de"
 source: index.md
-source_hash: "33aebf769b1c"
+source_hash: "42fa7cbbd4cd"
 nav_exclude: true
 search_exclude: true
 permalink: /de/
@@ -25,25 +25,35 @@ hundert MB für ein ganzes Level. (*Frostbite* ist die Engine, mit der Battlefie
 
 ## Schnellstart {#quick-start}
 
-Neu auf der Kommandozeile? Lies zuerst [Bevor du anfängst](before-you-start.md). Du brauchst
-Python 3.10 oder neuer, [3DHeat GameFiles](https://holdi601.github.io/3DHeat-GameFiles/) (die
-Bibliothek, mit der dieses Werkzeug liest) und ein installiertes Battlefield 6. Führe diese
-Befehle in dem Ordner aus, den du geklont oder entpackt hast:
+Du brauchst Windows, Python 3.10 oder neuer (im Installer "Add python.exe to PATH"
+ankreuzen), das installierte Spiel und etwa 130 MB Platz je Level; Git ist nicht nötig.
+Neu auf der Kommandozeile? Lies zuerst [Bevor du anfängst](before-you-start.md).
 
 ```bash
-python -m pip install -e .                                  # installiert heat3d-battlefield-maps und GameFiles dazu
-heat3d-battlefield-maps levels                              # wo das Spiel liegt, und seine Levels
-heat3d-battlefield-maps level <level> -o level.glb          # ein Level, einfarbig
-heat3d-battlefield-maps level <level> -o level.glb --textures --ground-texture   # mit Farbe
+python -m pip install https://github.com/Holdi601/3DHeat-Ext-Battlefield/archive/refs/tags/v0.2.0.zip
+heat3d-battlefield-maps levels --game "C:\Program Files\EA Games\Battlefield 4"                 # seine Levels
+heat3d-battlefield-maps level MP_Prison --game "C:\Program Files\EA Games\Battlefield 4" -o levels
+heat3d-battlefield-maps level all --game "C:\Program Files\EA Games\Battlefield 1" -o levels\bf1
+heat3d-battlefield-maps levels                                                                   # Battlefield 6, findet es selbst
+heat3d-battlefield-maps level <level> -o levels --textures --ground-texture                       # ein Battlefield-6-Level, mit Farbe
 ```
 
-`levels` beginnt mit einer Zeile wie `<n> levels in D:\Games\Steam\steamapps\common\Battlefield 6`
-und listet je Zeile ein Level; `level` endet mit `-> level.glb (<n> MB)`. Lade dann
-`level.glb` im Bereich **Hintergrund / Level** des Viewers
-([Level laden](https://holdi601.github.io/3DHeat/levels.html)).
+Battlefield 4 und 1 brauchen ihren Ordner mit `--game` (die EA-App installiert sie
+unter `C:\Program Files\EA Games\`, Steam unter `...\steamapps\common\`).
+`levels` beginnt mit einer Zeile wie `34 multiplayer levels in <Ordner>` und listet je
+Zeile ein Level; `level` endet mit `-> levels\MP_Prison.glb (133 MB, 37 s)`. Ein Level
+aus Battlefield 4 oder 1 dauert 20 bis 60 Sekunden, ein großes ein paar Minuten; `all`
+schreibt jedes Mehrspieler-Level, zusammen etwa 4 bis 5 GB.
 
-Das Level wird aus den Dateien des Spiels gebaut und bleibt **auf deinem Rechner**: zum
-Ansehen, nicht zum Teilen oder Veröffentlichen ([Bedingungen und Lizenz](terms.md)).
+Dann öffne die `.glb` im [3DHeat-Viewer](https://github.com/Holdi601/3DHeat#quick-start):
+herunterladen (**Code -> Download ZIP**, entpacken), `start.bat` doppelklicken (es bietet
+an, Node.js zu installieren, wenn es fehlt, und öffnet `http://127.0.0.1:5273`), dann
+**Hintergrund / Level -> 3D-Modell...** und die Datei wählen
+([Level laden](https://holdi601.github.io/3DHeat/levels.html)). Das Level bleibt auf
+deinem Rechner.
+
+Wenn ein neues Release erscheint, sagt das Werkzeug es beim Start und bietet an, sich
+selbst zu aktualisieren.
 
 Jeder Spiele-Leser ist ein eigenes kleines Projekt mit eigener Lizenzdatei, eigenen Releases und eigenem Issue-Tracker. So lässt er sich für sich allein installieren, aktualisieren und pflegen - oder auf Wunsch eines Rechteinhabers zurückziehen -, ohne dass der Viewer oder die anderen Werkzeuge davon berührt werden.
 

@@ -12,6 +12,10 @@
   ` @battlefield-4/<Level>` so the viewer can match a level to tables on it.
 - `--game` is another name for `--install`; `HEAT3D_BATTLEFIELD_GAME` gives
   the folder when neither is given.
+- Installs with one line and no Git: `pip install` of the release's zip, which
+  brings GameFiles from its own release zip. A pip install knows its version
+  and updates itself with pip when a newer release is out.
+- README: a quick start for new users.
 
 ## 0.1.0
 
