@@ -153,11 +153,13 @@ def models(args) -> int:
                 same += 1
                 continue
             try:
-                parts, pivots, notes = build_vehicle(vs, bp, d["domain"])
-                e = pack.add(d["id"], parts, d["domain"], d["class"], key=d["key"], pivots=pivots, fingerprint=fp,
+                dm: list = []
+                parts, pivots, notes = build_vehicle(vs, bp, d["domain"], dm)
+                e = pack.add(d["id"], parts, d["domain"], d["class"], key=d["key"], pivots=pivots, dm=dm, fingerprint=fp,
                              extra={"name": d["name"], "nation": d["nation"], "blueprint": bp, "notes": notes[:4]})
                 done += 1
-                print(f"  {d['id']}: {e['parts']} {e['tris']} tris, {e['length']} x {e['width']} x {e['height']} m", flush=True)
+                print(f"  {d['id']}: {e['parts']} {e['tris']} tris, {e['dm']} hit regions, "
+                      f"{e['length']} x {e['width']} x {e['height']} m", flush=True)
             except Exception as exc:  # noqa: BLE001
                 failed += 1
                 print(f"  {d['id']}: FAILED {exc}", flush=True)

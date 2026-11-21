@@ -245,7 +245,7 @@ class Vehicles:
 
 
 class _Node:
-    __slots__ = ("type", "world", "parent", "axis", "parts", "mesh", "skinned", "kids", "inst", "hidden")
+    __slots__ = ("type", "world", "parent", "axis", "parts", "mesh", "skinned", "kids", "inst", "hidden", "health")
 
     def __init__(self, type_, world, parent):
         self.type, self.world, self.parent = type_, world, parent
@@ -255,6 +255,7 @@ class _Node:
         self.skinned = False
         self.kids: list[_Node] = []
         self.hidden: set[int] = set()
+        self.health: dict[int, tuple[float, bool]] = {}  # part index -> (health, indestructible)
 
 
 def component_tree(vs: Vehicles, part, ve) -> _Node:
@@ -282,6 +283,7 @@ def component_tree(vs: Vehicles, part, ve) -> _Node:
             pi = hs.get("PartIndex") if hs is not None and hasattr(hs, "get") else None
             if isinstance(pi, int) and 0 <= pi < 0xFFFF:
                 n.parts.append(pi)
+                n.health.setdefault(pi, (float(hs.get("Health") or 0.0), bool(hs.get("Indestructable"))))
         if x.type == "RotorComponentData":
             # The blades (drawn when slow) are this rotor's part; the blur disc (drawn when fast) is left out.
             lo, hi = x.get("LowRpmModel") or {}, x.get("HighRpmModel") or {}
@@ -319,8 +321,9 @@ def _ancestors(n: _Node):
 GEAR = {"TrackWheelComponentData", "WheelComponentData", "TrackComponentData", "TireTrailVehicleComponentData"}
 
 
-def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, list[str]]:
-    """({part: (verts, faces)} in the figure frame, pivots, notes) of one blueprint."""
+def build_vehicle(vs: Vehicles, name: str, domain: str, dm: list | None = None) -> tuple[dict, dict, list[str]]:
+    """({part: (verts, faces)} in the figure frame, pivots, notes) of one blueprint; its hit regions are appended
+    to `dm` when a list is given (`hit_regions`)."""
     part = vs.partition(name)
     ve = part.of_type("VehicleEntityData")[0]
     root = component_tree(vs, part, ve)
@@ -368,17 +371,17 @@ def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, lis
                     m = pn.world if pn is not None else mn.world
                     world[sel] = pos[sel] @ m[:3, :3] + m[3, :3]
                     owner[sel] = pn if pn is not None else mn
-                geoms.append((world, faces, owner))
+                geoms.append((world, faces, owner, pidx[faces[:, 0]] if len(faces) else np.zeros(0, np.int64), material))
             else:
                 # A skinned mesh (tracks) lies in the model's frame in its bind pose.
                 world = pos if mn.skinned else pos @ mn.world[:3, :3] + mn.world[3, :3]
                 owner = np.empty(len(pos), object)
                 owner[:] = mn
-                geoms.append((world, faces, owner))
+                geoms.append((world, faces, owner, np.full(len(faces), -1, np.int64), material))
     if not geoms:
         raise UnsupportedFrostbite("no geometry read: " + "; ".join(notes[:2]))
     # Joints: the yaw joint with the most vertices under it is the turret; the pitch joint under it with the most, the gun.
-    for world, faces, owner in geoms:
+    for world, faces, owner, *_ in geoms:
         for o in set(owner.tolist()):
             cnt = int((owner == o).sum())
             for a in _ancestors(o):
@@ -394,7 +397,7 @@ def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, lis
 
         def reach(j: _Node) -> float:
             best = 0.0
-            for world, _f, owner in geoms:
+            for world, _f, owner, *_ in geoms:
                 sel = np.array([j in list(_ancestors(o)) for o in owner.tolist()]) if len(owner) else np.zeros(0, bool)
                 if sel.any():
                     best = max(best, float((world[sel, 2] - j.world[3, 2]).max()))
@@ -409,7 +412,7 @@ def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, lis
         if rotors:
             def spread(r: _Node) -> float:
                 ext = 0.0
-                for world, _f, owner in geoms:
+                for world, _f, owner, *_ in geoms:
                     sel = np.array([r in list(_ancestors(o)) for o in owner.tolist()]) if len(owner) else np.zeros(0, bool)
                     if sel.any():
                         d = world[sel] - r.world[3, :3]
@@ -419,7 +422,8 @@ def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, lis
             rotor = max(rotors, key=spread)
             if spread(rotor) < 1.0:
                 rotor = None
-    for world, faces, owner in geoms:
+    tagged = []  # (verts, faces, part per triangle, part index per triangle, material)
+    for world, faces, owner, tri_pidx, material in geoms:
         labels = np.empty(len(world), object)
         cache: dict[int, str] = {}
         for o in set(owner.tolist()):
@@ -436,9 +440,11 @@ def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, lis
             labels[owner == o] = cache[id(o)]
         if domain == "ground":
             # Track links laid out flat under the vehicle (no part of the tree places them) are left out.
-            faces = faces[(world[faces][:, :, 1] > -0.05).any(1)]
+            up = (world[faces][:, :, 1] > -0.05).any(1)
+            faces, tri_pidx = faces[up], tri_pidx[up]
         # A triangle goes with its first vertex's part.
         tri_part = labels[faces[:, 0]]
+        tagged.append((world, faces, tri_part, tri_pidx, material))
         for p in set(tri_part.tolist()):
             acc.setdefault(p, []).append((world, faces[tri_part == p]))
     from .modelpack import merge
@@ -454,7 +460,116 @@ def build_vehicle(vs: Vehicles, name: str, domain: str) -> tuple[dict, dict, lis
         pivots["gun"] = [round(float(x), 4) for x in to_frame(pitch.world[3:4, :3])[0]]
     if rotor is not None and "rotor" in parts:
         pivots["rotor"] = [round(float(x), 4) for x in to_frame(rotor.world[3:4, :3])[0]]
+    if dm is not None:
+        health: dict[int, tuple[float, bool]] = {}
+        for n in nodes:
+            for pi, h in n.health.items():
+                health.setdefault(pi, h)
+        dm.extend(hit_regions(tagged, health, zones(ve)))
     return parts, pivots, notes
+
+
+#: The blueprint's direction zones (`<Front|Rear|Left|Right|Top>HealthZone`): which way a hit comes from on the vehicle.
+ZONES = ("front", "rear", "left", "right", "top")
+
+
+def zones(ve) -> dict[str, dict]:
+    """The vehicle's direction zones that have health: {zone: {hp, shield, minAngle, angleMultiplier, angleDamage}}."""
+    out = {}
+    for z in ZONES:
+        hz = ve.get(z.capitalize() + "HealthZone")
+        if not isinstance(hz, dict) or not float(hz.get("MaxHealth") or 0) > 0:
+            continue
+        out[z] = {"hp": float(hz["MaxHealth"]), "shield": float(hz.get("MaxShieldHealth") or 0.0),
+                  "minAngle": float(hz.get("MinDamageAngle") or 0.0),
+                  "angleMultiplier": round(float(hz.get("DamageAngleMultiplier") or 1.0), 4),
+                  "angleDamage": bool(hz.get("UseDamageAngleCalculation"))}
+    return out
+
+
+def zone_of_normals(n: np.ndarray, have: set[str], at: np.ndarray | None = None) -> np.ndarray:
+    """The direction zone each face (unit normal, figure frame: x forward, y up, z right) faces: front, rear, left,
+    right, or top where the vehicle has a top zone. A face that points mostly down, or up without a top zone, goes
+    with the side it lies on: its centre `at` against the part's box (by the normal's own side when not given)."""
+    def side(d: np.ndarray) -> np.ndarray:
+        return np.where(np.abs(d[:, 0]) >= np.abs(d[:, 2]), np.where(d[:, 0] >= 0, "front", "rear"),
+                        np.where(d[:, 2] >= 0, "right", "left")).astype(object)
+
+    out = side(n)
+    flat = np.abs(n[:, 1]) > np.maximum(np.abs(n[:, 0]), np.abs(n[:, 2]))
+    if at is not None and flat.any():
+        lo, hi = at.min(0), at.max(0)
+        rel = (at - (lo + hi) / 2) / np.maximum((hi - lo) / 2, 1e-6)
+        out[flat] = side(rel[flat])
+    if "top" in have:
+        out[flat & (n[:, 1] > 0)] = "top"
+    return out
+
+
+#: Triangles kept for the hit regions, more than the visual levels keep: the zones of all moving parts together,
+#: and each destructible piece.
+DM_ZONE_BUDGET = 20000
+DM_PIECE_BUDGET = 2000
+
+
+def hit_regions(tagged: list, health: dict[int, tuple[float, bool]], zone_hp: dict[str, dict]) -> list:
+    """The `dm` nodes of one vehicle as (name, verts, faces, extras):
+
+    - `<part>_<zone>`: the surface of a part (hull, turret, gun, rotor) facing each direction zone of the
+      blueprint, extras {part, group: "zone", zone, hp, shield, minAngle, angleMultiplier, angleDamage};
+    - `piece<index>`: each destructible piece of the composite model (a `HealthStateData` whose health can run
+      out), extras {part, group: "piece", hp, material}.
+    """
+    from .modelpack import merge, simplify, weld
+
+    out = []
+    if zone_hp:
+        by_part: dict[str, list] = {}
+        for world, faces, tri_part, _pi, _mat in tagged:
+            for p in set(tri_part.tolist()):
+                if p != "gear":
+                    by_part.setdefault(p, []).append((world, faces[tri_part == p]))
+        full = {}
+        for p, items in by_part.items():
+            v, f = merge(items)
+            v, f = weld(to_frame(v), f)
+            if len(f):
+                full[p] = (v, f)
+        for p, (v, f) in sorted(simplify(full, DM_ZONE_BUDGET).items()):
+            if not len(f):
+                continue
+            tri = v[f].astype(np.float64)
+            nrm = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+            nrm /= np.maximum(np.linalg.norm(nrm, axis=1, keepdims=True), 1e-12)
+            zone = zone_of_normals(nrm, set(zone_hp), tri.mean(1))
+            for z in ZONES:
+                sel = zone == z
+                if z in zone_hp and sel.any():
+                    zv, zf = weld(v, f[sel], 1e-5)
+                    out.append((f"{p}_{z}", zv, zf, {"part": p, "group": "zone", "zone": z, **zone_hp[z]}))
+    pieces: dict[int, list] = {}
+    info: dict[int, dict] = {}
+    for world, faces, tri_part, tri_pidx, material in tagged:
+        for pi in set(tri_pidx.tolist()):
+            hp = health.get(pi)
+            if pi < 0 or hp is None or hp[1] or not 0 < hp[0] < 10000:
+                continue
+            sel = tri_pidx == pi
+            pieces.setdefault(pi, []).append((world, faces[sel]))
+            c = info.setdefault(pi, {"parts": {}, "material": material or ""})
+            for p in tri_part[sel].tolist():
+                c["parts"][p] = c["parts"].get(p, 0) + 1
+    for pi in sorted(pieces):
+        v, f = merge(pieces[pi])
+        v, f = weld(to_frame(v), f)
+        if not len(f):
+            continue
+        v, f = simplify({"piece": (v, f)}, DM_PIECE_BUDGET)["piece"]
+        c = info[pi]
+        part = max(c["parts"], key=c["parts"].get)
+        out.append((f"piece{pi}", v, f, {"part": part, "group": "piece", "hp": health[pi][0],
+                                         "material": c["material"].rsplit("/", 1)[-1]}))
+    return out
 
 
 def describe(vs: Vehicles, name: str) -> dict:

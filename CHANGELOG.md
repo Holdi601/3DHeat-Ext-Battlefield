@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1
+
+- `models`: Battlefield 4 and 1 vehicles carry their hit regions under a `dm` node: the surface of each
+  moving part (hull, turret, gun, rotor) facing each of the blueprint's direction zones (front, rear, left,
+  right, top; `<part>_<zone>`, with the zone's health, shield and angle settings), and each destructible
+  piece of the model (`piece<index>`, with its health and material).
+
 ## 0.3.0
 
 - `layouts` reads Battlefield 6 too: each mode's capture points (lettered,

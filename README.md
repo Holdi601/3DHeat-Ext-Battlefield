@@ -142,7 +142,10 @@ vehicle at three levels of detail, split into the parts the viewer moves (hull,
 running gear, turret, gun, rotor), with `model-pack.json`. Battlefield 4 and 1
 place the parts by the vehicle's own component tree; Battlefield 6 by its mesh
 (the turret's material, the barrel's bone). The viewer draws them in place of
-its built-in figures. They are made from your own install for your own use and
+its built-in figures. Battlefield 4 and 1 vehicles also carry their hit
+regions (a `dm` node): the surface of each moving part facing each of the
+blueprint's direction zones (front, rear, left, right, top) with the zone's
+health, and each destructible piece with its health. They are made from your own install for your own use and
 are not meant to be shared.
 
 ```bash
