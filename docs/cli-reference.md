@@ -11,17 +11,22 @@ The other pages explain each command step by step.
 ## `heat3d-battlefield-maps`
 
 ```text
-usage: heat3d-battlefield-maps [-h] [--version] {levels,level,layouts,identify} ...
+usage: heat3d-battlefield-maps [-h] [--version]
+                               {levels,level,layouts,catalog,models,identify} ...
 
 Battlefield 6 levels (Frostbite) from your own install into 3DHeat levels.
 
 positional arguments:
-  {levels,level,layouts,identify}
+  {levels,level,layouts,catalog,models,identify}
     levels              list the levels of an installed Frostbite game
     level               export a Frostbite level: its terrain backdrop and placed
                         meshes
     layouts             write each game mode's capture points, objectives, combat
-                        areas and spawns of a level (Battlefield 4 and 1)
+                        areas and spawns of a level (Battlefield 6, 4 and 1)
+    catalog             write the vehicles of Battlefield 6, 4 and 1 as a catalogue
+                        (<HEAT3D_LEVELS>/<game>/catalog.json)
+    models              write the vehicles' models of Battlefield 6, 4 and 1 as a
+                        local model pack (<HEAT3D_LEVELS>/model-packs/<game>/)
     identify            say whether a file is a Frostbite table of contents, and what
                         it holds
 

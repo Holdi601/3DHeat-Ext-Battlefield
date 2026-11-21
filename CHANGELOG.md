@@ -1,7 +1,22 @@
 # Changelog
 
-## Unreleased
+## 0.3.0
 
+- `layouts` reads Battlefield 6 too: each mode's capture points (lettered,
+  with their capture areas), HQs, combat area, Rush's M-COMs, the soldiers'
+  spawn points and the vehicle spawners, from the user's own install.
+- Every spawn names the capture point or HQ that owns it (`baseId`) and how
+  that is known (`baseSource`: the game's links, a Battlefield 1 channel, the
+  capture point's prefab, or only the nearest flag), and when it can be used
+  (`rule`: `flag`, `hq`, `stage`, `team`, `free`). Capture points and HQs get
+  an `id`.
+- Vehicle spawns whose vehicle is given from outside (most of Battlefield 4's
+  and 1's) are read, with the spawner's class and a vehicle kind; a vehicle's
+  seat and alternative spawn points are folded into the vehicle.
+- Spawns at the level's origin (a prefab's spare), sub-levels set up for no
+  mode, and shared spawns only other modes use are left out and counted
+  (`spawnsDropped`). Battlefield 1's flags and HQs own their spawns through
+  their channels; Breakthrough's sector channels give stages.
 - `catalog`: the vehicles of every Battlefield 6, 4 and 1 installed as `<game>/catalog.json` (name, class, side,
   the real vehicle each stands for), for the viewer's names and order.
 - `models`: the same vehicles' models as a local model pack (`model-packs/<game>/`, a `.glb` per vehicle at three

@@ -74,9 +74,32 @@ F_OWNER = field_id("InitialOwnerTeam")
 F_RADIUS = field_id("CaptureRadius")
 F_ENABLED = field_id("Enabled")
 F_CAPTURE_AREA = field_id("CaptureArea")
+F_VEHICLE = field_id("Vehicle")
+F_ALTERNATIVES = field_id("AlternativeSpawnPoints")
+
+#: A vehicle spawner prefab's name says what it spawns: `spawnerprefab_tank_mbt`, `outpostspawn_jet_attack`.
+SPAWNER = re.compile(r"(?:spawnerprefab|outpostspawn|vehiclespawner|spawner)_([a-z0-9]+(?:_[a-z0-9]+)*?)(?:_(?:neutral|us|ru|cn|team\d)|_nongroupable.*|_autogen.*|_win32)*$", re.I)
+#: Names that say nothing of the vehicle.
+SPAWNER_GENERIC = {"fill", "cycle", "spec", "base", "generic", "logic", "default"}
+
+#: A vehicle's class by the words of its blueprint's name, first match wins.
+VEHICLE_WORDS = (
+    (r"jet(?!ski)|_f35|_f18|_su\d|_j20|_a10|su25|q5|fighter|attack_jet|stealth", "jet"),
+    (r"heli|_ah\d|_z10|_mi\d|_ka\d|_uh\d|venom|littlebird|ah6|z11|_scout", "helicopter"),
+    (r"plane|bomber|airship|zeppelin|biplane|aircraft", "plane"),
+    (r"boat|rhib|pwc|jetski|ship|destroyer|dv15|patrol", "boat"),
+    (r"tank|_mbt|m1a|t90|t\d\d|type99|ft17|mk[ivx]+|a7v|landship|_ht\d|_heavy_tank|_light_tank|ifv|_bmp|_lav|zbd|aa_tank|apc|btr|_m113", "tank"),
+    (r"static|_mg|tow|aa_|stationary|mortar|artillery|coastal|gunshield|_aa$|field_gun|fieldgun|_turret|emplacement", "stationary"),
+    (r"horse|cavalry", "horse"),
+    (r"car|jeep|quad|bike|truck|humvee|vodnik|dpv|mrap|growler|_ltv|motorcycle|armored_car|_ac_", "car"),
+)
 
 #: A schematic channel for one capture point (Battlefield 1): `conquest_flage_hub` is E's.
 FLAG_HUB = re.compile(r"flag_?([a-z])_hub$", re.I)
+#: A team's channel (`conquest_team1_hub`): what it points to is that team's headquarters'.
+TEAM_HUB = re.compile(r"team_?(\d)_hub$", re.I)
+#: A Breakthrough sector's channel (`breakthrough_sector2_hub`): the spawns of that stage.
+SECTOR_HUB = re.compile(r"(?:sector|stage|base)_?(\d+)_hub$", re.I)
 
 #: The modes each kind of objective is played in; a kind not listed is kept in every mode.
 KIND_MODES = {
@@ -193,6 +216,8 @@ class Context:
     #: Whether the level put it where it is (a spare of a prefab sits at the prefab's own place).
     placed: bool = False
     links: dict = field(default_factory=dict)
+    #: The same links by their target: (target, field) -> [(source, field)].
+    rlinks: dict = field(default_factory=dict)
     props: dict = field(default_factory=dict)
     iface: tuple | None = None
     defaults: dict = field(default_factory=dict)
@@ -204,6 +229,7 @@ class Context:
             s, t = _end(self.part, c.get("Source")), _end(self.part, c.get("Target"))
             if s and t:
                 self.links.setdefault((s, c.get("SourceFieldId")), []).append((t, c.get("TargetFieldId")))
+                self.rlinks.setdefault((t, c.get("TargetFieldId")), []).append((s, c.get("SourceFieldId")))
         for c in self.root.get("PropertyConnections") or []:
             s, t = _end(self.part, c.get("Source")), _end(self.part, c.get("Target"))
             if s and t:
@@ -268,6 +294,22 @@ class Layout:
     shape_stage: dict = field(default_factory=dict)
     #: (context, channel key, letter) of each capture point's schematic channel.
     hubs: list = field(default_factory=list)
+    #: vehicle spawner key -> its record; seats (soldier spawns into a vehicle) waiting for theirs.
+    vehicle_at: dict = field(default_factory=dict)
+    #: (context, key) of each Battlefield 1 team channel, with its team and stage.
+    team_hubs: list = field(default_factory=list)
+    #: (context, key, stage) of each Battlefield 1 Breakthrough sector channel.
+    sector_hubs: list = field(default_factory=list)
+    #: (seat, vehicle spawner) pairs of Battlefield 1's deploy entries.
+    seat_of: list = field(default_factory=list)
+    ids: set = field(default_factory=set)
+    #: Spawns left out, by why.
+    dropped: dict = field(default_factory=dict)
+    #: (context, key) of the sub-level references this mode leaves out.
+    excluded: set = field(default_factory=set)
+    vehicle_pending: dict = field(default_factory=dict)
+    #: (context, key, record) of every spawn, soldier and vehicle, for linking them to what owns them.
+    spawn_info: list = field(default_factory=list)
 
 
 def _pos(m: np.ndarray) -> list[float]:
@@ -312,7 +354,8 @@ class Walker:
                 s = part.resolve(s)
                 if isinstance(s, Instance):
                     opts = [o for o in s.get("EnabledOptions") or [] if isinstance(o, str)]
-                    if any(MODE_WORDS.search(o) for o in opts):
+                    # A setting that enables nothing (a mode left out of this level) includes it in no mode.
+                    if not opts or any(MODE_WORDS.search(o) for o in opts):
                         out.append(opts)
         return out
 
@@ -396,6 +439,7 @@ class Walker:
             t = obj.type
             if t == "SubWorldReferenceObjectData":
                 if not obj.get("BundleName") or not self._included(part, obj, mode):
+                    out.excluded.add((id(ctx), key))
                     continue
                 sub = self.world.partition(obj["BundleName"])
                 if sub is None or not sub.instances or sub.guid == ctx.part.guid:
@@ -407,6 +451,10 @@ class Walker:
                 self._walk_blueprint(child, mode, out, depth + 1)
                 continue
             if t == "AlternateSpawnEntityData":
+                if any(t2 == key and sf == F_ALTERNATIVES for (t2, _), srcs in ctx.rlinks.items() for _, sf in srcs):
+                    # Where a vehicle spawner puts the soldier when its vehicle cannot spawn: the vehicle's.
+                    out.dropped["a vehicle's alternative spawn point"] = out.dropped.get("a vehicle's alternative spawn point", 0) + 1
+                    continue
                 own = ctx.value(key, F_OWN_TRANSFORM)
                 own = own if isinstance(own, np.ndarray) else _matrix(obj.get("Transform"))
                 w = (own if own is not None else IDENTITY) @ m
@@ -416,7 +464,8 @@ class Walker:
                 if stage is not None:
                     rec["stage"] = stage
                 out.spawns.append(rec)
-                out.spawn_at[key] = rec
+                out.spawn_at[(id(ctx), key)] = rec
+                out.spawn_info.append((ctx, key, rec))
                 continue
             if t == "CapturePointEntityData":
                 self._capture(ctx, key, obj, m, out)
@@ -427,6 +476,17 @@ class Walker:
                 hub = FLAG_HUB.search(name or "")
                 if hub:
                     out.hubs.append((ctx, key, hub.group(1).upper()))
+                team_hub = TEAM_HUB.search(name or "")
+                if team_hub:
+                    out.team_hubs.append((ctx, key, int(team_hub.group(1)), stage))
+                sector = SECTOR_HUB.search(name or "")
+                if sector:
+                    out.sector_hubs.append((ctx, key, int(sector.group(1))))
+                continue
+            if t == "BFSoldierSpawnEntityData":
+                # Battlefield 1's deploy-screen entry for a vehicle: what owns it owns the vehicle.
+                for target, _ in ctx.links.get((key, F_VEHICLE), []):
+                    out.seat_of.append(((id(ctx), key), (id(ctx), target)))
                 continue
             if t == "VolumeVectorShapeData":
                 if stage is not None:
@@ -438,6 +498,9 @@ class Walker:
                 out.areas.append((ctx, key, team, stage))
                 continue
             if not t.endswith("ReferenceObjectData") or obj.get("Excluded"):
+                continue
+            if t in ("VehicleSpawnReferenceObjectData", "CharacterSpawnReferenceObjectData"):
+                self._spawner(ctx, part, obj, key, m, stage, out)
                 continue
             got = self.world.resolve(part, obj.get("Blueprint"))
             if not got:
@@ -451,26 +514,6 @@ class Walker:
                 placed = origin is not None and origin.is_level
             else:
                 placed = ctx.placed or ctx.is_level
-            if t == "VehicleSpawnReferenceObjectData":
-                if "vehicles/" not in bp_name:
-                    continue
-                team = ctx.value(key, F_TEAM)
-                team = int(team if team is not None else obj.get("Team", 0) or 0)
-                rec = {"type": "vehicle_spawn", "team": team or None, "position": _pos(w),
-                       "heading": _heading(w), "vehicle": bp_name.rsplit("/", 1)[-1]}
-                if stage is not None:
-                    rec["stage"] = stage
-                out.spawns.append(rec)
-                continue
-            if t == "CharacterSpawnReferenceObjectData":
-                team = ctx.value(key, F_TEAM)
-                team = int(team if team is not None else obj.get("Team", 0) or 0)
-                rec = {"type": "spawn", "team": team or None, "position": _pos(w), "heading": _heading(w)}
-                if stage is not None:
-                    rec["stage"] = stage
-                out.spawns.append(rec)
-                out.spawn_at[key] = rec
-                continue
             if NOT_GAMEPLAY.search(bp_name):
                 continue
             if OBJECTIVE.search(bp_name) and placed:
@@ -498,6 +541,65 @@ class Walker:
             child = Context(bp_part, bp, ctx, key, w, bp_name, stage, placed)
             ctx.children[key] = child
             self._walk_blueprint(child, mode, out, depth + 1)
+
+    def _spawner(self, ctx: Context, part: Partition, obj: Instance, key, m: np.ndarray, stage, out: Layout) -> None:
+        """
+        A soldier's or a vehicle's spawn point. A vehicle spawner's vehicle is
+        often given from outside (no `Blueprint` of its own): then its kind
+        is the spawner prefab's (`spawnerprefab_tank_mbt` -> `tank_mbt`). A
+        soldier spawn whose `Vehicle` points to a vehicle spawner is that
+        vehicle's seat on the deploy screen: it stands for the vehicle, so
+        what owns it (a capture point's links) owns the vehicle.
+        """
+        given, _ = ctx.value_from(key, F_TRANSFORM)
+        own = given if isinstance(given, np.ndarray) else _matrix(obj.get("BlueprintTransform"))
+        w = (own if own is not None else IDENTITY) @ m
+        team = ctx.value(key, F_TEAM)
+        team = int(team if isinstance(team, (int, float)) else obj.get("Team", 0) or 0)
+        got = self.world.resolve(part, obj.get("Blueprint")) if obj.get("Blueprint") is not None else None
+        bp_name = str(self.world.name_of(got[0].guid) or got[1].get("Name") or "").lower() if got else ""
+        here = id(ctx)
+        if obj.type == "CharacterSpawnReferenceObjectData":
+            seat = [t for t, _ in ctx.links.get((key, F_VEHICLE), []) if (here, t) in out.vehicle_at or self._is_vehicle(ctx, t)]
+            if not seat and not any(s == key for s, _ in ctx.links):
+                # A soldier spawn with no links of its own beside the one vehicle spawner of its prefab: that vehicle's seat.
+                vs = [_key(ctx.part, i) for i in ctx.part.instances if i.type == "VehicleSpawnReferenceObjectData"]
+                if len(vs) == 1 and key[0] == ctx.part.guid:
+                    seat = vs
+            if seat:
+                rec = out.vehicle_at.get((here, seat[0]))
+                if rec is None:
+                    out.vehicle_pending.setdefault((here, seat[0]), []).append(key)
+                else:
+                    out.spawn_at[(here, key)] = rec
+                return
+            rec = {"type": "spawn", "team": team or None, "position": _pos(w), "heading": _heading(w)}
+        else:
+            if got and "vehicles/" not in bp_name:
+                return
+            rec = {"type": "vehicle_spawn", "team": team or None, "position": _pos(w), "heading": _heading(w)}
+            if bp_name:
+                rec["vehicle"] = bp_name.rsplit("/", 1)[-1]
+            kind = vehicle_class(ctx)
+            if kind:
+                rec["vehicleClass"] = kind
+            what = vehicle_class_of(kind) or vehicle_class_of(bp_name)
+            if what:
+                rec["vehicleKind"] = what
+            out.vehicle_at[(here, key)] = rec
+            for seat in out.vehicle_pending.pop((here, key), []):
+                out.spawn_at[(here, seat)] = rec
+        if stage is not None:
+            rec["stage"] = stage
+        out.spawns.append(rec)
+        out.spawn_at[(here, key)] = rec
+        out.spawn_info.append((ctx, key, rec))
+
+    @staticmethod
+    def _is_vehicle(ctx: Context, key) -> bool:
+        return key[0] == ctx.part.guid and any(
+            _key(ctx.part, i) == key and i.type == "VehicleSpawnReferenceObjectData" for i in ctx.part.instances
+        )
 
     def _capture(self, ctx: Context, key, obj: Instance, m: np.ndarray, out: Layout) -> None:
         if not (ctx.placed or ctx.is_level):
@@ -564,6 +666,16 @@ class Walker:
         if dedup in out.seen:
             return
         out.seen.add(dedup)
+        # An id the spawns name their owner by: the letter, `HQ1`, with the stage (`HQ2#3`) where staged.
+        ident = rec["letter"] or (f"HQ{owner}" if owner else rec["name"]) or "CP"
+        if ctx.stage is not None:
+            ident = f"{ident}#{ctx.stage}"
+        n, base_id = 1, ident
+        while ident in out.ids:
+            n += 1
+            ident = f"{base_id}-{n}"
+        out.ids.add(ident)
+        rec = {"id": ident, **rec}
         out.objectives.append(rec)
         out.captures.append((ctx, rec))
 
@@ -584,7 +696,11 @@ class Walker:
     # -- the links, once everything is walked --------------------------------
 
     def _follow(self, ctx: Context, src: tuple, fid, depth: int = 0) -> list[tuple]:
-        """The keys a pointer field leads to, out through the interfaces it passes."""
+        """
+        (context, key) of what a pointer field leads to, out through the
+        interfaces it passes: the context tells apart the copies of a prefab
+        placed more than once (their objects have the same keys).
+        """
         if depth > 12:
             return []
         out = []
@@ -598,7 +714,7 @@ class Walker:
                 child = ctx.children[target]
                 out += self._follow(child, child.iface, tf, depth + 1)
             else:
-                out.append(target)
+                out.append((ctx, target))
         return out
 
     def _all_links(self, ctx: Context, src: tuple) -> list[tuple]:
@@ -625,7 +741,7 @@ class Walker:
     def _resolve(self, out: Layout) -> None:
         seen_shapes: set = set()
         for ctx, key, team, stage in out.areas:
-            for target in self._all_links(ctx, key):
+            for _, target in self._all_links(ctx, key):
                 pts = self._shape(target)
                 if pts is None:
                     continue
@@ -643,22 +759,52 @@ class Walker:
                 if stage is not None:
                     rec["stage"] = stage
                 out.zones.append(rec)
+        # Battlefield 1's deploy entries stand for their vehicles.
+        for seat, vehicle in out.seat_of:
+            if vehicle in out.spawn_at:
+                out.spawn_at[seat] = out.spawn_at[vehicle]
+        # A vehicle spawner's alternative spawn points (`AlternativeSpawnPoints`) are where it puts the
+        # soldier when the vehicle cannot spawn: the vehicle's, not spawns of their own.
+        alternates = set()
+        for ctx, key, rec in out.spawn_info:
+            if rec["type"] != "vehicle_spawn":
+                continue
+            for tctx, target in self._follow(ctx, key, F_ALTERNATIVES):
+                sp = out.spawn_at.get((id(tctx), target))
+                if sp is not None and sp is not rec and sp["type"] == "spawn":
+                    alternates.add(id(sp))
+                    out.spawn_at[(id(tctx), target)] = rec
+        if alternates:
+            out.spawns = [sp for sp in out.spawns if id(sp) not in alternates]
+            out.spawn_info = [i for i in out.spawn_info if id(i[2]) not in alternates]
+            out.dropped["a vehicle's alternative spawn point"] = len(alternates)
         # A capture point's spawns: what the prefab placed in the sub-level points to.
+        owners: dict[int, dict] = {}
         for ctx, rec in out.captures:
             c = ctx
             while c.parent is not None and c.parent.root.type not in ("SubWorldData", "LevelData"):
                 c = c.parent
             if c.parent is None or c.via is None:
                 continue
-            for target in self._all_links(c.parent, c.via):
-                sp = out.spawn_at.get(target)
-                if sp is not None and "base" not in sp:
-                    sp["base"] = rec["letter"] or rec["name"]
+            for tctx, target in self._all_links(c.parent, c.via):
+                sp = out.spawn_at.get((id(tctx), target))
+                if sp is not None:
+                    _own(sp, rec, "link")
+            owners[id(c)] = rec
+        # A spawn placed inside a capture point's prefab is that capture point's.
+        for ctx, key, sp in out.spawn_info:
+            if "base" in sp:
+                continue
+            c = ctx
+            while c is not None and id(c) not in owners:
+                c = c.parent
+            if c is not None:
+                _own(sp, owners[id(c)], "prefab")
         # Battlefield 1: each capture point's area is a polygon its letter's
         # channel points to; a capture point in none is a spare one of the prefab.
         letters: dict[str, list] = {}
         for ctx, key, letter in out.hubs:
-            for target in self._follow(ctx, key, F_CAPTURE_AREA):
+            for _, target in self._follow(ctx, key, F_CAPTURE_AREA):
                 pts = self._shape(target)
                 if pts is not None and letter not in letters:
                     letters[letter] = [[round(float(v), 2) for v in p] for p in pts]
@@ -703,6 +849,196 @@ class Walker:
                 if _inside(o["position"], z["points"]):
                     o["stage"] = z["stage"]
                     break
+        self._channels(out)
+        self._other_modes(out)
+        _finish_spawns(out)
+
+    @staticmethod
+    def _other_modes(out: Layout) -> None:
+        """
+        A shared layer's spawn that only sub-levels of other modes point to
+        (their capture points' spawn lists) is not one of this mode's: left
+        out and counted.
+        """
+        drop = set()
+        for ctx, key, sp in out.spawn_info:
+            if sp.get("_how"):
+                continue
+            sources = [src for (t, _), srcs in ctx.rlinks.items() if t == key for src, _ in srcs]
+            if sources and all((id(ctx), src) in out.excluded for src in sources):
+                drop.add(id(sp))
+        if drop:
+            out.spawns = [sp for sp in out.spawns if id(sp) not in drop]
+            out.dropped["used by other modes only"] = len(drop)
+
+    def _channels(self, out: Layout) -> None:
+        """
+        Battlefield 1: a flag's channel (`conquest_flaga_hub`) points to the
+        spawns the flag gives its holder, a team's (`conquest_team1_hub`) to
+        that team's headquarters' spawns.
+        """
+        letters = {o["letter"]: o for o in out.objectives if o["type"] == "capture_zone" and o.get("letter")}
+        for ctx, key, letter in out.hubs:
+            owner = letters.get(letter)
+            if owner is None:
+                continue
+            for s, f in list(ctx.links):
+                if s != key or f == F_CAPTURE_AREA:
+                    continue
+                for tctx, target in self._follow(ctx, s, f):
+                    sp = out.spawn_at.get((id(tctx), target))
+                    if sp is not None:
+                        _own(sp, owner, "channel")
+        # A sector's channel: the spawns of that stage (one spawn can serve several).
+        for ctx, key, stage in out.sector_hubs:
+            for s, f in list(ctx.links):
+                if s != key:
+                    continue
+                for tctx, target in self._follow(ctx, s, f):
+                    sp = out.spawn_at.get((id(tctx), target))
+                    if sp is not None:
+                        sp.setdefault("_stages", set()).add(stage)
+        for ctx, key, team, stage in out.team_hubs:
+            hqs = [o for o in out.objectives if o["type"] == "base" and o.get("team") == team]
+            hq = next((o for o in hqs if o.get("stage") == stage), hqs[0] if hqs else None)
+            for s, f in list(ctx.links):
+                if s != key:
+                    continue
+                for tctx, target in self._follow(ctx, s, f):
+                    sp = out.spawn_at.get((id(tctx), target))
+                    if sp is None:
+                        continue
+                    if hq is not None:
+                        _own(sp, hq, "channel")
+                    elif not sp.get("team"):
+                        sp["team"] = team
+
+
+#: How a spawn's owner is known, strongest first wins: the game's own links
+#: (a capture point's spawn lists, a Battlefield 1 flag's channel), being
+#: placed inside the capture point's prefab, then only being nearest.
+OWN_RANK = {"link": 3, "channel": 3, "prefab": 2, "nearest": 1}
+
+
+def _own(spawn: dict, owner: dict, how: str) -> None:
+    """Gives a spawn its owner (a capture point or a headquarters record), unless a stronger way already did."""
+    was = spawn.get("_how")
+    if was is not None and OWN_RANK[was] >= OWN_RANK[how]:
+        return
+    spawn["_owner"] = owner
+    spawn["_how"] = how
+    spawn["base"] = True
+
+
+#: A spawn the game links to nothing is given the nearest capture point only
+#: this close (metres), and only in a mode most of whose spawns are linked.
+NEAREST_MAX = 150.0
+NEAREST_SHARE = 0.5
+
+
+def _finish_spawns(out: Layout) -> None:
+    """
+    Each spawn's owner by the id its capture point or headquarters is known
+    by (`baseId`), how that is known (`baseSource`), and when it can be
+    spawned on (`rule`):
+
+    - `flag`: while the spawn's team holds the capture point;
+    - `hq`: always, for the headquarters' team;
+    - `stage`: in its stage (Rush, Breakthrough), for its team;
+    - `team`: always, for its team (a spawn of no capture point);
+    - `free`: anyone's (a mode with no teams' spawns: Team Deathmatch's are free for both).
+
+    Spawns at the level's origin with nothing placing them elsewhere are a
+    prefab's spare pieces: they are dropped and counted (`dropped`).
+    """
+    kept_ids = {id(o) for o in out.objectives}
+    owned = [o for o in out.objectives if o["type"] in ("capture_zone", "base")]
+    flags = [o for o in owned if o["type"] == "capture_zone"]
+    # The ids again, now that Battlefield 1's letters and the stages are known.
+    used: set = set()
+    for o in owned:
+        want = o.get("letter") or (f"HQ{o['team']}" if o["type"] == "base" and o.get("team") else o.get("name")) or "CP"
+        if o.get("stage") is not None:
+            want = f"{want}#{o['stage']}"
+        ident, n = want, 1
+        while ident in used:
+            n += 1
+            ident = f"{want}-{n}"
+        used.add(ident)
+        o["id"] = ident
+    keep = []
+    for sp in out.spawns:
+        if all(abs(v) < 0.01 for v in sp["position"]):
+            out.dropped["at the origin (a prefab's spare)"] = out.dropped.get("at the origin (a prefab's spare)", 0) + 1
+            continue
+        keep.append(sp)
+    out.spawns = keep
+    for sp in out.spawns:
+        owner = sp.pop("_owner", None)
+        how = sp.pop("_how", None)
+        sp.pop("base", None)
+        if owner is not None and id(owner) in kept_ids:
+            sp["_o"], sp["_h"] = owner, how
+    linked = sum(1 for sp in out.spawns if "_o" in sp)
+    if flags and out.spawns and linked >= NEAREST_SHARE * len(out.spawns):
+        for sp in out.spawns:
+            # A gun emplacement no capture point lists is anyone's, wherever it stands.
+            if "_o" in sp or sp.get("vehicleKind") == "stationary":
+                continue
+            best, dist = None, NEAREST_MAX
+            for o in flags:
+                r = float(o.get("radius") or 0)
+                d = math.dist((sp["position"][0], sp["position"][2]), (o["position"][0], o["position"][2])) - r
+                if d < dist and (o.get("stage") is None or sp.get("stage") in (None, o.get("stage"))):
+                    best, dist = o, d
+            if best is not None:
+                sp["_o"], sp["_h"] = best, "nearest"
+    for sp in out.spawns:
+        stages = sorted(sp.pop("_stages", ()))
+        if stages:
+            if sp.get("stage") is None:
+                sp["stage"] = stages[0]
+                sp["stageSource"] = "channel"
+            if len(stages) > 1:
+                sp["stages"] = stages
+    staged = any(sp.get("stage") is not None for sp in out.spawns) or any(o.get("stage") is not None for o in owned)
+    for sp in out.spawns:
+        owner = sp.pop("_o", None)
+        how = sp.pop("_h", None)
+        if owner is not None:
+            sp["base"] = owner.get("letter") or owner.get("name") or owner["id"]
+            sp["baseId"] = owner["id"]
+            sp["baseSource"] = how
+            if owner["type"] == "capture_zone":
+                sp["rule"] = "flag"
+            else:
+                sp["rule"] = "stage" if staged and (owner.get("stage") is not None or sp.get("stage") is not None) else "hq"
+                if not sp.get("team") and owner.get("team"):
+                    sp["team"] = owner["team"]
+        elif sp.get("stage") is not None:
+            sp["rule"] = "stage"
+        else:
+            sp["rule"] = "team" if sp.get("team") and sp.get("vehicleKind") != "stationary" else "free"
+
+
+def vehicle_class_of(name: str) -> str:
+    """A vehicle's class (`tank`, `jet`, `boat`...) by the words of a blueprint's or prefab's name; "" for none."""
+    n = name.lower().rsplit("/", 1)[-1]
+    for pattern, kind in VEHICLE_WORDS:
+        if re.search(pattern, n):
+            return kind
+    return ""
+
+
+def vehicle_class(ctx: Context) -> str:
+    """What a vehicle spawner spawns, by the nearest spawner prefab around it that names it (`car_heavy`), "" for none."""
+    c = ctx
+    while c is not None:
+        m = SPAWNER.search(c.name.rsplit("/", 1)[-1])
+        if m and m.group(1).lower() not in SPAWNER_GENERIC:
+            return m.group(1).lower()
+        c = c.parent
+    return ""
 
 
 def _inside(p, poly, margin: float = 0.0) -> bool:
@@ -777,6 +1113,7 @@ def build_layouts(install, level: str, game: str, version: str, log=print) -> di
             "objectives": lay.objectives,
             "zones": lay.zones,
             "spawns": lay.spawns,
+            **({"spawnsDropped": lay.dropped} if lay.dropped else {}),
         })
         caps = sum(o["type"] == "capture_zone" for o in lay.objectives)
         log(f"   {mode}: {caps} capture points, {len(lay.objectives) - caps} other objectives, "

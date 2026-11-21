@@ -171,8 +171,7 @@ def _layouts(args) -> int:
         return 2
     game = _legacy(install)
     if game is None:
-        print("layouts reads Battlefield 4 and Battlefield 1 for now; give --game <their folder>", file=sys.stderr)
-        return 2
+        return _bf6_layouts(install, args)
     folder = levelshome.game_folder(install)
     names = sorted(game.multiplayer_levels()) if args.level.lower() == "all" else [args.level]
     failed = 0
@@ -191,6 +190,63 @@ def _layouts(args) -> int:
         # Named as the level's .glb is, when it is there (`MP_Volga`, not `mp_volga`).
         home = args.out if args.out is not None and args.out.suffix.lower() != ".json" else levelshome.default("x", folder).parent
         glb = next((p for p in home.glob("*.glb") if p.stem.lower() == doc["level"].lower()), None) if home.is_dir() else None
+        if glb is not None:
+            doc["level"] = glb.stem
+        stem = f"{doc['level']}.layouts.json"
+        if args.out is not None:
+            out = args.out if args.out.suffix.lower() == ".json" and len(names) == 1 else args.out / stem
+        else:
+            out = levelshome.default(stem, folder)
+        write_layouts(doc, out)
+        print(f"-> {out} ({len(doc['layouts'])} modes, {time.time() - start:,.1f} s)", flush=True)
+    return 1 if names and failed == len(names) else 0
+
+
+def _bf6_layouts(install: Path, args) -> int:
+    """Battlefield 6's layouts: each level's game modes from its gameplay layers (`bf6layouts`)."""
+    import re
+    import time
+
+    from heat3d_gamefiles import levelshome
+
+    from .bf6layouts import build_layouts
+    from .frostbite import UnsupportedFrostbite
+    from .frostbitebundle import LevelCatalogue, level_sources
+    from .frostbitelevel import ebx_prefix
+    from .legacylayouts import write_layouts
+
+    try:
+        tables = level_sources(install)
+    except UnsupportedFrostbite as exc:
+        print(exc, file=sys.stderr)
+        return 1
+    folder = levelshome.game_folder(install)
+    names = sorted(tables) if args.level.lower() == "all" else [args.level.lower()]
+    failed = 0
+    for name in names:
+        table = tables.get(name) or next((t for k, t in tables.items() if name in k), None)
+        if table is None:
+            print(f"   no level called {name!r}; `levels` lists them", file=sys.stderr)
+            failed += 1
+            continue
+        start = time.time()
+        print(f"== {name}", flush=True)
+        try:
+            catalogue = LevelCatalogue(table.toc, table.supplements)
+            doc = build_layouts(catalogue, ebx_prefix(table.toc), name, folder, __version__)
+        except (UnsupportedFrostbite, ValueError, KeyError, IndexError, OSError) as exc:
+            print(f"   failed: {exc}", file=sys.stderr, flush=True)
+            failed += 1
+            continue
+        if not doc["layouts"]:
+            print("   no game modes found", flush=True)
+            continue
+        # Named as the level's .glb is, when one is there (`capstone_textured_ground_nav` for `mp_capstone`).
+        home = args.out if args.out is not None and args.out.suffix.lower() != ".json" else levelshome.default("x", folder).parent
+        short = re.sub(r"^mp_", "", name)
+        glbs = sorted(home.glob("*.glb")) if home.is_dir() else []
+        glb = next((p for p in glbs if p.stem.lower() == name), None) or next(
+            (p for p in glbs if re.match(rf"(mp_)?{re.escape(short)}(_|$)", p.stem.lower())), None)
         if glb is not None:
             doc["level"] = glb.stem
         stem = f"{doc['level']}.layouts.json"
@@ -460,7 +516,7 @@ def parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser(
         "layouts",
-        help="write each game mode's capture points, objectives, combat areas and spawns of a level (Battlefield 4 and 1)",
+        help="write each game mode's capture points, objectives, combat areas and spawns of a level (Battlefield 6, 4 and 1)",
     )
     p.add_argument("level", help="the level's name as `levels` lists it, or `all`")
     p.add_argument(
