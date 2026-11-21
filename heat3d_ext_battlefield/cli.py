@@ -2,12 +2,15 @@
 heat3d-battlefield-maps levels   [--game folder]
 heat3d-battlefield-maps level    <level> [-o map.glb] [--detail-budget n] [--textures [px]]
                                  [--ground-texture [m]] [--navmesh] [--skip text ...] ...
+heat3d-battlefield-maps layouts  <level|all> [--game folder] [-o folder]
 heat3d-battlefield-maps identify <file>
 
 `levels` lists the levels of the installed Battlefield 6 (any Frostbite game
 whose `Data` holds a `layout.toc`), or the multiplayer levels of a Battlefield 4
 or Battlefield 1 folder given with --game, `level` writes one of them (or `all`)
-as a `.glb`,
+as a `.glb`, `layouts` writes what each of its game modes is played over
+(capture points, objectives, combat areas, spawns) as `<Level>.layouts.json`
+beside it (Battlefield 4 and 1),
 `identify` says whether a file is a Frostbite table of contents. 3DHeat
 GameFiles' `levels`, `level` and `identify` run these.
 
@@ -152,6 +155,52 @@ def _legacy_level(game, install: Path, args) -> int:
             print(f"   {key}: {value:,}" if isinstance(value, int) else f"   {key}: {value}")
         print(f"-> {out} ({out.stat().st_size / 1e6:,.0f} MB, {time.time() - start:,.0f} s)", flush=True)
     return 1 if failed == len(names) else 0
+
+
+def _layouts(args) -> int:
+    import time
+
+    from heat3d_gamefiles import levelshome
+
+    from .frostbite import UnsupportedFrostbite
+    from .legacylayouts import build_layouts, write_layouts
+
+    install = _frostbite_install(args.install)
+    if install is None:
+        print(NOT_FOUND, file=sys.stderr)
+        return 2
+    game = _legacy(install)
+    if game is None:
+        print("layouts reads Battlefield 4 and Battlefield 1 for now; give --game <their folder>", file=sys.stderr)
+        return 2
+    folder = levelshome.game_folder(install)
+    names = sorted(game.multiplayer_levels()) if args.level.lower() == "all" else [args.level]
+    failed = 0
+    for name in names:
+        start = time.time()
+        print(f"== {name}", flush=True)
+        try:
+            doc = build_layouts(game, name, folder, __version__)
+        except (UnsupportedFrostbite, ValueError, KeyError, IndexError) as exc:
+            print(f"   failed: {exc}", file=sys.stderr, flush=True)
+            failed += 1
+            continue
+        if not doc["layouts"]:
+            print("   no game modes found", flush=True)
+            continue
+        # Named as the level's .glb is, when it is there (`MP_Volga`, not `mp_volga`).
+        home = args.out if args.out is not None and args.out.suffix.lower() != ".json" else levelshome.default("x", folder).parent
+        glb = next((p for p in home.glob("*.glb") if p.stem.lower() == doc["level"].lower()), None) if home.is_dir() else None
+        if glb is not None:
+            doc["level"] = glb.stem
+        stem = f"{doc['level']}.layouts.json"
+        if args.out is not None:
+            out = args.out if args.out.suffix.lower() == ".json" and len(names) == 1 else args.out / stem
+        else:
+            out = levelshome.default(stem, folder)
+        write_layouts(doc, out)
+        print(f"-> {out} ({len(doc['layouts'])} modes, {time.time() - start:,.1f} s)", flush=True)
+    return 1 if names and failed == len(names) else 0
 
 
 def _levels(args) -> int:
@@ -409,6 +458,18 @@ def parser() -> argparse.ArgumentParser:
         help="leave out static model groups whose partition name contains TEXT (repeatable)",
     )
 
+    p = sub.add_parser(
+        "layouts",
+        help="write each game mode's capture points, objectives, combat areas and spawns of a level (Battlefield 4 and 1)",
+    )
+    p.add_argument("level", help="the level's name as `levels` lists it, or `all`")
+    p.add_argument(
+        "-o", "--out", type=Path, default=None,
+        help="a folder (or, for one level, a .json); default: beside the levels, in $HEAT3D_LEVELS/<game> when that is set",
+    )
+    p.add_argument("--install", "--game", dest="install", type=Path, default=None,
+                   help=f"the game's folder (or set {GAME_ENV})")
+
     p = sub.add_parser("identify", help="say whether a file is a Frostbite table of contents, and what it holds")
     p.add_argument("path", type=Path)
     return ap
@@ -428,7 +489,8 @@ def main(argv: list[str] | None = None) -> int:
         update.startup("heat3d_ext_battlefield")
     except Exception:  # an update check never stops an export
         pass
-    return _run(_levels if args.verb == "levels" else _level, args)
+    verbs = {"levels": _levels, "level": _level, "layouts": _layouts}
+    return _run(verbs[args.verb], args)
 
 
 if __name__ == "__main__":

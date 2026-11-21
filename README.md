@@ -93,6 +93,7 @@ Without pip, the tool finds GameFiles in `HEAT3D_GAMEFILES`, in `../../gamefiles
 | `levels [--install FOLDER]` | where the game is, and every level it ships | [levels and level](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield.html) |
 | `level <level> [-o FILE] [options]` | one level as a `.glb` | [levels and level](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield.html) |
 | `levels --game FOLDER`, `level <level>\|all --game FOLDER` | Battlefield 4 and Battlefield 1: their multiplayer levels | [Battlefield 4 and 1](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield-older.html) |
+| `layouts <level>\|all --game FOLDER` | Battlefield 4 and Battlefield 1: each game mode's capture points, objectives, combat areas and spawns as `<Level>.layouts.json` | [layouts](https://holdi601.github.io/3DHeat-Ext-Battlefield/layouts.html) |
 | `identify <file>` | whether a file is a Frostbite table of contents, and what it holds | [identify](https://holdi601.github.io/3DHeat-Ext-Battlefield/identify.html) |
 
 ```bash

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1
+
+- Battlefield 4 and Battlefield 1: `layouts <level>|all --game <folder>` writes
+  what each game mode of a level is played over as `<Level>.layouts.json`
+  beside the level: capture points and headquarters (letter, name, radius or
+  polygon), the mode's objectives (M-COMs, telegraphs, bomb targets...), each
+  team's combat area, and the soldier and vehicle spawns with the capture point
+  that owns them; Rush and Breakthrough by stage. The 3DHeat viewer draws the
+  layout of the data's mode on the level.
+
 ## 0.2.0
 
 - Battlefield 4 and Battlefield 1: `levels --game <folder>` lists their
@@ -42,6 +52,7 @@ Where each feature is documented
 | Installing, GameFiles, a first run | [Before you start](docs/before-you-start.md) |
 | Listing levels and exporting one (`levels`, `level` and every option), where the game is found, sizes, parts | [Battlefield 6 levels](docs/level-battlefield.md) |
 | Battlefield 4 and Battlefield 1 levels | [Battlefield 4 and Battlefield 1 levels](docs/level-battlefield-older.md) |
+| Game-mode layouts (`layouts`) | [Game-mode layouts](docs/layouts.md) |
 | `identify` | [Identifying a file](docs/identify.md) |
 | How the tables, bundles, meshes, terrain, textures and navigation mesh are read and checked | [Frostbite](docs/reader-frostbite.md) |
 | EA's game, Oodle, the format sources | [Terms and licence](docs/terms.md) |
