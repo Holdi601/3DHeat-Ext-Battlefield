@@ -1,0 +1,7 @@
+{
+  "spec": "heat3d_ext_battlefield.standalone_spec",
+  "collect_submodules": ["numpy", "PIL", "lz4", "zstandard", "heat3d_gamefiles"],
+  "platforms": {
+    "windows-x64": {"build": true, "tested": true, "note": "Battlefield 6, 4 and 1 (Steam, EA app, Origin, Epic); CI builds and smoke-runs, levels checked on a real install"}
+  }
+}

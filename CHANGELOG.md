@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0
+
+- A standalone program for Windows (no Python needed), built by CI with a `SHA256SUMS` file. Without arguments
+  it opens a window: what is found and what is missing (Battlefield 6, 4 and 1 installs, the Oodle library from
+  your own Battlefield 6 install, disk space), the levels folder, each game's levels as new / changed by a game
+  update / extracted by an older version / up to date, and extraction of the picked ones one at a time into
+  `<levels>/battlefield-6/`, `battlefield-4/` and `battlefield-1/` (the level and its layouts), and updates.
+- Each extracted level is recorded in `<levels>/<game>/.heat3d-extract.json` (extractor version, game build,
+  size and SHA-256 of its tables), so levels a game update adds or changes are found and only those extracted:
+  `status --json`, `extract [--game bf6|bf4|bf1] --new` / `--changed` / `--outdated` / `<level>...`,
+  `--progress-json`.
+- Updates ask first (update now / later / skip this version) unless automatic updates were chosen
+  (`--auto-update`, the window's checkbox, or `HEAT3D_AUTO_UPDATE=1`).
+- The standalone program looks for each game by its own folder name in every Steam library and launcher folder,
+  so Battlefield 6, 4 and 1 installed side by side are each found.
+
 ## 0.3.1
 
 - `models`: Battlefield 4 and 1 vehicles carry their hit regions under a `dm` node: the surface of each

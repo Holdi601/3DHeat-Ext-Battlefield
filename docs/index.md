@@ -20,7 +20,46 @@ scaling in the viewer.
 a few hundred MB for a whole level. (*Frostbite* is the engine Battlefield is
 made with.)
 
-## Quick start
+## The standalone program (no Python needed)
+
+Each [release](https://github.com/Holdi601/3DHeat-Ext-Battlefield/releases/latest)
+has a ready-to-run program for Windows
+(`heat3d-battlefield-<version>-windows-x64.zip`), with a `SHA256SUMS` file to
+check the download. Unpack it anywhere and start `heat3d-battlefield`.
+
+Started without arguments it opens a window that:
+
+- finds your Battlefield 6, Battlefield 4 and Battlefield 1 installs (the
+  Steam libraries and the EA app's, Origin's and Epic's folders), or lets you
+  choose each one's folder;
+- says what is missing: a game, the Oodle library Battlefield 6 levels need
+  (it comes from your own Battlefield 6 install), free disk space;
+- lists each game's levels as new, changed by a game update, extracted by an
+  older version, or up to date, and extracts the ones you pick, one at a
+  time, into the 3DHeat levels folder (`HEAT3D_LEVELS`, by default
+  `%LOCALAPPDATA%\3DHeat\levels`), under `battlefield-6/`, `battlefield-4/`
+  and `battlefield-1/`, where the viewer finds them: each level's `.glb` and
+  its game modes' layouts (flat colours; for colour maps use `level` with
+  `--textures`);
+- checks for updates and asks before installing one, unless you tick
+  *Update automatically*.
+
+A level a game update adds or changes is found the next time: each extracted
+level is recorded in `<levels>/<game>/.heat3d-extract.json` with the version
+that extracted it, the game's build and the size and SHA-256 of the tables it
+was read from.
+
+The same program runs every command below:
+`heat3d-battlefield heat3d-battlefield-maps levels`,
+`heat3d-battlefield heat3d-battlefield-maps level <level> -o <file>`. For
+scripts: `heat3d-battlefield status --json` reports the levels' state,
+`heat3d-battlefield extract --new` (or `--game bf4 --new`) extracts only the
+new ones and `heat3d-battlefield --check --json` says what is found and
+missing. The 3DHeat app's Extractors panel installs, updates and starts it
+for you. `python -m heat3d_ext_battlefield.standalone_spec` opens the same
+window from the source.
+
+## Quick start (Python)
 
 You need Windows, Python 3.10 or later ("Add python.exe to PATH" ticked in its
 installer), the game installed and about 130 MB of disk space a level; no Git.
@@ -49,8 +88,10 @@ then **Background / level -> 3D model...** and pick the file
 ([loading a level](https://holdi601.github.io/3DHeat/levels.html)). The level
 stays on your machine.
 
-When a new release is out, the tool says so when it starts and offers to
-update itself.
+When a new release is out, the tool says so when it starts, shows its notes
+and asks: update now, later, or skip this version. It updates without asking
+only when you chose that: `--auto-update` (this run), the standalone window's
+*Update automatically*, or `HEAT3D_AUTO_UPDATE=1`.
 
 Each game reader is its own small project with its own licence file, releases
 and issue tracker, so it can be installed, updated, maintained - or withdrawn
