@@ -470,6 +470,17 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--install", "--game", dest="install", type=Path, default=None,
                    help=f"the game's folder (or set {GAME_ENV})")
 
+    for verb, text in (("catalog", "write the vehicles of Battlefield 6, 4 and 1 as a catalogue (<HEAT3D_LEVELS>/<game>/catalog.json)"),
+                       ("models", "write the vehicles' models of Battlefield 6, 4 and 1 as a local model pack "
+                                  "(<HEAT3D_LEVELS>/model-packs/<game>/)")):
+        p = sub.add_parser(verb, help=text)
+        p.add_argument("-o", "--out", type=Path, default=None, help="the levels folder to write under (default $HEAT3D_LEVELS)")
+        p.add_argument("--install", "--game", dest="install", type=Path, default=None,
+                       help=f"the game's folder (default: every Battlefield 6, 4 and 1 installed; or set {GAME_ENV})")
+        if verb == "models":
+            p.add_argument("--only", nargs="+", help="only the vehicles whose blueprint contains one of these words")
+            p.add_argument("--force", action="store_true", help="rewrite vehicles already written")
+
     p = sub.add_parser("identify", help="say whether a file is a Frostbite table of contents, and what it holds")
     p.add_argument("path", type=Path)
     return ap
@@ -489,7 +500,9 @@ def main(argv: list[str] | None = None) -> int:
         update.startup("heat3d_ext_battlefield")
     except Exception:  # an update check never stops an export
         pass
-    verbs = {"levels": _levels, "level": _level, "layouts": _layouts}
+    from .gearcli import catalog, models
+
+    verbs = {"levels": _levels, "level": _level, "layouts": _layouts, "catalog": catalog, "models": models}
     return _run(verbs[args.verb], args)
 
 

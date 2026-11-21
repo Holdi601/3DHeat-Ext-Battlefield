@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- `catalog`: the vehicles of every Battlefield 6, 4 and 1 installed as `<game>/catalog.json` (name, class, side,
+  the real vehicle each stands for), for the viewer's names and order.
+- `models`: the same vehicles' models as a local model pack (`model-packs/<game>/`, a `.glb` per vehicle at three
+  levels of detail; hull, running gear, turret, gun and rotor as the viewer moves them), drawn by the viewer in
+  place of its figures.
+
 ## 0.2.1
 
 - Battlefield 4 and Battlefield 1: `layouts <level>|all --game <folder>` writes
