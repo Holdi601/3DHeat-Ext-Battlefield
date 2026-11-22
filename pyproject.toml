@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "heat3d-ext-battlefield"
-version = "0.4.0"
+version = "0.5.0"
 description = "Battlefield 6, 4 and 1 levels (Frostbite) from your own install into 3DHeat levels: terrain, placed meshes, colour maps, walkable surfaces"
 readme = "README.md"
 license = { file = "LICENSE" }

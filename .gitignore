@@ -28,3 +28,7 @@ dist-standalone/
 # Oodle belongs to the game that ships it; it is never part of this repository.
 *.dll
 *.exe
+# the window's own images (logo, icons): ours, not game data
+!*/app/assets/*.png
+!docs/assets/tool-64.png
+!docs/assets/favicon.ico
