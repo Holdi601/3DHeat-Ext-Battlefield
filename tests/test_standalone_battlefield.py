@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -93,10 +94,16 @@ def test_install_that_gains_a_level(steam, tmp_path, monkeypatch, capsys):
     assert states == {"mp_bravo": "current", "mp_charlie": "current", "mp_delta": "new"}
 
 
-def test_untracked_level_is_outdated(steam, tmp_path, capsys):
+def test_untracked_level_is_current_when_newer_else_outdated(steam, tmp_path, capsys):
+    # A level extracted before the extract record existed: newer than the game files it is current (and said
+    # to be untracked), older outdated.
     out = tmp_path / "levels" / "battlefield-4"
     out.mkdir(parents=True)
-    (out / "MP_Bravo.glb").write_bytes(b"old")
+    glb = out / "MP_Bravo.glb"
+    glb.write_bytes(b"old")
     assert [p.name for p in standalone_spec._outputs(out, SPEC.games[1].maps(steam["bf4"])[0])] == ["MP_Bravo.glb"]
+    maps = {m["id"]: (m["state"], m.get("untracked")) for m in games(capsys)["bf4"]["maps"]}
+    assert maps["mp_bravo"] == ("current", True) and maps["mp_charlie"][0] == "new"
+    os.utime(glb, (1, 1))
     states = {m["id"]: m["state"] for m in games(capsys)["bf4"]["maps"]}
     assert states == {"mp_bravo": "outdated", "mp_charlie": "new"}
