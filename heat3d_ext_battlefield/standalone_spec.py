@@ -107,7 +107,7 @@ def _outputs(out: Path, m: MapSource) -> list[Path]:
     A level counts as extracted by its .glb: layouts alone (written for levels whose .glb was never made)
     are not the level, so such a level is still new.
     """
-    if getattr(m, "kind", "map") != "map":
+    if m.kind != "map":
         return [p for p in _content_files(out, m) if p.is_file()]
     if not out.is_dir():
         return []
@@ -146,13 +146,8 @@ def _extract(game: Path, m: MapSource, out: Path, log) -> list[Path]:
 
 
 def _source(id_: str, title: str, sources: list[Path], kind: str) -> MapSource:
-    """A content entry: the kit's MapSource with `kind` (set by hand on a kit that has no `kind` yet)."""
-    try:
-        return MapSource(id_, title, sources, kind=kind)  # type: ignore[call-arg]
-    except TypeError:
-        m = MapSource(id_, title, sources)
-        m.kind = kind  # type: ignore[attr-defined]
-        return m
+    """A content entry: a MapSource whose `kind` is not a map."""
+    return MapSource(id_, title, sources, kind=kind)
 
 
 def _tables(game: Path, pattern: str) -> list[Path]:
@@ -257,16 +252,13 @@ def _checks(found: dict, levels: Path) -> list[Check]:
 
 def _game(key: str, maps, output_version: str) -> GameSpec:
     label, folder_name, _ = GAMES[key]
-    g = GameSpec(
+    return GameSpec(
         key=key, label=label, find=_finder(key), subdir=folder_name.lower().replace(" ", "-"), build=_build,
         maps=maps, extract=_extract, existing_outputs=_outputs, output_version=output_version,
         platforms=("windows-x64",),
+        # New content beside new maps: the catalogue and the vehicle models, and the items the install holds.
+        contents=_contents, extract_content=_extract_content, catalog_items=_catalog_items,
     )
-    # The new-content hooks, set as attributes so a kit without them still runs.
-    g.contents = _contents  # type: ignore[attr-defined]
-    g.extract_content = _extract_content  # type: ignore[attr-defined]
-    g.catalog_items = _catalog_items  # type: ignore[attr-defined]
-    return g
 
 
 SPEC = Spec(
