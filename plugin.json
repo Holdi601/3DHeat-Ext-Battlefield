@@ -1,0 +1,90 @@
+{
+  "format": "3dheat-plugin",
+  "version": 1,
+  "id": "battlefield",
+  "name": "Battlefield",
+  "kind": "game",
+  "what": "The levels of your install as 3D levels",
+  "games": [
+    {
+      "id": "bf6",
+      "name": "Battlefield 6"
+    },
+    {
+      "id": "bf4",
+      "name": "Battlefield 4"
+    },
+    {
+      "id": "bf1",
+      "name": "Battlefield 1"
+    }
+  ],
+  "platforms": [
+    "windows-x64"
+  ],
+  "icon": "icon-64.png",
+  "programs": [
+    {
+      "id": "heat3d-battlefield",
+      "repo": "Holdi601/3DHeat-Ext-Battlefield",
+      "verbs": {
+        "check": [
+          "--check",
+          "--json"
+        ],
+        "status": [
+          "status",
+          "--json"
+        ],
+        "extract": [
+          "extract",
+          "{maps}",
+          "--progress-json"
+        ]
+      }
+    }
+  ],
+  "capabilities": {
+    "maps": {
+      "program": "heat3d-battlefield"
+    }
+  },
+  "newContent": {
+    "verb": "status",
+    "everyHours": 6,
+    "whileGameClosed": true,
+    "autoExtract": [
+      "new"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "game",
+      "label": "The game installed on this computer",
+      "auto": false
+    }
+  ],
+  "detect": {
+    "steam": [
+      "Battlefield 6",
+      "Battlefield 4",
+      "Battlefield 1"
+    ],
+    "paths": [
+      "{programfiles}/EA Games/Battlefield 6",
+      "{programfiles}/EA Games/Battlefield 4",
+      "{programfiles}/EA Games/Battlefield 1",
+      "{programfilesx86}/Origin Games/Battlefield 6",
+      "{programfiles}/Epic Games/Battlefield 6",
+      "{programfilesx86}/Origin Games/Battlefield 4",
+      "{programfiles}/Epic Games/Battlefield 4",
+      "{programfilesx86}/Origin Games/Battlefield 1",
+      "{programfiles}/Epic Games/Battlefield 1"
+    ],
+    "processes": [
+      "bf6.exe",
+      "bf4.exe",
+      "bf1.exe"
+    ]
+  }
+}
