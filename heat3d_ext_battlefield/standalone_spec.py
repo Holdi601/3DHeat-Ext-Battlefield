@@ -9,6 +9,7 @@ app from a checkout; the release executables run the same.
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 
 from . import __version__
@@ -69,11 +70,15 @@ def _finder(key: str):
     return find
 
 
+#: Levels that are not maps to play on: menus and lobbies.
+NOT_A_MAP = re.compile(r"lobby|frontend|mainmenu|(^|_)test(_|$)", re.I)
+
+
 def _maps_modern(game: Path) -> list[MapSource]:
     from .frostbitebundle import level_sources
 
     return [MapSource(name, name, [t.toc, *t.supplements], note=t.source)
-            for name, t in sorted(level_sources(game).items())]
+            for name, t in sorted(level_sources(game).items()) if not NOT_A_MAP.search(name)]
 
 
 def _maps_legacy(game: Path) -> list[MapSource]:
@@ -86,23 +91,140 @@ def _maps_legacy(game: Path) -> list[MapSource]:
             for name, tocs in sorted(g.multiplayer_levels().items())]
 
 
+def _stems(m: MapSource) -> re.Pattern:
+    """
+    The names a level's outputs may have: its id in any case (`MP_Prison` for `mp_prison`), or, for a
+    Battlefield 6 level, its name without `mp_` and with what the export added (`capstone_textured_ground_nav`
+    for `mp_capstone`, as `layouts` names them too). A name starting `mp_` is always another level's own.
+    """
+    short = re.sub(r"^mp_", "", m.id.lower())
+    return re.compile(rf"{re.escape(m.id.lower())}|{re.escape(short)}(_[a-z0-9_]+)?")
+
+
 def _outputs(out: Path, m: MapSource) -> list[Path]:
-    """The level's .glb (named as the game names it, `MP_Prison` for `mp_prison`) and its layouts."""
+    """
+    What a level has in `out`: its .glb and its layouts (content - catalogue, models - its own files).
+    A level counts as extracted by its .glb: layouts alone (written for levels whose .glb was never made)
+    are not the level, so such a level is still new.
+    """
+    if getattr(m, "kind", "map") != "map":
+        return [p for p in _content_files(out, m) if p.is_file()]
     if not out.is_dir():
         return []
-    return sorted(p for p in out.iterdir() if p.is_file() and p.name.lower() in (f"{m.id}.glb", f"{m.id}.layouts.json"))
+    rx = _stems(m)
+    files = [p for p in out.iterdir() if p.is_file()]
+    glbs = sorted(p for p in files if p.suffix.lower() == ".glb" and rx.fullmatch(p.stem.lower())
+                  and (p.stem.lower() == m.id.lower() or not p.stem.lower().startswith("mp_")))
+    if not glbs:
+        return []
+    stems = {p.stem.lower() for p in glbs} | {m.id.lower()}
+    layouts = sorted(p for p in files if p.name.lower().endswith(".layouts.json")
+                     and p.name.lower()[: -len(".layouts.json")] in stems)
+    return glbs + layouts
 
 
 def _extract(game: Path, m: MapSource, out: Path, log) -> list[Path]:
     from . import cli
 
-    target = out / f"{m.id}.glb" if _generation(game) == "modern" else out
-    code = cli.main(["level", m.id, "--game", str(game), "-o", str(target)])
+    had_level = bool(_outputs(out, m))
+    modern = _generation(game) == "modern"
+    target = out / f"{m.id}.glb" if modern else out
+    # Battlefield 6: with its colour maps, the terrain decals baked into the ground, and the walkable surfaces.
+    extra = ["--textures", "--ground-texture", "--navmesh"] if modern else []
+    code = cli.main(["level", m.id, "--game", str(game), "-o", str(target), *extra])
     if code != 0:
         raise RuntimeError(f"heat3d-battlefield-maps level exited {code}")
-    # The game modes' capture points, objectives and spawns; a level without any is not an error.
-    cli.main(["layouts", m.id, "--game", str(game), "-o", str(out)])
+    # The game modes' capture points, objectives and spawns; a level without any is not an error. A level
+    # extracted for the first time keeps layouts made before (nothing is replaced); extracting it again redoes both.
+    have_layouts = out.is_dir() and any(p.name.lower() == f"{m.id.lower()}.layouts.json" for p in out.iterdir())
+    if had_level or not have_layouts:
+        cli.main(["layouts", m.id, "--game", str(game), "-o", str(out)])
     return _outputs(out, m)
+
+
+# --------------------------------------------------------------------------- content: catalogue and models
+
+
+def _source(id_: str, title: str, sources: list[Path], kind: str) -> MapSource:
+    """A content entry: the kit's MapSource with `kind` (set by hand on a kit that has no `kind` yet)."""
+    try:
+        return MapSource(id_, title, sources, kind=kind)  # type: ignore[call-arg]
+    except TypeError:
+        m = MapSource(id_, title, sources)
+        m.kind = kind  # type: ignore[attr-defined]
+        return m
+
+
+def _tables(game: Path, pattern: str) -> list[Path]:
+    from .cli import _legacy
+    from .soldiergear import bf6_tables, legacy_tables
+
+    g = _legacy(game)
+    if g is None:
+        return [t for t in bf6_tables(game) if re.search(pattern, t.stem, re.I)]
+    return legacy_tables(g, pattern)
+
+
+def _contents(game: Path) -> list[MapSource]:
+    """The catalogue (vehicles, weapons, gadgets) and the vehicles' model pack, by the tables they are read from."""
+    out = []
+    gear = _tables(game, r"vehicle|weapon|character")
+    if gear:
+        out.append(_source("catalog", "Vehicles, weapons and gadgets", gear, "catalog"))
+    vehicles = _tables(game, r"vehicle")
+    if vehicles:
+        out.append(_source("models", "Vehicle models", vehicles, "models"))
+    return out
+
+
+def _content_files(out: Path, m: MapSource) -> list[Path]:
+    if m.id == "catalog":
+        return [out / "catalog.json"]
+    if m.id == "models":
+        return [out.parent / "model-packs" / out.name / "model-pack.json"]
+    return []
+
+
+def _extract_content(game: Path, m: MapSource, out: Path, log) -> list[Path]:
+    """Writes the catalogue or the model pack of this install (`out` is `<levels>/<game>`)."""
+    import argparse
+
+    from . import gearcli
+
+    if m.id == "catalog":
+        code = gearcli.catalog(argparse.Namespace(install=game, out=out.parent))
+        if code != 0:
+            raise RuntimeError(f"catalog exited {code}")
+        return [p for p in _content_files(out, m) if p.is_file()]
+    if m.id == "models":
+        failed = gearcli.models(argparse.Namespace(install=game, out=out.parent, only=None, force=False))
+        if failed:
+            raise RuntimeError(f"models: {failed} vehicles failed")
+        pack = out.parent / "model-packs" / out.name
+        return sorted(pack.glob("*.glb")) + [p for p in _content_files(out, m) if p.is_file()]
+    raise ValueError(f"no content called {m.id!r}")
+
+
+def _catalog_items(game: Path) -> dict[str, list[str]]:
+    """The item ids the install holds by kind (vehicle, weapon, gadget), as the catalogue names them."""
+    from . import soldiergear as sg
+    from .cli import _legacy
+
+    g = _legacy(game)
+    if g is None:
+        from .frostbitebundle import LevelCatalogue
+        from .frostbitegear import bf6_vehicles_table, vehicles
+
+        table = bf6_vehicles_table(game)
+        vids = sorted(vehicles(LevelCatalogue(table))) if table is not None else []
+        gear = sg.bf6_gear(game)
+    else:
+        vids = sg.legacy_vehicle_ids(g)
+        gear = sg.legacy_gear(g)
+    found: dict[str, list[str]] = {"vehicle": vids}
+    for item in gear:
+        found.setdefault(item["kind"], []).append(item["id"])
+    return {k: sorted(v) for k, v in found.items()}
 
 
 def _build(game: Path) -> str | None:
@@ -135,11 +257,16 @@ def _checks(found: dict, levels: Path) -> list[Check]:
 
 def _game(key: str, maps, output_version: str) -> GameSpec:
     label, folder_name, _ = GAMES[key]
-    return GameSpec(
+    g = GameSpec(
         key=key, label=label, find=_finder(key), subdir=folder_name.lower().replace(" ", "-"), build=_build,
         maps=maps, extract=_extract, existing_outputs=_outputs, output_version=output_version,
         platforms=("windows-x64",),
     )
+    # The new-content hooks, set as attributes so a kit without them still runs.
+    g.contents = _contents  # type: ignore[attr-defined]
+    g.extract_content = _extract_content  # type: ignore[attr-defined]
+    g.catalog_items = _catalog_items  # type: ignore[attr-defined]
+    return g
 
 
 SPEC = Spec(

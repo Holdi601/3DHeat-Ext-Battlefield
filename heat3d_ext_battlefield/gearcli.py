@@ -1,6 +1,7 @@
 """
 The `catalog` and `models` verbs: the vehicles of Battlefield 4 and 1 (`legacygear`) and of Battlefield 6
 (`frostbitegear`) as a catalogue and a local model pack, for every such game installed (or the one given).
+The catalogue lists the soldiers' weapons and gadgets too (`soldiergear`).
 
     catalog  -> <HEAT3D_LEVELS>/<game>/catalog.json
     models   -> <HEAT3D_LEVELS>/model-packs/<game>/<vehicle>.glb + model-pack.json
@@ -115,9 +116,16 @@ def catalog(args) -> int:
             if d["id"] in have:
                 d["model"] = f"model-packs/{folder}/{have[d['id']]['file']}"
             items.append(d)
+        vehicles = len(items)
+        # The soldiers' weapons and gadgets beside the vehicles.
+        from . import soldiergear
+
+        gear = soldiergear.legacy_gear(_game) if _game is not None else soldiergear.bf6_gear(install)
+        items += gear
+        weapons = sum(1 for i in gear if i["kind"] == "weapon")
         out = root / folder / "catalog.json"
         write_catalog(out, folder, _game_build(install), f"{SOURCE} {__version__}", items)
-        print(f"{folder}: {len(items)} vehicles -> {out}")
+        print(f"{folder}: {vehicles} vehicles, {weapons} weapons, {len(gear) - weapons} gadgets -> {out}")
     return 0
 
 

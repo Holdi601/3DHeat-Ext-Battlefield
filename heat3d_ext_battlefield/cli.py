@@ -526,7 +526,7 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--install", "--game", dest="install", type=Path, default=None,
                    help=f"the game's folder (or set {GAME_ENV})")
 
-    for verb, text in (("catalog", "write the vehicles of Battlefield 6, 4 and 1 as a catalogue (<HEAT3D_LEVELS>/<game>/catalog.json)"),
+    for verb, text in (("catalog", "write the vehicles, weapons and gadgets of Battlefield 6, 4 and 1 as a catalogue (<HEAT3D_LEVELS>/<game>/catalog.json)"),
                        ("models", "write the vehicles' models of Battlefield 6, 4 and 1 as a local model pack "
                                   "(<HEAT3D_LEVELS>/model-packs/<game>/)")):
         p = sub.add_parser(verb, help=text)

@@ -2,6 +2,17 @@
 
 ## 0.6.0
 
+- The catalogue (`catalog`, `<game>/catalog.json`) lists the soldiers' weapons and gadgets beside the vehicles:
+  Battlefield 4 and 1 from their weapon blueprints (class, the kill feed's name), Battlefield 6 from its weapon and
+  gadget folders (launchers, grenades, explosives, tools, drones, armour ...). Items for AI, the campaign and
+  cosmetics are left out.
+- New content after a game update: the catalogue and the vehicle models are content entries of their own
+  (`catalog`, `models`, made from the vehicle, weapon and character tables), and the install's item ids by kind
+  (vehicle, weapon, gadget) can be compared with the extracted catalogue.
+- A Battlefield 6 level extracted before under another name (`capstone_textured_ground_nav.glb` for `mp_capstone`)
+  is found as extracted; a level with only its layouts (no .glb) is new, not outdated. Lobbies are not listed as maps.
+- Battlefield 6 levels from the window or `extract` come with their colour maps, the terrain decals baked into the
+  ground and the walkable surfaces. A level extracted for the first time keeps layouts written before.
 - `plugin.json`: the manifest 3DHeat's Games page reads to know what this tool does, which games it is
   for and how to call it. The release archive carries it and the tool's icon (`icon-64.png`) beside the
   program.

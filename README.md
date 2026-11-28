@@ -118,7 +118,7 @@ Without pip, the tool finds GameFiles in `HEAT3D_GAMEFILES`, in `../../gamefiles
 | `level <level> [-o FILE] [options]` | one level as a `.glb` | [levels and level](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield.html) |
 | `levels --game FOLDER`, `level <level>\|all --game FOLDER` | Battlefield 4 and Battlefield 1: their multiplayer levels | [Battlefield 4 and 1](https://holdi601.github.io/3DHeat-Ext-Battlefield/level-battlefield-older.html) |
 | `layouts <level>|all --game FOLDER` | Battlefield 6, 4 and 1: each game mode's capture points, objectives, combat areas and spawns (each linked to its flag) as `<Level>.layouts.json`\|all --game FOLDER` | Battlefield 4 and Battlefield 1: each game mode's capture points, objectives, combat areas and spawns as `<Level>.layouts.json` | [layouts](https://holdi601.github.io/3DHeat-Ext-Battlefield/layouts.html) |
-| `catalog [--game FOLDER]` | Battlefield 6, 4 and 1: every vehicle (name, class, side, the real vehicle) as `<game>/catalog.json` | below |
+| `catalog [--game FOLDER]` | Battlefield 6, 4 and 1: every vehicle (name, class, side, the real vehicle), weapon and gadget as `<game>/catalog.json` | below |
 | `models [--game FOLDER] [--only WORD...] [--force]` | Battlefield 6, 4 and 1: the vehicles' models as a local model pack, `model-packs/<game>/` | below |
 | `identify <file>` | whether a file is a Frostbite table of contents, and what it holds | [identify](https://holdi601.github.io/3DHeat-Ext-Battlefield/identify.html) |
 
@@ -156,12 +156,14 @@ of mesh (per colour map with `--textures`), and `nav:walkable` with
 `--navmesh`. Load it in the viewer's **Background / level** panel
 ([loading a level](https://holdi601.github.io/3DHeat/levels.html)).
 
-## Vehicles: catalogue and models
+## Vehicles, weapons and gadgets: catalogue and models
 
 `catalog` and `models` read the vehicles of every Battlefield 6, 4 and 1
 installed (or the one `--game` names) and write under `$HEAT3D_LEVELS` (or
 `--out`): `<game>/catalog.json` lists each vehicle with its name, class, side
-and the real vehicle it stands for; `model-packs/<game>/` holds one `.glb` per
+and the real vehicle it stands for, and the soldiers' weapons and gadgets
+(launchers, grenades, explosives, tools, drones, armour; `kind` `weapon` or
+`gadget`, with a class); `model-packs/<game>/` holds one `.glb` per
 vehicle at three levels of detail, split into the parts the viewer moves (hull,
 running gear, turret, gun, rotor), with `model-pack.json`. Battlefield 4 and 1
 place the parts by the vehicle's own component tree; Battlefield 6 by its mesh
